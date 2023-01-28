@@ -1,0 +1,38 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    ".vscode": true,
+    "env": true,
+    "website/.eslintrc.json": true,
+    "website/next-env.d.ts": true,
+    "website/next.config.js": true,
+    "website/package-lock.json": true,
+    "website/package.json": true,
+    "website/README.md": true,
+    "website/tsconfig.json": true,
+    "website/node_modules": true,
+    "website/.next": true
+  },
+  "hide-files.files": [
+    ".vscode",
+    "env",
+    "website/.eslintrc.json",
+    "website/next-env.d.ts",
+    "website/next.config.js",
+    "website/package-lock.json",
+    "website/package.json",
+    "website/README.md",
+    "website/tsconfig.json",
+    "website/node_modules",
+    "website/.next"
+  ],
+  "editor.codeActionsOnSave": {
+    //    "source.organizeImports": true,
+    "source.addMissingImports": true
+  }
+}
