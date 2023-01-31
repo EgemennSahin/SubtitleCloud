@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function SignUpPage() {
-  const { user, signup } = useAuth();
+  const { signUp } = useAuth();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -13,7 +13,7 @@ export default function SignUpPage() {
     e.preventDefault();
 
     try {
-      await signup(email, password);
+      await signUp(email, password);
       router.push("/dashboard");
     } catch (err: any) {
       console.log(err);

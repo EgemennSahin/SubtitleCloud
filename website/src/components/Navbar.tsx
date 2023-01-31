@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
-  const { user, signout } = useAuth();
+  const { user, logOut } = useAuth();
   const router = useRouter();
 
   return (
@@ -27,7 +27,7 @@ const Navbar = () => {
               <Link className="flex" href="/dashboard" passHref>
                 <div
                   onClick={() => {
-                    signout();
+                    logOut();
                   }}
                   className="text-blue-600 hover:text-blue-800 focus:ring-6 focus:outline-3 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >

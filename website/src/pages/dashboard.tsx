@@ -1,4 +1,5 @@
 import ProgressBar from "@/components/ProgressBar";
+import VideoList from "@/components/VideoList";
 import { storage } from "@/configs/firebaseConfig";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -13,25 +14,31 @@ import React, { BaseSyntheticEvent, useEffect, useState } from "react";
 export default function Dashboard() {
   const { user } = useAuth();
   const [file, setFile] = useState<Blob>();
-  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (file) {
-      setLoading(false);
+      setUploading(false);
     }
   }, [file]);
 
+  // Function to upload a pre-chosen file onto Firebase Storage when a form is submitted
   async function handleUpload(event: BaseSyntheticEvent) {
     event.preventDefault();
-    if (loading || !file) {
+    if (uploading || !file) {
       console.log("Still loading. Wait");
       return;
     }
 
-    setLoading(true);
+    setUploading(true);
 
-    const storageRef = ref(storage, "videos/mp4/" + user.email);
+    const currentDate = new Date();
+    const currentTimestamp = currentDate.getTime().toString();
+    const storageRef = ref(
+      storage,
+      "videos/mp4/" + user?.uid + "/" + currentTimestamp
+    );
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -40,7 +47,6 @@ export default function Dashboard() {
         setProgress(
           Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
         );
-        console.log("Upload is " + progress + "% done");
         switch (snapshot.state) {
           case "paused":
             console.log("Upload is paused");
@@ -58,15 +64,16 @@ export default function Dashboard() {
           console.log("File available at", downloadURL);
         });
 
-        setLoading(false);
+        setUploading(false);
         setProgress(0);
       }
     );
   }
 
+  // Function to choose a file from the user's computer
   function handleChoose(event: BaseSyntheticEvent) {
     event.preventDefault();
-    setLoading(true);
+    setUploading(true);
     setFile(event.target.files[0]);
   }
 
@@ -75,7 +82,7 @@ export default function Dashboard() {
     <>
       <div className=" bg-gradient-to-b from-white to-slate-200 flex flex-col items-center h-screen gap-7">
         <h1 className="font-normal text-2xl text-slate-600">
-          {user.email}'s Dashboard
+          {user?.email}'s Dashboard
         </h1>
 
         <label className="relative rounded-lg py-6 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200">
@@ -111,7 +118,9 @@ export default function Dashboard() {
           </form>
         )}
 
-        {loading ? <ProgressBar progress={progress} /> : <></>}
+        {uploading ? <ProgressBar progress={progress} /> : <></>}
+
+        <VideoList />
       </div>
     </>
   );

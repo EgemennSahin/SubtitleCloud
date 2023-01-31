@@ -6,17 +6,26 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth } from "@/configs/firebaseConfig";
+import CustomUser from "@/components/interfaces/UserInterface";
 
-const AuthContext = createContext<any>({});
+const AuthContext = createContext<{
+  user: CustomUser | null;
+  logIn: (email: string, password: string) => Promise<any>;
+  signUp: (email: string, password: string) => Promise<any>;
+  logOut: () => Promise<void>;
+}>(
+  {} as {
+    user: null;
+    logIn: (email: string, password: string) => Promise<any>;
+    signUp: (email: string, password: string) => Promise<any>;
+    logOut: () => Promise<void>;
+  }
+);
 
 export const useAuth = () => useContext(AuthContext);
 
-export const AuthContextProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const [user, setUser] = useState<any>(null);
+export function AuthContextProvider({ children }: any) {
+  const [user, setUser] = useState<CustomUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,7 +34,6 @@ export const AuthContextProvider = ({
         setUser({
           uid: user.uid,
           email: user.email,
-          displayName: user.displayName,
         });
       } else {
         setUser(null);
@@ -36,23 +44,22 @@ export const AuthContextProvider = ({
     return () => unsubscribe();
   }, []);
 
-
-  const signup = (email: string, password: string) => {
+  const signUp = (email: string, password: string) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  const signin = (email: string, password: string) => {
+  const logIn = (email: string, password: string) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  const signout = async () => {
+  const logOut = async () => {
     setUser(null);
     await signOut(auth);
   };
 
   return (
-    <AuthContext.Provider value={{ user, signin, signup, signout }}>
+    <AuthContext.Provider value={{ user, logIn, signUp, logOut }}>
       {loading ? null : children}
     </AuthContext.Provider>
   );
-};
+}

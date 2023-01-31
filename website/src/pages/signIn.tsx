@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function SignInPage() {
-  const { user, signin } = useAuth();
+  const { logIn } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,7 +13,8 @@ export default function SignInPage() {
     e.preventDefault();
 
     try {
-      await signin(email, password);
+      await logIn(email, password);
+      
       router.push("/dashboard");
     } catch (err: any) {
       console.log(err);

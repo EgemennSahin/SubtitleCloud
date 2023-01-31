@@ -1,12 +1,9 @@
 import {
   sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  UserCredential,
 } from "firebase/auth";
 import { auth } from "@/configs/firebaseConfig";
 import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
-import BackButton from "@/components/backbutton";
 
 export default function PasswordResetPage() {
   const [email, setEmail] = useState("");

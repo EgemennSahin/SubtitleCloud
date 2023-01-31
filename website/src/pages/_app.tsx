@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import NonProtectedRoute from "@/components/NonProtectedRoute";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { AuthContextProvider } from "@/contexts/AuthContext";
+import { AuthContextProvider, useAuth } from "@/contexts/AuthContext";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
