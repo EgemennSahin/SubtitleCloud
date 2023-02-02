@@ -2,15 +2,26 @@
 import ffmpeg
 
 # Needed for transcribing subtitles
-from stable_whisper import load_model, save_as_json, open_results, to_srt
-
 import whisperx
 import whisperx.utils
 
-resultsPath = "../assets/results_aligned.json"
-
-
 # Create an audio file from the mp4 file and export an accordingly named file
+
+
+def downloadVideo(url, output_filename):
+
+    try:
+        (
+            ffmpeg.input(url)
+            .output(output_filename)
+            .run()
+        )
+    except ffmpeg.Error as e:
+        print(e.stderr)
+
+    return output_filename
+
+
 def createAudio(mp4_filename, output_filename):
     (
         ffmpeg.input(mp4_filename)
@@ -24,7 +35,7 @@ def createAudio(mp4_filename, output_filename):
 # Transcribe the mp3 file and export a Whisper response
 def getResult(audio_filename):
     # Import the model
-    model = load_model("medium")
+    model = whisperx.load_model("tiny")
 
     DECODE_OPTIONS = {'language': 'en'}
 
@@ -36,8 +47,6 @@ def getResult(audio_filename):
     results_aligned = whisperx.align(
         result["segments"], model_a, metadata, audio_filename, "cpu")
 
-    save_as_json(results_aligned, resultsPath)
-
     return results_aligned
 
 
@@ -48,18 +57,22 @@ def translate(whisper_response, output_srt_filename):
     for i in whisper_response["word_segments"]:
         i["text"] = i["text"].upper()
 
-    to_srt(whisper_response["word_segments"], output_srt_filename, strip=True)
+    with open(output_srt_filename, "w", encoding="utf-8") as srt:
+        whisperx.utils.write_srt(whisper_response["word_segments"], file=srt)
+
     return output_srt_filename
 
 
 # Main Function
 def audioProcessing(main_video, output_name):
+    print("Downloading main video.")
+    download_video = downloadVideo(main_video, output_name + '_download.mp4')
+
     print("Extracting audio from main video.")
-    mp3_filename = createAudio(main_video, output_name + '.mp3')
+    mp3_filename = createAudio(download_video, output_name + '.mp3')
 
     print("Transcribing audio using AI.")
-    # results = getResult(mp3_filename)
-    results = open_results(resultsPath)
+    results = getResult(mp3_filename)
 
     print("Creating subtitles from the transcription.")
     subtitle_filename = translate(results, output_name + '.srt')

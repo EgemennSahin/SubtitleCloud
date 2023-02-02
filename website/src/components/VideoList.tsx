@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { storage } from "@/configs/firebaseConfig";
 import { useAuth } from "@/contexts/AuthContext";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
+import VideoPlayer from "./VideoPlayer";
 
 const VideoList = () => {
   const [videos, setVideos] = useState<Array<string>>([]);
@@ -25,14 +26,16 @@ const VideoList = () => {
 
   return (
     <>
-      <h1>Videos uploaded by {user?.email}</h1>
-      <ul>
-        {videos.map((video, index) => (
-          <li key={index}>
-            <video src={video} controls />
-          </li>
-        ))}
-      </ul>
+      <div className="flex flex-col justify-center items-center h-screen">
+        <h1>Your videos</h1>
+        <ul className="p-16 grid grid-cols-4 gap-8 text-center">
+          {videos.map((video, index) => (
+            <li className="flex items-center justify-center" key={index}>
+              <VideoPlayer videoSource={video} />
+            </li>
+          ))}
+        </ul>
+      </div>
     </>
   );
 };

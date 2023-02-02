@@ -25,8 +25,8 @@ const IndexPage = () => {
 
   return (
     <>
-      <div className="mx-auto h-screen bg-gradient-to-r from-indigo-400 to-purple-500">
-        <h1 className="text-center font-normal text-2xl text-teal-800">
+      <div className="mx-auto h-screen">
+        <h1 className="text-center font-normal text-2xl text-blue-900">
           Homepage
         </h1>
       </div>

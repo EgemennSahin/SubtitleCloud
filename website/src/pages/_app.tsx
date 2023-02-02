@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import NonProtectedRoute from "@/components/NonProtectedRoute";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { AuthContextProvider, useAuth } from "@/contexts/AuthContext";
+import { AuthContextProvider } from "@/contexts/AuthContext";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
@@ -15,6 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthContextProvider>
       <Navbar />
+      <div className="py-20"></div>
 
       {noAuthRequired.includes(router.pathname) ? (
         <NonProtectedRoute>

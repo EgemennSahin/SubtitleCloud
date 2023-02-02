@@ -9,11 +9,15 @@ import {
   uploadBytesResumable,
   UploadTaskSnapshot,
 } from "firebase/storage";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { BaseSyntheticEvent, useEffect, useState } from "react";
 
-export default function Dashboard() {
+export default function DashboardPage() {
   const { user } = useAuth();
-  const [file, setFile] = useState<Blob>();
+  const router = useRouter();
+
+  const [file, setFile] = useState<Blob | null>();
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
 
@@ -65,6 +69,7 @@ export default function Dashboard() {
         });
 
         setUploading(false);
+        setFile(null);
         setProgress(0);
       }
     );
@@ -80,7 +85,7 @@ export default function Dashboard() {
   // Change user.email to user.displayName
   return (
     <>
-      <div className=" bg-gradient-to-b from-white to-slate-200 flex flex-col items-center h-screen gap-7">
+      <div className="flex flex-col items-center h-screen gap-7">
         <h1 className="font-normal text-2xl text-slate-600">
           {user?.email}'s Dashboard
         </h1>
@@ -118,9 +123,23 @@ export default function Dashboard() {
           </form>
         )}
 
-        {uploading ? <ProgressBar progress={progress} /> : <></>}
+        {uploading ? (
+          <div>
+            <ProgressBar progress={progress} />
+          </div>
+        ) : (
+          <></>
+        )}
 
-        <VideoList />
+        <Link
+          className="h-10 relative rounded-lg py-6 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200"
+          href="/videos"
+          passHref
+        >
+          <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-xl">
+            Videos
+          </div>
+        </Link>
       </div>
     </>
   );

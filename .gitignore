@@ -1,4 +1,7 @@
 env/
+env_python3.9/
 scripts/__pycache__/
 assets/videos
 assets/results
+.prettierignore
+winRequirements.txt

@@ -93,11 +93,10 @@ def combineVids(top_mp4_filename, bottom_mp4_filename, output_mp4_filename, padd
     return output_mp4_filename
 
 
-font_path = "assets/fonts"
 font_name = "Mercadillo Black"
 
 
-def addAudioSubtitles(mp4_filename, mp3_filename, srt_filename, font_name, font_path, output_mp4_filename):
+def addAudioSubtitles(mp4_filename, mp3_filename, srt_filename, font_name, output_mp4_filename):
     style = "FontName=" + font_name + \
         ",FontSize=20,Alignment=10,PrimaryColour=&H03fcff,Outline=1"
     input_video = ffmpeg.input(mp4_filename)
@@ -105,7 +104,7 @@ def addAudioSubtitles(mp4_filename, mp3_filename, srt_filename, font_name, font_
 
     (
         ffmpeg.concat(input_video, input_audio, v=1, a=1)
-        .filter("subtitles", srt_filename, fontsdir=font_path, force_style=style)
+        .filter("subtitles", srt_filename, force_style=style)
         .output(output_mp4_filename)
         .run()
     )
@@ -130,21 +129,24 @@ def videoProcessing(main_video, game_video, mp3_filename, subtitle_filename, out
 
         print("Adding subtitles to the video.")
         final_video = addAudioSubtitles(
-            comb_video, mp3_filename, subtitle_filename, font_name, font_path, output_name + '.mp4')
+            comb_video, mp3_filename, subtitle_filename, font_name, output_name + '.mp4')
 
         # Delete subtitles, mp3 and combined video
-        os.remove(subtitle_filename)
-        os.remove(mp3_filename)
         os.remove(comb_video)
 
     else:
         print("Adding subtitles to the video.")
         final_video = addAudioSubtitles(
-            main_video, mp3_filename, subtitle_filename, font_name, font_path, output_name + '.mp4')
+            main_video, mp3_filename, subtitle_filename, font_name,  output_name + '.mp4')
 
     os.remove(subtitle_filename)
-
-    aa = 'fasdf'
     os.remove(mp3_filename)
 
+    return final_video
+
+
+def simpleVideoProcessing(main_video, mp3_filename, subtitle_filename, output_name):
+    print("Adding subtitles to the video.")
+    final_video = addAudioSubtitles(
+        main_video, mp3_filename, subtitle_filename, font_name, output_name + '.mp4')
     return final_video
