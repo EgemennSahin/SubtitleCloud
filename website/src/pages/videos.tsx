@@ -4,7 +4,7 @@ import React from "react";
 const VideosPage = () => {
   return (
     <>
-      <VideoList />
+      <VideoList isOutput={false} />
     </>
   );
 };

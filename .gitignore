@@ -3,5 +3,6 @@ env_python3.9/
 scripts/__pycache__/
 assets/videos
 assets/results
+assets/models
 .prettierignore
 winRequirements.txt

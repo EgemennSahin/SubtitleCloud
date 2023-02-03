@@ -15,5 +15,12 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const storage = getStorage(app);
+export const storageUploads = getStorage(
+  app,
+  "gs://captioning-693de.appspot.com"
+);
+export const storageOutputs = getStorage(
+  app,
+  "gs://subtitle-cloud-generated-output"
+);
 export const db = getFirestore(app);

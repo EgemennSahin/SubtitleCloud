@@ -1,5 +1,5 @@
 import React from "react";
-import { storage } from "@/configs/firebaseConfig";
+import { storageUploads } from "@/configs/firebaseConfig";
 import {
   getDownloadURL,
   listAll,
@@ -9,7 +9,7 @@ import {
 } from "firebase/storage";
 
 const IndexPage = () => {
-  const listref = ref(storage, "videos/mp4");
+  const listref = ref(storageUploads, "videos/mp4");
 
   listAll(listref)
     .then((res: ListResult) => {

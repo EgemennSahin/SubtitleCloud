@@ -1,6 +1,6 @@
 import ProgressBar from "@/components/ProgressBar";
 import VideoList from "@/components/VideoList";
-import { storage } from "@/configs/firebaseConfig";
+import { storageUploads } from "@/configs/firebaseConfig";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   getDownloadURL,
@@ -40,8 +40,8 @@ export default function DashboardPage() {
     const currentDate = new Date();
     const currentTimestamp = currentDate.getTime().toString();
     const storageRef = ref(
-      storage,
-      "videos/mp4/" + user?.uid + "/" + currentTimestamp
+      storageUploads,
+      "videos/" + user?.uid + "/" + currentTimestamp
     );
     const uploadTask = uploadBytesResumable(storageRef, file);
 
