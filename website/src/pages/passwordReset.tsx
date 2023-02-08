@@ -1,9 +1,8 @@
-import {
-  sendPasswordResetEmail,
-} from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/configs/firebaseConfig";
 import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function PasswordResetPage() {
   const [email, setEmail] = useState("");
@@ -26,36 +25,44 @@ export default function PasswordResetPage() {
   }
 
   return (
-    <div className="w-1/3 mx-auto">
-      <h2 className="text-center font-normal mt-32 text-2xl text-teal-800">
-        Firebase 9 Authentication <br /> Reset Password
+    <div className="bg-white max-w-2xl mx-auto p-16 rounded-md drop-shadow-2xl flex-col space-y-4">
+      <h2 className="text-center font-bold text-3xl text-slate-800">
+        Reset your password
       </h2>
 
+      <p className="text-slate-600">
+        Enter the email associated with your account and you will receive a link
+        to reset your password.
+      </p>
+
       <form onSubmit={handlePasswordReset}>
-        {message && (
-          <p className="text-center text-xs mt-3 text-green-400">{message}</p>
-        )}
-        {error && (
-          <p className="text-center text-xs mt-3 text-red-400">{error}</p>
-        )}
-        <div className="my-2 flex flex-col">
-          <label className="text-teal-900 font-bold text-lg tracking-wide">
-            Email
-          </label>
-          <input
-            type="email"
-            placeholder="E-mail"
-            className="bg-none border-4 border-teal-900 focus:outline-none rounded-xl font-bold text-teal-700 my-2 p-2"
-            onChange={(e) => setEmail(e.target.value)}
-          />
+        <div className="flex flex-col gap-9">
+          <div className="flex flex-col gap-1">
+            <label className="text-slate-700 font-bold text-lg tracking-wide">
+              Email
+            </label>
+            <input
+              type="email"
+              className="bg-white border-2 border-slate-700 rounded-md text-black p-2.5"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
           <input
             type="submit"
-            value="Reset Password"
-            className="bg-teal-400 w-full tracking-wide font-semibold foucs:outline-none rounded-xl p-2 my-2"
+            value="Continue"
+            className="text-white font-bold rounded-md mt-5 py-4 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200"
           />
         </div>
       </form>
+
+      <div className="flex justify-center">
+        <Link href="/signIn" passHref>
+          <p className="text-blue-600 font-bold text-lg tracking-wide">
+            Return to sign in
+          </p>
+        </Link>
+      </div>
     </div>
   );
 }

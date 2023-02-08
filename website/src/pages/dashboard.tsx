@@ -1,5 +1,4 @@
 import ProgressBar from "@/components/ProgressBar";
-import VideoList from "@/components/VideoList";
 import { storageUploads } from "@/configs/firebaseConfig";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -86,10 +85,6 @@ export default function DashboardPage() {
   return (
     <>
       <div className="flex flex-col items-center h-screen gap-7">
-        <h1 className="font-normal text-2xl text-slate-600">
-          {user?.email}'s Dashboard
-        </h1>
-
         <label className="relative rounded-lg py-6 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200">
           <input
             type="file"
@@ -133,11 +128,21 @@ export default function DashboardPage() {
 
         <Link
           className="h-10 relative rounded-lg py-6 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200"
-          href="/videos"
+          href="/uploadedVideos"
           passHref
         >
-          <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-xl">
-            Videos
+          <div className="absolute inset-0 flex items-center justify-center  text-white font-bold text-xl">
+            Uploaded Videos
+          </div>
+        </Link>
+
+        <Link
+          className="h-10 relative rounded-lg py-6 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200"
+          href="/outputVideos"
+          passHref
+        >
+          <div className="absolute  inset-0 flex items-center justify-center text-center text-white font-bold text-xl">
+            Generated Videos
           </div>
         </Link>
       </div>

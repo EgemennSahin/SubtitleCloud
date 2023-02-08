@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
+import Link from "next/link";
 
 export default function SignInPage() {
   const { logIn } = useAuth();
@@ -14,62 +15,58 @@ export default function SignInPage() {
 
     try {
       await logIn(email, password);
-      
+
       router.push("/dashboard");
     } catch (err: any) {
       console.log(err);
     }
   };
 
-  function toPasswordReset() {
-    router.push("/passwordReset");
-  }
-
   return (
-    <div className="w-1/3 mx-auto">
-      <h2 className="text-center font-normal mt-32 text-2xl text-teal-800">
-        Firebase 9 Authentication <br /> Sign In
+    <div className="bg-white max-w-2xl mx-auto p-16 rounded-md drop-shadow-2xl flex-col space-y-4">
+      <h2 className="text-center font-bold text-3xl text-slate-800">
+        Sign in to your account
       </h2>
 
-      <div className="space-y-3">
-        <form onSubmit={handleSignIn}>
-          <div className="flex flex-col space-y-3">
-            <label className="text-teal-900 font-bold text-lg tracking-wide">
+      <form onSubmit={handleSignIn}>
+        <div className="flex flex-col gap-9">
+          <div className="flex flex-col gap-1">
+            <label className="text-slate-700 font-bold text-lg tracking-wide">
               Email
             </label>
             <input
               type="email"
-              placeholder="E-mail"
-              className="bg-none border-2 border-teal-900 focus:outline-none rounded-xl font-bold text-teal-700 p-2"
+              className="bg-white border-2 border-slate-700 rounded-md text-black p-2.5"
               onChange={(e) => setEmail(e.target.value)}
             />
+          </div>
 
-            <label className="text-teal-900 font-bold text-lg tracking-wide">
-              Password
-            </label>
+          <div className="flex flex-col gap-1">
+            <div className="flex justify-between">
+              <label className="text-slate-700 font-bold text-lg tracking-wide">
+                Password
+              </label>
+              <Link href="/passwordReset" passHref>
+                <p className="text-blue-600 font-bold text-lg tracking-wide">
+                  Forgot Password?
+                </p>
+              </Link>
+            </div>
 
             <input
               type="password"
-              placeholder="Password"
-              className="bg-none border-2 border-teal-900  rounded-xl font-bold text-teal-700 p-2"
+              className="bg-white border-2 border-slate-700 rounded-md text-black p-2.5"
               onChange={(e) => setPassword(e.target.value)}
             />
-
-            <input
-              type="submit"
-              value="Sign In"
-              className="bg-teal-400 w-full tracking-wide font-semibold foucs:outline-none rounded-xl p-2"
-            />
           </div>
-        </form>
 
-        <button
-          onClick={toPasswordReset}
-          className="bg-teal-400 w-full tracking-wide font-semibold foucs:outline-none rounded-xl p-2"
-        >
-          Forgot Password
-        </button>
-      </div>
+          <input
+            type="submit"
+            value="Continue"
+            className="text-white font-bold rounded-md mt-5 py-4 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200"
+          />
+        </div>
+      </form>
     </div>
   );
 }

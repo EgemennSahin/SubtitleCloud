@@ -3,7 +3,7 @@ import { storageOutputs, storageUploads } from "@/configs/firebaseConfig";
 import { useAuth } from "@/contexts/AuthContext";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
 import VideoPlayer from "./VideoPlayer";
-import videos from "@/pages/videos";
+import videos from "@/pages/uploadedVideos";
 
 const VideoList = (props: { isOutput: boolean }) => {
   const [videos, setVideos] = useState<Array<string>>([]);
@@ -30,7 +30,6 @@ const VideoList = (props: { isOutput: boolean }) => {
   return (
     <>
       <div className="flex flex-col justify-center items-center h-screen">
-        <h1>Your videos</h1>
         <ul className="p-16 grid grid-cols-4 gap-8 text-center">
           {videos.map((video, index) => (
             <li className="flex items-center justify-center" key={index}>

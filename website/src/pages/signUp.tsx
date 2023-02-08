@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
+import Link from "next/link";
 
 export default function SignUpPage() {
   const { signUp } = useAuth();
@@ -21,12 +22,14 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="bg-white min-w-fit max-w-2xl mx-auto px-16 mt-10 py-10 rounded-md drop-shadow-2xl">
-      <h2 className="text-center font-bold text-3xl text-slate-800">Sign Up</h2>
+    <div className="bg-white max-w-2xl mx-auto p-16 rounded-md drop-shadow-2xl flex-col space-y-4">
+      <h2 className="text-center font-bold text-3xl text-slate-800">
+        Create your Shortzoo account
+      </h2>
 
       <form onSubmit={handleSignUp}>
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-9">
+          <div className="flex flex-col gap-1">
             <label className="text-slate-700 font-bold text-lg tracking-wide">
               Email
             </label>
@@ -37,10 +40,12 @@ export default function SignUpPage() {
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-slate-700 font-bold text-lg tracking-wide">
-              Password
-            </label>
+          <div className="flex flex-col gap-1">
+            <div className="flex">
+              <label className="text-slate-700 font-bold text-lg tracking-wide">
+                Password
+              </label>
+            </div>
 
             <input
               type="password"
@@ -51,11 +56,18 @@ export default function SignUpPage() {
 
           <input
             type="submit"
-            value="Sign Up"
-            className="text-white font-bold rounded-md py-4 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200"
+            value="Continue"
+            className="text-white font-bold rounded-md mt-5 py-4 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200"
           />
         </div>
       </form>
+      <div className="flex justify-center">
+        <Link href="/signIn" passHref>
+          <p className="text-blue-600 font-bold text-lg tracking-wide">
+            Return to sign in
+          </p>
+        </Link>
+      </div>
     </div>
   );
 }
