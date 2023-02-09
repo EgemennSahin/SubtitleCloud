@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { storageOutputs, storageUploads } from "@/configs/firebaseConfig";
-import { useAuth } from "@/contexts/AuthContext";
+import {
+  storageOutputs,
+  storageUploads,
+} from "@/configs/firebase/firebaseConfig";
+import { useAuth } from "@/configs/firebase/AuthContext";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
 import VideoPlayer from "./VideoPlayer";
 import videos from "@/pages/uploadedVideos";

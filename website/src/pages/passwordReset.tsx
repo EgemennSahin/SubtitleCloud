@@ -1,5 +1,5 @@
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "@/configs/firebaseConfig";
+import { auth } from "@/configs/firebase/firebaseConfig";
 import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";

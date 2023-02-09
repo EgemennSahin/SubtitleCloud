@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/configs/firebase/AuthContext";
 import Link from "next/link";
 
 export default function SignInPage() {

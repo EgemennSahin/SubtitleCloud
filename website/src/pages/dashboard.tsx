@@ -1,6 +1,6 @@
 import ProgressBar from "@/components/ProgressBar";
-import { storageUploads } from "@/configs/firebaseConfig";
-import { useAuth } from "@/contexts/AuthContext";
+import { storageUploads } from "@/configs/firebase/firebaseConfig";
+import { useAuth } from "@/configs/firebase/AuthContext";
 import {
   getDownloadURL,
   ref,
@@ -9,12 +9,13 @@ import {
   UploadTaskSnapshot,
 } from "firebase/storage";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { BaseSyntheticEvent, useEffect, useState } from "react";
+import usePremiumStatus from "@/configs/stripe/usePremiumStatus";
+import { createCheckoutSession } from "@/configs/stripe/createCheckoutSession";
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const router = useRouter();
+  const userIsPremium = usePremiumStatus(user);
 
   const [file, setFile] = useState<Blob | null>();
   const [uploading, setUploading] = useState(false);
@@ -85,6 +86,23 @@ export default function DashboardPage() {
   return (
     <>
       <div className="flex flex-col items-center h-screen gap-7">
+        <div>
+          {user && (
+            <div className="flex flex-col items-center gap-7">
+              Hello, {user.displayName}
+              {!userIsPremium ? (
+                <button
+                  className="bg-blue-600 text-white py-4 px-8 rounded-lg"
+                  onClick={() => createCheckoutSession(user.uid)}
+                >
+                  Upgrade to Premium
+                </button>
+              ) : (
+                <div>You are a premium user</div>
+              )}
+            </div>
+          )}
+        </div>
         <label className="relative rounded-lg py-6 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200">
           <input
             type="file"

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/configs/firebase/AuthContext";
 
 const Navbar = (props: { pathname: string }) => {
   const { user, logOut } = useAuth();

@@ -4,12 +4,13 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  User,
 } from "firebase/auth";
-import { auth } from "@/configs/firebaseConfig";
-import CustomUser from "@/components/interfaces/UserInterface";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "@/configs/firebase/firebaseConfig";
 
 const AuthContext = createContext<{
-  user: CustomUser | null;
+  user: User | null;
   logIn: (email: string, password: string) => Promise<any>;
   signUp: (email: string, password: string) => Promise<any>;
   logOut: () => Promise<void>;
@@ -25,16 +26,13 @@ const AuthContext = createContext<{
 export const useAuth = () => useContext(AuthContext);
 
 export function AuthContextProvider({ children }: any) {
-  const [user, setUser] = useState<CustomUser | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser({
-          uid: user.uid,
-          email: user.email,
-        });
+        setUser(user);
       } else {
         setUser(null);
       }
@@ -44,8 +42,16 @@ export function AuthContextProvider({ children }: any) {
     return () => unsubscribe();
   }, []);
 
-  const signUp = (email: string, password: string) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  const signUp = async (email: string, password: string) => {
+    const userCredentials = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    await setDoc(doc(db, "users", userCredentials.user.uid), {
+      email: userCredentials.user.email,
+    });
   };
 
   const logIn = (email: string, password: string) => {
