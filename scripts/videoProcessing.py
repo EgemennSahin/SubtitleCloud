@@ -5,8 +5,6 @@ import ffmpeg
 import os
 
 # Find the smallest resolution in the combined 4 dimensions of the videos and return it
-
-
 def findSmallestRes(main_mp4_filename, game_mp4_filename):
     probe_main = ffmpeg.probe(main_mp4_filename)['streams'][0]
     probe_game = ffmpeg.probe(game_mp4_filename)['streams'][0]
