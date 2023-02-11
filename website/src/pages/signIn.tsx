@@ -4,7 +4,7 @@ import { useAuth } from "@/configs/firebase/AuthContext";
 import Link from "next/link";
 
 export default function SignInPage() {
-  const { logIn } = useAuth();
+  const { logIn, authGoogle } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,6 +15,18 @@ export default function SignInPage() {
 
     try {
       await logIn(email, password);
+
+      router.push("/dashboard");
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
+
+  const handleGoogleSignIn = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await authGoogle();
 
       router.push("/dashboard");
     } catch (err: any) {
@@ -66,6 +78,14 @@ export default function SignInPage() {
             className="text-white font-bold rounded-md mt-5 py-4 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200"
           />
         </div>
+      </form>
+
+      <form onSubmit={handleGoogleSignIn}>
+        <input
+          type="submit"
+          value="Sign in with Google"
+          className="text-white font-bold rounded-md mt-5 py-4 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200"
+        />
       </form>
     </div>
   );

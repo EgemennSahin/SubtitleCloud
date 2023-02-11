@@ -5,19 +5,24 @@ import {
   signInWithEmailAndPassword,
   signOut,
   User,
+  signInWithPopup,
+  GoogleAuthProvider,
+  UserCredential,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/configs/firebase/firebaseConfig";
 
 const AuthContext = createContext<{
   user: User | null;
   logIn: (email: string, password: string) => Promise<any>;
+  authGoogle: () => Promise<void>;
   signUp: (email: string, password: string) => Promise<any>;
   logOut: () => Promise<void>;
 }>(
   {} as {
     user: null;
     logIn: (email: string, password: string) => Promise<any>;
+    authGoogle: () => Promise<void>;
     signUp: (email: string, password: string) => Promise<any>;
     logOut: () => Promise<void>;
   }
@@ -58,13 +63,30 @@ export function AuthContextProvider({ children }: any) {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
+  const authGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    const userCredentials = await signInWithPopup(auth, provider);
+
+    console.log("userCredentials", userCredentials);
+    const userExists = (
+      await getDoc(doc(db, "users", userCredentials.user.uid))
+    ).exists();
+
+    console.log(userExists);
+    if (!userExists) {
+      await setDoc(doc(db, "users", userCredentials.user.uid), {
+        email: userCredentials.user.email,
+      });
+    }
+  };
+
   const logOut = async () => {
     setUser(null);
     await signOut(auth);
   };
 
   return (
-    <AuthContext.Provider value={{ user, logIn, signUp, logOut }}>
+    <AuthContext.Provider value={{ user, logIn, authGoogle, signUp, logOut }}>
       {loading ? null : children}
     </AuthContext.Provider>
   );
