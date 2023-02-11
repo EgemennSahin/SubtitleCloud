@@ -5,3 +5,4 @@ assets/videos
 assets/results
 assets/models
 .prettierignore
+.vscode
