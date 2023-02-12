@@ -46,6 +46,7 @@ const IndexPage = () => {
             headers: {
               "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({
               video_id: uid,
             }),
