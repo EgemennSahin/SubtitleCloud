@@ -23,4 +23,6 @@ export const storageOutputs = getStorage(
   app,
   "gs://subtitle-cloud-generated-output"
 );
+export const tempStorage = getStorage(app, "gs://short-zoo-temp-videos");
+
 export const db = getFirestore(app);

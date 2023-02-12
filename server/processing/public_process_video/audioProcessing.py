@@ -12,15 +12,16 @@ import bz2
 import os
 
 # Create an audio file from the mp4 file and export an accordingly named file
+
+
 def create_mp3(mp4_filename, output_filename):
     (
         ffmpeg.input(mp4_filename)
-        .output(output_filename)
+        .output(output_filename, preset="ultrafast")
         .run()
     )
 
     return output_filename
-
 
 
 # Transcribe the mp3 file and export a Whisper response
@@ -51,6 +52,7 @@ def transcribe_whisper(audio_filename, models_bucket):
     os.remove("/tmp/" + pickled_model)
     return result
 
+
 def align_whisperx(audio_filename, result, models_bucket):
     models = {"align_model": None,
               "align_model_metadata": None}
@@ -63,14 +65,13 @@ def align_whisperx(audio_filename, result, models_bucket):
             models[model] = pickle.load(pickle_file)
 
     results_aligned = whisperx.align(
-    result["segments"], models["align_model"], models["align_model_metadata"], audio_filename, "cpu")
+        result["segments"], models["align_model"], models["align_model_metadata"], audio_filename, "cpu")
 
     for model in models:
         pickled_model = model + ".pkl.bz2"
         os.remove("/tmp/" + pickled_model)
 
     return results_aligned
-
 
 
 def adjust_subtitles(subtitles, start_pad=0.05, end_pad=0.1):
@@ -98,6 +99,8 @@ def adjust_subtitles(subtitles, start_pad=0.05, end_pad=0.1):
     return subtitles
 
 # Create subtitles from Whisper response and export an accordingly named srt file
+
+
 def export_srt(whisper_response, output_srt_filename):
     for i in whisper_response["word_segments"]:
         i["text"] = i["text"].upper()

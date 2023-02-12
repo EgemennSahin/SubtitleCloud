@@ -1,8 +1,9 @@
 env/
 env_python3.9/
 __pycache__
-assets/videos
-assets/results
-assets/models
+assets
 .prettierignore
 .vscode
+
+server/localFunctions
+server/processing/backup

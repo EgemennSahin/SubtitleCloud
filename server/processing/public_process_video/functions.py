@@ -1,6 +1,5 @@
 from audioProcessing import process_audio
 from videoProcessing import process_video_simple
-import os
 
 
 def main_function(main_video, output_name):
