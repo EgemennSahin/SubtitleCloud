@@ -6,9 +6,8 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 
-
 const noAuthRequired = ["/signIn", "/signUp", "/passwordReset"];
-const noAccessRequired = ["/homePage"];
+const noAccessRequired = ["/"];
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -22,17 +21,17 @@ export default function App({ Component, pageProps }: AppProps) {
       />
       <div className="py-20"></div>
 
-        {noAuthRequired.includes(router.pathname) ? (
-          <NonProtectedRoute>
-            <Component {...pageProps} />
-          </NonProtectedRoute>
-        ) : noAccessRequired.includes(router.pathname) ? (
+      {noAuthRequired.includes(router.pathname) ? (
+        <NonProtectedRoute>
           <Component {...pageProps} />
-        ) : (
-          <ProtectedRoute>
-            <Component {...pageProps} />
-          </ProtectedRoute>
-        )}
+        </NonProtectedRoute>
+      ) : noAccessRequired.includes(router.pathname) ? (
+        <Component {...pageProps} />
+      ) : (
+        <ProtectedRoute>
+          <Component {...pageProps} />
+        </ProtectedRoute>
+      )}
     </AuthContextProvider>
   );
 }
