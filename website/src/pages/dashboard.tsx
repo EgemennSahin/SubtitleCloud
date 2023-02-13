@@ -34,11 +34,13 @@ export default function DashboardPage() {
       console.log("Still loading. Wait");
       return;
     }
-
     setUploading(true);
 
     const uid = uuidv4();
-    const storageRef = ref(storageUploads, "videos/" + user?.uid + "/" + uid);
+    const storageRef = ref(
+      storageUploads,
+      "videos/" + user?.uid + "/uploads/" + uid
+    );
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -70,6 +72,7 @@ export default function DashboardPage() {
             },
             body: JSON.stringify({
               video_id: uid,
+              user_id: user?.uid,
             }),
           }
         );
