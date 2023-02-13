@@ -4,6 +4,7 @@ import ffmpeg
 # Needed to delete files
 import os
 
+
 def add_audio_subtitles(mp4_filename, mp3_filename, srt_filename, output_mp4_filename):
     style = "FontName=Mercadillo Black,FontSize=20,Alignment=10,PrimaryColour=&H03fcff,Outline=1"
     input_video = ffmpeg.input(mp4_filename)

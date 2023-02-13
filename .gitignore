@@ -6,4 +6,4 @@ assets
 .vscode
 
 server/localFunctions
-server/processing/backup
+server/backup

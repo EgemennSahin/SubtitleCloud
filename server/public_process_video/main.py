@@ -10,13 +10,18 @@ def public_process_video(request):
         # Allows GET requests from any origin with the Content-Type
         # header and caches preflight response for an 3600s
         headers = {
-            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Origin': 'shortzoo.com',
             'Access-Control-Allow-Methods': 'GET, POST',
             'Access-Control-Allow-Headers': 'Content-Type',
             'Access-Control-Max-Age': '3600'
         }
 
         return ('', 204, headers)
+
+    print("Checking origin: " + request.headers.get('Origin'))
+    if request.headers.get('Origin') != 'https://shortzoo.com':
+        print("Origin: " + request.headers.get('Origin') + " is not shortzoo.com")
+        return ('', 403)
 
     # Get the video url from the request
     request_data = request.get_json()
@@ -30,6 +35,7 @@ def public_process_video(request):
     file_tmp_path = "/tmp/raw_" + video_id
 
     # Download the file
+    print("Downloading the video")
     blob = bucket.blob(video_id)
     blob.download_to_filename(file_tmp_path)
 
@@ -40,6 +46,7 @@ def public_process_video(request):
     output_name = "/tmp/edited_" + video_id
 
     # Run the main function
+    print("Starting the editing process")
     output_file = main_function(
         main_video=file_tmp_path,
         output_name=output_name)
@@ -52,7 +59,7 @@ def public_process_video(request):
 
     # Set CORS headers for the main request
     headers = {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'shortzoo.com',
         'Content-Type': 'application/json'
     }
 

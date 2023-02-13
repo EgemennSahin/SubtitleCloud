@@ -30,8 +30,10 @@ def transcribe_mp3(audio_filename):
     client = storage.Client()
     models_bucket = client.bucket("subtitle-cloud-models")
 
+    print("Transcribing the audio")
     result = transcribe_whisper(audio_filename, models_bucket)
 
+    print("Aligning transcription and audio")
     results_aligned = align_whisperx(audio_filename, result, models_bucket)
 
     return results_aligned
@@ -118,7 +120,7 @@ def process_audio(main_video, output_name):
     print("Extracting audio from main video.")
     mp3_filename = create_mp3(main_video, output_name + '.mp3')
 
-    print("Transcribing audio using AI.")
+    print("Initializing AI")
     results = transcribe_mp3(mp3_filename)
 
     print("Creating subtitles from the transcription.")
