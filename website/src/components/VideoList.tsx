@@ -12,8 +12,8 @@ const VideoList = (props: { isOutput: boolean }) => {
   const [videos, setVideos] = useState<Array<string>>([]);
   const { user } = useAuth();
   const videoRef = props.isOutput
-    ? ref(storageOutputs, `videos/${user?.uid}`)
-    : ref(storageUploads, `videos/${user?.uid}`);
+    ? ref(storageUploads, `videos/${user?.uid}/uploads`)
+    : ref(storageUploads, `videos/${user?.uid}/outputs`);
 
   useEffect(() => {
     listAll(videoRef)
