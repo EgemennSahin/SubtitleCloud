@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from "react";
-import {
-  storageOutputs,
-  storageUploads,
-} from "@/configs/firebase/firebaseConfig";
+import { storageUploads } from "@/configs/firebase/firebaseConfig";
 import { useAuth } from "@/configs/firebase/AuthContext";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
 import VideoPlayer from "./VideoPlayer";
-import videos from "@/pages/uploadedVideos";
 
 const VideoList = (props: { isOutput: boolean }) => {
   const [videos, setVideos] = useState<Array<string>>([]);
   const { user } = useAuth();
   const videoRef = props.isOutput
-    ? ref(storageUploads, `videos/${user?.uid}/uploads`)
-    : ref(storageUploads, `videos/${user?.uid}/outputs`);
+    ? ref(storageUploads, `videos/${user?.uid}/outputs`)
+    : ref(storageUploads, `videos/${user?.uid}/uploads`);
 
   useEffect(() => {
     listAll(videoRef)

@@ -20,6 +20,7 @@ export default function DashboardPage() {
 
   const [processedVideo, setProcessedVideo] = useState<string | null>();
   const [processing, setProcessing] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (processedVideo) {
@@ -70,6 +71,7 @@ export default function DashboardPage() {
             const progress = Math.round(
               (snapshot.bytesTransferred / snapshot.totalBytes) * 100
             );
+            setProgress(progress);
             console.log("Upload progress: " + progress + "%");
           },
           (error: StorageError) => {
@@ -81,7 +83,7 @@ export default function DashboardPage() {
 
             console.log("Processing video");
             const response_video_processing = await fetch(
-              "https://private-process-video-px2m4mdiyq-uc.a.run.app",
+              "/api/privateProcess",
               {
                 method: "POST",
                 headers: {
@@ -89,7 +91,7 @@ export default function DashboardPage() {
                 },
                 body: JSON.stringify({
                   video_id: uid,
-                  user_id: user?.uid,
+                  user: user,
                 }),
               }
             );
@@ -139,6 +141,8 @@ export default function DashboardPage() {
             Choose Video
           </div>
         </label>
+
+        {processing && <ProgressBar progress={progress} />}
 
         <Link
           className="h-10 relative rounded-lg py-6 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200"

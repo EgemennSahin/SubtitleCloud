@@ -68,8 +68,9 @@ const IndexPage = () => {
             setProcessedVideo(null);
 
             console.log("Processing video");
+
             const response_video_processing = await fetch(
-              "https://us-central1-captioning-693de.cloudfunctions.net/public_process_video",
+              "/api/publicProcess",
               {
                 method: "POST",
                 headers: {
