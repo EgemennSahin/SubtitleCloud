@@ -82,8 +82,19 @@ export default function DashboardPage() {
             setProcessedVideo(null);
 
             console.log("Processing video");
+
+            if (!user) {
+              console.log("User not logged in");
+              return;
+            }
+
+            if (!userIsPremium) {
+              console.log("User is not premium");
+              return;
+            }
+
             const response_video_processing = await fetch(
-              "/api/privateProcess",
+              "https://private-process-video-px2m4mdiyq-uc.a.run.app",
               {
                 method: "POST",
                 headers: {
@@ -91,7 +102,7 @@ export default function DashboardPage() {
                 },
                 body: JSON.stringify({
                   video_id: uid,
-                  user: user,
+                  user_id: user.uid,
                 }),
               }
             );
@@ -136,6 +147,7 @@ export default function DashboardPage() {
             accept="video/*"
             onChange={handleFileUpload}
             className="w-10 h-10 opacity-0"
+            disabled={!userIsPremium}
           />
           <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-xl">
             Choose Video
