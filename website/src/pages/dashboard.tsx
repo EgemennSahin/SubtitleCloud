@@ -60,7 +60,7 @@ export default function DashboardPage() {
         const uid = uuidv4();
         const storageRef = ref(
           storageUploads,
-          "videos/" + user?.uid + "/uploads" + uid
+          "videos/" + user?.uid + "/uploads/" + uid
         );
         const uploadTask = uploadBytesResumable(storageRef, file);
 
