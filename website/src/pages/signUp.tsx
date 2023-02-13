@@ -62,7 +62,7 @@ export default function SignUpPage() {
         </div>
       </form>
       <div className="flex justify-center">
-        <Link href="/signIn" passHref>
+        <Link href="/logIn" passHref>
           <p className="text-blue-600 font-bold text-lg tracking-wide">
             Return to sign in
           </p>

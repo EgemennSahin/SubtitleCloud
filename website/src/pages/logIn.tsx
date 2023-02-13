@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/configs/firebase/AuthContext";
 import Link from "next/link";
 
-export default function SignInPage() {
+export default function LogInPage() {
   const { logIn, authGoogle } = useAuth();
 
   const [email, setEmail] = useState("");

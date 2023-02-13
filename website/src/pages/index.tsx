@@ -109,6 +109,8 @@ const IndexPage = () => {
         </div>
       </label>
 
+      <div className="h-screen border-2">Test</div>
+
       {processing && (
         <div className="flex items-center justify-center h-64">
           <div className="text-2xl font-bold text-gray-600">

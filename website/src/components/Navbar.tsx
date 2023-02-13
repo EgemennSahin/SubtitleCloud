@@ -1,70 +1,60 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/configs/firebase/AuthContext";
+import { useRouter } from "next/router";
 
-const Navbar = (props: { pathname: string }) => {
+const Navbar = () => {
   const { user, logOut } = useAuth();
+  const router = useRouter();
 
-  // Remove "/" and "-" from pathname
-  const styledPathname = props.pathname.replace("/", "").replace("-", " ");
-
-  // Add a space between each word in styledPathname
-  const spacedPathname = styledPathname.replace(/([A-Z])/g, " $1");
-
-  // Capitalize styledPathname
-  const capitalizedPathname =
-    spacedPathname.charAt(0).toUpperCase() + spacedPathname.slice(1);
+  const handleClick = (route: string) => {
+    router.push(route);
+  };
 
   return (
-    <nav className="fixed w-full top-0 z-10 bg-slate-50 shadow">
-      <div className="flex flex-col md:flex-row justify-center px-16 py-4 gap-4">
-        <Link
-          className="flex-initial md:w-1/3 h-full mx-auto md:my-auto"
-          href="/"
-          passHref
+    <nav className="sticky top-0 z-50 flex items-center justify-between flex-wrap bg-white py-3 px-8 shadow">
+      <div className="flex items-center flex-shrink-0 text-white">
+        {/* Add logo here */}
+        <button
+          className="uppercase text-3xl font-semibold tracking-wider
+          text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-blue-800
+          hover:from-teal-400 hover:to-blue-600"
+          onClick={() => handleClick("/")}
         >
-          <div className="uppercase self-center text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
-            ShortZoo
-          </div>
-        </Link>
-
-        <div className="flex-1 h-full my-auto text-center font-medium text-slate-800">
-          {capitalizedPathname}
-        </div>
-
-        {user ? (
-          <div className="flex w-1/3 justify-end">
-            <Link href="/dashboard" passHref>
-              <div className="text-white bg-blue-600 hover:bg-blue-800 rounded-lg font-medium text-sm px-5 py-2.5 text-center mr-3">
-                Go to Dashboard
-              </div>
-            </Link>
-            <Link href="/dashboard" passHref>
-              <div
-                onClick={() => {
-                  logOut();
-                }}
-                className="text-blue-600 hover:text-blue-800 focus:ring-6 focus:outline-3 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >
-                Sign Out
-              </div>
-            </Link>
-          </div>
-        ) : (
-          <div className="flex md:w-1/3 h-full mx-auto md:my-auto justify-end">
-            <Link href="/signIn" passHref>
-              <div className="text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3">
-                Sign In
-              </div>
-            </Link>
-            <Link href="/signUp" passHref>
-              <div className="text-blue-600 hover:text-blue-800 focus:ring-6 focus:outline-3 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                Sign Up
-              </div>
-            </Link>
-          </div>
-        )}
+          ShortZoo
+        </button>
       </div>
+      {user ? (
+        <div className="flex items-center gap-4">
+          <a
+            className="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-xl py-3 px-4 rounded-lg shadow-md"
+            onClick={() => handleClick("/dashboard")}
+          >
+            Dashboard
+          </a>
+          <button
+            className="text-slate-800 hover:bg-slate-300 hover:text-slate-700 hover:shadow-md rounded-lg text-white text-xl font-bold py-3 px-4 cursor-pointer"
+            onClick={() => logOut()}
+          >
+            Sign Out
+          </button>
+        </div>
+      ) : (
+        <div className="flex items-center gap-4">
+          <a
+            className="text-slate-800 hover:text-slate-500 text-white font-bold py-5 px-7 cursor-pointer"
+            onClick={() => handleClick("/logIn")}
+          >
+            Log In
+          </a>
+          <button
+            className="bg-slate-200 hover:bg-slate-300 text-black font-bold py-5 px-7 rounded-lg shadow-md"
+            onClick={() => handleClick("/signUp")}
+          >
+            Sign Up
+          </button>
+        </div>
+      )}
     </nav>
   );
 };
