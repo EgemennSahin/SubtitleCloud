@@ -9,18 +9,31 @@ import React, { BaseSyntheticEvent, useEffect, useState } from "react";
 import { uuidv4 } from "@firebase/util";
 
 const IndexPage = () => {
-  const [processedVideo, setProcessedVideo] = useState();
+  const [processedVideo, setProcessedVideo] = useState<string | null>();
   const [processing, setProcessing] = useState(false);
+
+  useEffect(() => {
+    if (processedVideo) {
+      setProcessing(false);
+    }
+  }, [processedVideo]);
+
+  useEffect(() => {
+    if (processing) {
+      setProcessedVideo(null);
+    }
+  }, [processing]);
 
   async function handleFileUpload(event: BaseSyntheticEvent) {
     event.preventDefault();
-    setProcessing(true);
 
     const file = event.target.files[0];
     if (!file) {
       console.log("No file selected");
       return;
     }
+
+    setProcessing(true);
 
     const uid = uuidv4();
     const storageRef = ref(tempStorage, uid);
@@ -39,10 +52,11 @@ const IndexPage = () => {
       },
       async () => {
         // Video processing
+        setProcessedVideo(null);
 
         console.log("Processing video");
         const response_video_processing = await fetch(
-          "https://us-central1-captioning-693de.cloudfunctions.net/public_process_video",
+          "https://private-process-video-px2m4mdiyq-uc.a.run.app",
           {
             method: "POST",
             headers: {

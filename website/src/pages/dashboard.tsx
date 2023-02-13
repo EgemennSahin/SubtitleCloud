@@ -37,12 +37,8 @@ export default function DashboardPage() {
 
     setUploading(true);
 
-    const currentDate = new Date();
-    const currentTimestamp = currentDate.getTime().toString();
-    const storageRef = ref(
-      storageUploads,
-      "videos/" + user?.uid + "/" + currentTimestamp
-    );
+    const uid = uuidv4();
+    const storageRef = ref(storageUploads, "videos/" + user?.uid + "/" + uid);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -63,11 +59,24 @@ export default function DashboardPage() {
       (error: StorageError) => {
         console.log(error.message);
       },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
-        });
+      async () => {
+        console.log("Processing video");
+        const response_video_processing = await fetch(
+          "https://private-process-video-px2m4mdiyq-uc.a.run.app",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              video_id: uid,
+            }),
+          }
+        );
 
+        const data = await response_video_processing.json();
+
+        console.log("Cloud function invoked: ", data);
         setUploading(false);
         setFile(null);
         setProgress(0);
@@ -166,4 +175,7 @@ export default function DashboardPage() {
       </div>
     </>
   );
+}
+function uuidv4() {
+  throw new Error("Function not implemented.");
 }
