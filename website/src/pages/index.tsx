@@ -31,51 +31,67 @@ const IndexPage = () => {
     if (!file) {
       console.log("No file selected");
       return;
-    }
+    } else {
+      const video = document.createElement("video");
+      video.preload = "metadata";
 
-    setProcessing(true);
+      video.onloadedmetadata = function () {
+        window.URL.revokeObjectURL(video.src);
+        const duration = video.duration;
+        console.log("Duration: ", duration);
+        if (duration > 60) {
+          console.log("Video too long");
+          return;
+        }
 
-    const uid = uuidv4();
-    const storageRef = ref(tempStorage, uid);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+        console.log("Video is good");
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot: UploadTaskSnapshot) => {
-        const progress = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        console.log("Upload progress: " + progress + "%");
-      },
-      (error: StorageError) => {
-        console.log("Error uploading file: " + error.message);
-      },
-      async () => {
-        // Video processing
-        setProcessedVideo(null);
+        setProcessing(true);
 
-        console.log("Processing video");
-        const response_video_processing = await fetch(
-          "https://private-process-video-px2m4mdiyq-uc.a.run.app",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              video_id: uid,
-            }),
+        const uid = uuidv4();
+        const storageRef = ref(tempStorage, uid);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot: UploadTaskSnapshot) => {
+            const progress = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+            console.log("Upload progress: " + progress + "%");
+          },
+          (error: StorageError) => {
+            console.log("Error uploading file: " + error.message);
+          },
+          async () => {
+            // Video processing
+            setProcessedVideo(null);
+
+            console.log("Processing video");
+            const response_video_processing = await fetch(
+              "https://private-process-video-px2m4mdiyq-uc.a.run.app",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  video_id: uid,
+                }),
+              }
+            );
+
+            const data = await response_video_processing.json();
+
+            console.log("Cloud function invoked: ", data);
+
+            setProcessedVideo(data.url);
+            setProcessing(false);
           }
         );
-
-        const data = await response_video_processing.json();
-
-        console.log("Cloud function invoked: ", data);
-
-        setProcessedVideo(data.url);
-        setProcessing(false);
-      }
-    );
+      };
+      video.src = URL.createObjectURL(file);
+    }
   }
 
   return (
