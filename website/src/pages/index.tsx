@@ -53,7 +53,7 @@ const LandingPage = () => {
     setProcessingVideo(false);
     console.log("Cloud function invoked: ", data);
 
-    if (data.status === "success") {
+    if (data.url) {
       setProcessedVideo(data.url);
       return true;
     } else {
