@@ -57,6 +57,7 @@ const LandingPage = () => {
 
   async function handleVideoProcessing() {
     console.log("Here:", uploadedVideo);
+    console.log("Token:", token);
     setProcessingVideo(true);
     const response_video_processing = await fetch(
       "https://us-central1-captioning-693de.cloudfunctions.net/public_process_video",
