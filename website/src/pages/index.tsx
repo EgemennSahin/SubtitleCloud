@@ -11,8 +11,7 @@ import {
 } from "firebase/storage";
 import { tempStorage } from "@/configs/firebase/firebaseConfig";
 import { uuidv4 } from "@firebase/util";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import { useCallback, useState } from "react";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 const LandingPage = () => {
   const [file, setFile] = React.useState<File | null>(null);
@@ -20,25 +19,7 @@ const LandingPage = () => {
   const [uploadedVideo, setUploadedVideo] = React.useState<string | null>();
   const [processingVideo, setProcessingVideo] = React.useState(false);
   const [processedVideo, setProcessedVideo] = React.useState<string | null>();
-  const { executeRecaptcha } = useGoogleReCaptcha();
-  const [token, setToken] = useState<string | null>(null);
-
-  // Create an event handler so you can call the verification on button click event or form submit
-  const handleReCaptchaVerify = useCallback(async () => {
-    if (!executeRecaptcha) {
-      console.log("Execute recaptcha not yet available");
-      return;
-    }
-
-    const token = await executeRecaptcha("test");
-    // Do whatever you want with the token
-    setToken(token);
-    console.log("Token: ", token);
-  }, [executeRecaptcha]);
-
-  useEffect(() => {
-    handleReCaptchaVerify();
-  }, [handleReCaptchaVerify]);
+  const [token, setToken] = React.useState<string>();
 
   const scrollToSection = (documentId: string) => {
     scroller.scrollTo(documentId, {
@@ -50,34 +31,38 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
-    if (uploadedVideo && token) {
+    if (uploadedVideo && token != null) {
       handleVideoProcessing();
     }
   }, [uploadedVideo, token]);
 
   async function handleVideoProcessing() {
-    console.log("Here:", uploadedVideo);
-    console.log("Token:", token);
     setProcessingVideo(true);
+
+    if (!token || !uploadedVideo) {
+      console.log("No token");
+      return;
+    }
+
+    let formData = new FormData();
+    formData.append("video_id", uploadedVideo);
+    formData.append("token", token);
+
     const response_video_processing = await fetch(
       "https://us-central1-captioning-693de.cloudfunctions.net/public_process_video",
       {
         method: "POST",
+        mode: "no-cors",
         headers: {
           "Content-Type": "application/json",
         },
-        mode: "no-cors",
-        body: JSON.stringify({
-          video_id: uploadedVideo,
-          token: token,
-        }),
+        body: formData,
       }
     );
 
     const data = await response_video_processing.json();
     setProcessingVideo(false);
     console.log("Cloud function invoked: ", data);
-    console.log("Data url: ", data.url);
 
     setProcessingVideo(false);
 
@@ -203,6 +188,19 @@ const LandingPage = () => {
           <FileInput
             onFile={async (file: File) => {
               setFile(file);
+            }}
+          />
+
+          <Turnstile
+            siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
+            scriptOptions={{ async: true, defer: true, appendTo: "head" }}
+            onSuccess={(token: string) => {
+              setToken(token);
+              console.log(token);
+            }}
+            options={{
+              theme: "dark",
+              size: "invisible",
             }}
           />
 
