@@ -41,6 +41,14 @@ function FileInput({ onFile }: FileInputProps) {
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    if (window.innerWidth < 768) {
+      // Close the hamburger menu on mobile
+      const menu = document.querySelector(".navbar-collapse");
+
+      if (menu) {
+        menu.classList.add("hidden");
+      }
+    }
     e.preventDefault();
     setDragging(false);
     const file = e.dataTransfer.files[0];
@@ -73,17 +81,7 @@ function FileInput({ onFile }: FileInputProps) {
       onDragOver={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      onClick={() => {
-        if (window.innerWidth < 768) {
-          // Close the hamburger menu on mobile
-          const menu = document.querySelector(".navbar-collapse");
-
-          if (menu) {
-            menu.classList.add("hidden");
-          }
-        }
-        handleChooseFile;
-      }}
+      onClick={handleChooseFile}
     >
       {dragging ? (
         <p className="text-lg font-medium text-slate-200">Drop the file here</p>
