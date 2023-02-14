@@ -1,7 +1,12 @@
+import FileInput from "@/components/FileInput";
 import React from "react";
 import { Element, scroller } from "react-scroll";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import TextButton from "@/components/TextButton";
 
 const LandingPage = () => {
+  const [file, setFile] = React.useState<File | null>(null);
+
   const scrollToSection = (documentId: string) => {
     scroller.scrollTo(documentId, {
       duration: 700,
@@ -13,134 +18,106 @@ const LandingPage = () => {
 
   return (
     <div className="flex flex-wrap">
-      <div className="w-full min-h-screen max-h-full py-10 px-8 md:px-16 bg-gradient-to-b from-white to-slate-200">
-        <div className="flex flex-col items-center justify-center">
-          <h1 className="text-6xl text-transparent px-1 bg-gradient-to-r bg-clip-text from-slate-700 to-slate-800 font-bold mb-4 tracking-tighter">
+      <Element
+        name="start"
+        className="min-h-screen w-screen bg-gradient-to-b from-slate-50 to-slate-200"
+      >
+        <div className="flex flex-col items-center justify-center p-10">
+          <h1 className="mb-8 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text text-6xl font-bold tracking-tighter text-transparent">
             Add Captions to Video
           </h1>
-          <p className="text-3xl tracking-tight font-semibold text-transparent bg-gradient-to-r bg-clip-text from-slate-500 to-slate-700 mb-8">
+          <h2 className="mb-10 bg-gradient-to-r from-slate-500 to-slate-700 bg-clip-text text-3xl font-semibold tracking-tight text-transparent">
             Enhance your short video with accurate subtitles.
-          </p>
+          </h2>
 
-          <div className="flex items-center justify-center mb-10">
-            <button
-              className="bg-gradient-to-r from-teal-300 to-blue-400 text-3xl text-white font-bold py-10 px-20 rounded-xl drop-shadow-xl hover:shadow-xl transition duration-80 ease-in-out transform hover:scale-110"
+          <div className="mb-10 flex items-center justify-center">
+            <TextButton
               onClick={() => scrollToSection("uploading")}
-            >
-              Start Now
-            </button>
+              text={"Start Now"}
+            />
           </div>
 
-          <ul className="list-disc list-inside space-y-6">
+          <ul className="flex list-inside list-disc flex-col flex-wrap gap-3">
             <li className="flex items-center space-x-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-teal-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M17.293 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <CheckCircleIcon className="h-10 w-10 text-teal-400" />
               <span className="text-2xl font-semibold text-slate-600">
                 Caption every word
               </span>
             </li>
 
             <li className="flex items-center space-x-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-teal-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M17.293 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <CheckCircleIcon className="h-10 w-10 text-teal-400" />
+
               <span className="text-2xl font-semibold text-slate-600">
                 Easy to use
               </span>
             </li>
 
             <li className="flex items-center space-x-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-teal-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M17.293 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <CheckCircleIcon className="h-10 w-10 text-teal-400" />
+
               <span className="text-2xl font-semibold text-slate-600">
                 Increase engagement
               </span>
             </li>
 
             <li className="flex items-center space-x-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-teal-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M17.293 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <CheckCircleIcon className="h-10 w-10 text-teal-400" />
+
               <span className="text-2xl font-semibold text-slate-600">
                 Increase accessibility
               </span>
             </li>
           </ul>
         </div>
-      </div>
+      </Element>
 
       <Element
         name="uploading"
-        className="w-screen min-h-screen max-h-full bg-gradient-to-b from-slate-200 to-slate-400"
+        className="max-h-full min-h-screen w-screen bg-gradient-to-b from-slate-200 to-slate-400"
       >
-        <div> Upload Files</div>
+        <div className="flex flex-col items-center justify-center">
+          <h2 className="mb-10 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text text-4xl font-bold tracking-tighter text-transparent">
+            Upload your video
+          </h2>
 
-        <div className="flex items-center justify-center mb-10">
-          <button
-            className="bg-gradient-to-r from-teal-300 to-blue-400 text-3xl text-white font-bold py-10 px-20 rounded-xl drop-shadow-xl hover:shadow-xl transition duration-80 ease-in-out transform hover:scale-110"
-            onClick={() => scrollToSection("processing")}
-          >
-            Submit
-          </button>
+          <FileInput
+            onFile={(file: File) => {
+              console.log(file);
+              setFile(file);
+            }}
+          />
+
+          <div className="mt-10 flex items-center justify-center">
+            <TextButton
+              onClick={async () => {
+                // TODO: Upload file
+
+                scrollToSection("processing");
+              }}
+              text={"Submit"}
+              disabled={!file}
+            />
+          </div>
         </div>
       </Element>
 
       <Element
         name="processing"
-        className="w-screen min-h-screen max-h-full bg-gradient-to-b from-slate-400 to-slate-600"
+        className="max-h-full min-h-screen w-screen bg-gradient-to-b from-slate-400 to-slate-600"
       >
         <div> Processing</div>
-        <div className="flex items-center justify-center mb-10">
-          <button
-            className="bg-gradient-to-r from-teal-300 to-blue-400 text-3xl text-white font-bold py-10 px-20 rounded-xl drop-shadow-xl hover:shadow-xl transition duration-80 ease-in-out transform hover:scale-110"
+        <div className="mb-10 flex items-center justify-center">
+          <TextButton
             onClick={() => scrollToSection("output")}
-          >
-            Processed
-          </button>
+            text={" Processed"}
+          />
         </div>
       </Element>
 
       <Element
         name="output"
-        className="w-screen min-h-screen max-h-full bg-gradient-to-b from-slate-600 to-slate-800"
+        className="max-h-full min-h-screen w-screen bg-gradient-to-b from-slate-600 to-slate-800"
       >
         <div> Output </div>
       </Element>

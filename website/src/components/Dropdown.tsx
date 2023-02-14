@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Bars3Icon } from "@heroicons/react/24/solid";
 
 const Dropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -6,14 +7,14 @@ const Dropdown = () => {
   return (
     <div className="inline-block text-left">
       <button
-        className="bg-blue-100 hover:bg-blue-200 text-blue-700 hover:text-blue-900 font-semibold text-xl py-3 px-4 rounded-lg shadow-md"
+        className="py-3 px-6 text-xl font-semibold text-blue-700 "
         onClick={() => setIsOpen(!isOpen)}
       >
-        ...
+        <Bars3Icon className="h-6 w-6" />
       </button>
       {isOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg">
-          <div className="rounded-md bg-white shadow-xs">
+        <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md shadow-lg">
+          <div className="shadow-xs rounded-md bg-white">
             <div className="py-1">
               <a
                 href="#"
