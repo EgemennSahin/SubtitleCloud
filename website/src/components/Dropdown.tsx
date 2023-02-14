@@ -22,12 +22,13 @@ function Dropdown({ Options }: DropdownProps) {
               {
                 /* Add options here */
                 Options.map((option) => (
-                  <span
+                  <a
+                    key={option.name}
                     onClick={() => option.onClick()}
                     className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                   >
                     {option.name}
-                  </span>
+                  </a>
                 ))
               }
             </div>
