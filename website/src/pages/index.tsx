@@ -39,20 +39,23 @@ const LandingPage = () => {
   async function handleVideoProcessing() {
     setProcessingVideo(true);
 
-    if (!token || !uploadedVideo) {
+    if (!token) {
       console.log("No token");
       return;
     }
-
-    let formData = new FormData();
-    formData.append("video_id", uploadedVideo);
-    formData.append("token", token);
 
     const response_video_processing = await fetch(
       "https://us-central1-captioning-693de.cloudfunctions.net/public_process_video",
       {
         method: "POST",
-        body: formData,
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          video_id: uploadedVideo,
+          token: token,
+        }),
       }
     );
 
