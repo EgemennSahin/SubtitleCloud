@@ -2,6 +2,7 @@ from functions import main_function
 from google.cloud import storage
 import functions_framework
 from flask import json
+import requests
 
 
 @functions_framework.http
@@ -23,8 +24,26 @@ def public_process_video(request):
         print("Origin: " + request.headers.get('Origin') + " is not shortzoo.com")
         return ('', 403)
 
+    secret_recaptcha_key = "6LeXqH0kAAAAABOanzy8ZN94Y7ImteOuuO2FyQHV"
+
     # Get the video url from the request
     request_data = request.get_json()
+    token = request_data.get('token')
+
+    # Verify the token
+    captcha_response = requests.post(
+        "https://www.google.com/recaptcha/api/siteverify", {
+            "secret": secret_recaptcha_key,
+            "response": token
+        }
+    )
+
+    captcha_data = captcha_response.json()
+
+    if not captcha_data['success']:
+        print("Captcha failed")
+        return ('Invalid reCAPTCHA v3 Token', 403)
+
     video_id = request_data.get('video_id')
 
     client = storage.Client()
