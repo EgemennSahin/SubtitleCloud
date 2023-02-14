@@ -1,5 +1,5 @@
 import FileInput from "@/components/FileInput";
-import React, { BaseSyntheticEvent } from "react";
+import React, { BaseSyntheticEvent, useEffect } from "react";
 import { Element, scroller } from "react-scroll";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import TextButton from "@/components/TextButton";
@@ -28,7 +28,14 @@ const LandingPage = () => {
     });
   };
 
+  useEffect(() => {
+    if (uploadedVideo) {
+      handleVideoProcessing();
+    }
+  }, [uploadedVideo]);
+
   async function handleVideoProcessing() {
+    console.log("Here:", uploadedVideo);
     const response_video_processing = await fetch(
       "https://us-central1-captioning-693de.cloudfunctions.net/public_process_video",
       {
@@ -91,11 +98,9 @@ const LandingPage = () => {
           (error: StorageError) => {
             console.log("Error uploading file: " + error.message);
           },
-          async () => {
+          () => {
             setUploadedVideo(uid);
-
-            const processing = await handleVideoProcessing();
-            setProcessingVideo(processing);
+            setUploading(false);
           }
         );
       };
