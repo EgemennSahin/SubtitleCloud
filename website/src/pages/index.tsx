@@ -91,8 +91,11 @@ const LandingPage = () => {
           (error: StorageError) => {
             console.log("Error uploading file: " + error.message);
           },
-          () => {
+          async () => {
             setUploadedVideo(uid);
+
+            const processing = await handleVideoProcessing();
+            setProcessingVideo(processing);
           }
         );
       };
@@ -177,8 +180,6 @@ const LandingPage = () => {
                 scrollToSection("processing");
 
                 await handleFileUpload();
-                const processing = await handleVideoProcessing();
-                setProcessingVideo(processing);
               }}
               text={"Submit"}
               disabled={!file}
