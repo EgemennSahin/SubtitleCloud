@@ -1,39 +1,68 @@
-import { tempStorage } from "@/configs/firebase/firebaseConfig";
+import FileInput from "@/components/FileInput";
+import React, { BaseSyntheticEvent } from "react";
+import { Element, scroller } from "react-scroll";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import TextButton from "@/components/TextButton";
 import {
   ref,
   StorageError,
   uploadBytesResumable,
   UploadTaskSnapshot,
 } from "firebase/storage";
-import React, { BaseSyntheticEvent, useEffect, useState } from "react";
+import { tempStorage } from "@/configs/firebase/firebaseConfig";
 import { uuidv4 } from "@firebase/util";
 
-const IndexPage = () => {
-  const [processedVideo, setProcessedVideo] = useState<string | null>();
-  const [processing, setProcessing] = useState(false);
+const LandingPage = () => {
+  const [file, setFile] = React.useState<File | null>(null);
+  const [uploading, setUploading] = React.useState(false);
+  const [uploadedVideo, setUploadedVideo] = React.useState<string | null>();
+  const [processingVideo, setProcessingVideo] = React.useState(false);
+  const [processedVideo, setProcessedVideo] = React.useState<string | null>();
 
-  useEffect(() => {
-    if (processedVideo) {
-      setProcessing(false);
-    }
-  }, [processedVideo]);
+  const scrollToSection = (documentId: string) => {
+    scroller.scrollTo(documentId, {
+      duration: 700,
+      delay: 0,
+      smooth: "easeInOutQuart",
+      offset: -120,
+    });
+  };
 
-  useEffect(() => {
-    if (processing) {
+  async function handleVideoProcessing() {
+    const response_video_processing = await fetch(
+      "https://us-central1-captioning-693de.cloudfunctions.net/public_process_video",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          video_id: uploadedVideo,
+        }),
+      }
+    );
+
+    const data = await response_video_processing.json();
+    setProcessingVideo(false);
+    console.log("Cloud function invoked: ", data);
+
+    if (data.status === "success") {
+      setProcessedVideo(data.url);
+      return true;
+    } else {
       setProcessedVideo(null);
+      return false;
     }
-  }, [processing]);
+  }
 
-  async function handleFileUpload(event: BaseSyntheticEvent) {
-    event.preventDefault();
-
-    const file = event.target.files[0];
+  async function handleFileUpload() {
     if (!file) {
       console.log("No file selected");
       return;
     } else {
       const video = document.createElement("video");
       video.preload = "metadata";
+      video.src = URL.createObjectURL(file);
 
       video.onloadedmetadata = function () {
         window.URL.revokeObjectURL(video.src);
@@ -46,11 +75,10 @@ const IndexPage = () => {
 
         console.log("Video is good");
 
-        setProcessing(true);
-
         const uid = uuidv4();
         const storageRef = ref(tempStorage, uid);
         const uploadTask = uploadBytesResumable(storageRef, file);
+        setUploading(true);
 
         uploadTask.on(
           "state_changed",
@@ -63,72 +91,124 @@ const IndexPage = () => {
           (error: StorageError) => {
             console.log("Error uploading file: " + error.message);
           },
-          async () => {
-            // Video processing
-            setProcessedVideo(null);
-
-            console.log("Processing video");
-
-            const response_video_processing = await fetch(
-              "https://us-central1-captioning-693de.cloudfunctions.net/public_process_video",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  video_id: uid,
-                }),
-              }
-            );
-
-            const data = await response_video_processing.json();
-
-            console.log("Cloud function invoked: ", data);
-
-            setProcessedVideo(data.url);
-            setProcessing(false);
+          () => {
+            setUploadedVideo(uid);
           }
         );
       };
-      video.src = URL.createObjectURL(file);
     }
   }
 
   return (
-    <>
-      <label className="relative rounded-lg py-6 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200">
-        <input
-          type="file"
-          accept="video/*"
-          onChange={handleFileUpload}
-          className="w-10 h-10 opacity-0"
-        />
-        <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-xl">
-          Upload Video
+    <div className="flex flex-wrap">
+      <Element
+        name="start"
+        className="min-h-screen w-screen bg-gradient-to-b from-slate-50 to-slate-200"
+      >
+        <div className="flex flex-col items-center justify-center p-10">
+          <h1 className="mb-8 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text text-6xl font-bold tracking-tighter text-transparent">
+            Add Captions to Video
+          </h1>
+          <h2 className="mb-10 bg-gradient-to-r from-slate-500 to-slate-700 bg-clip-text text-3xl font-semibold tracking-tight text-transparent">
+            Enhance your short video with accurate subtitles.
+          </h2>
+
+          <div className="mb-10 flex items-center justify-center">
+            <TextButton
+              onClick={() => scrollToSection("uploading")}
+              text={"Start Now"}
+            />
+          </div>
+
+          <ul className="flex list-inside list-disc flex-col flex-wrap gap-3">
+            <li className="flex items-center space-x-2">
+              <CheckCircleIcon className="h-10 w-10 text-teal-400" />
+              <span className="text-2xl font-semibold text-slate-600">
+                Caption every word
+              </span>
+            </li>
+
+            <li className="flex items-center space-x-2">
+              <CheckCircleIcon className="h-10 w-10 text-teal-400" />
+
+              <span className="text-2xl font-semibold text-slate-600">
+                Easy to use
+              </span>
+            </li>
+
+            <li className="flex items-center space-x-2">
+              <CheckCircleIcon className="h-10 w-10 text-teal-400" />
+
+              <span className="text-2xl font-semibold text-slate-600">
+                Increase engagement
+              </span>
+            </li>
+
+            <li className="flex items-center space-x-2">
+              <CheckCircleIcon className="h-10 w-10 text-teal-400" />
+
+              <span className="text-2xl font-semibold text-slate-600">
+                Increase accessibility
+              </span>
+            </li>
+          </ul>
         </div>
-      </label>
+      </Element>
 
-      <div className="h-screen border-2">Test</div>
+      <Element
+        name="uploading"
+        className="max-h-full min-h-screen w-screen bg-gradient-to-b from-slate-200 to-slate-400"
+      >
+        <div className="flex flex-col items-center justify-center">
+          <h2 className="mb-10 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text text-4xl font-bold tracking-tighter text-transparent">
+            Upload your video
+          </h2>
 
-      {processing && (
-        <div className="flex items-center justify-center h-64">
-          <div className="text-2xl font-bold text-gray-600">
-            Stay on this page. Processing...
+          <FileInput
+            onFile={async (file: File) => {
+              setFile(file);
+            }}
+          />
+
+          <div className="mt-10 flex items-center justify-center">
+            <TextButton
+              onClick={async () => {
+                // TODO: Upload file
+                scrollToSection("processing");
+
+                await handleFileUpload();
+                const processing = await handleVideoProcessing();
+                setProcessingVideo(processing);
+              }}
+              text={"Submit"}
+              disabled={!file}
+            />
           </div>
         </div>
-      )}
+      </Element>
 
-      {processedVideo && (
-        <video
-          className="w-full h-64 bg-slate-800"
-          style={{ backgroundSize: `contain` }}
-          src={processedVideo}
-          controls
-        />
-      )}
-    </>
+      <Element
+        name="processing"
+        className="max-h-full min-h-screen w-screen bg-gradient-to-b from-slate-400 to-slate-600"
+      >
+        <div className="mb-10 flex items-center justify-center">
+          {processedVideo && (
+            <video
+              className="h-64 w-full bg-slate-800"
+              style={{ backgroundSize: `contain` }}
+              src={processedVideo}
+              controls
+            />
+          )}
+        </div>
+      </Element>
+
+      <Element
+        name="output"
+        className="max-h-full min-h-screen w-screen bg-gradient-to-b from-slate-600 to-slate-800"
+      ></Element>
+    </div>
   );
 };
 
-export default IndexPage;
+export default LandingPage;
