@@ -36,19 +36,19 @@ export default function LogInPage() {
 
   return (
     <div className="bg-white max-w-2xl mx-auto p-16 rounded-md drop-shadow-2xl flex-col space-y-4">
-      <h2 className="text-center font-bold text-3xl text-slate-800">
+      <h2 className="text-4xl text-transparent bg-gradient-to-r bg-clip-text from-slate-700 to-slate-800 font-bold mb-4 tracking-tighter">
         Sign in to your account
       </h2>
 
       <form onSubmit={handleSignIn}>
         <div className="flex flex-col gap-9">
           <div className="flex flex-col gap-1">
-            <label className="text-slate-700 font-bold text-lg tracking-wide">
+            <label className="text-slate-600 font-bold text-xl tracking-wider">
               Email
             </label>
             <input
               type="email"
-              className="bg-white border-2 border-slate-700 rounded-md text-black p-2.5"
+              className="bg-white border-2 border-slate-700 shadow-inner rounded-md text-black p-2.5"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
@@ -67,7 +67,7 @@ export default function LogInPage() {
 
             <input
               type="password"
-              className="bg-white border-2 border-slate-700 rounded-md text-black p-2.5"
+              className="bg-white border-2 border-slate-700 shadow-inner rounded-md text-black p-2.5"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>

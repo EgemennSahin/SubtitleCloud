@@ -9,6 +9,11 @@ module.exports = {
       fontFamily: {
         sans: ["Kanit", "sans-serif"],
       },
+
+      boxShadow: {
+        inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.2)",
+        "inner-lg": "inset 0 4px 12px 0 rgba(0, 0, 0, 0.2)",
+      },
     },
   },
   plugins: [],

@@ -13,9 +13,9 @@ const LandingPage = () => {
 
   return (
     <div className="flex flex-wrap">
-      <div className="w-full min-h-screen max-h-full py-10 px-16 bg-gradient-to-b from-white to-slate-200">
+      <div className="w-full min-h-screen max-h-full py-10 px-8 md:px-16 bg-gradient-to-b from-white to-slate-200">
         <div className="flex flex-col items-center justify-center">
-          <h1 className="text-6xl text-transparent bg-gradient-to-r bg-clip-text from-slate-700 to-slate-800 font-bold mb-4 tracking-tighter">
+          <h1 className="text-6xl text-transparent px-1 bg-gradient-to-r bg-clip-text from-slate-700 to-slate-800 font-bold mb-4 tracking-tighter">
             Add Captions to Video
           </h1>
           <p className="text-3xl tracking-tight font-semibold text-transparent bg-gradient-to-r bg-clip-text from-slate-500 to-slate-700 mb-8">
@@ -24,8 +24,8 @@ const LandingPage = () => {
 
           <div className="flex items-center justify-center mb-10">
             <button
-              className="bg-gradient-to-r from-teal-300 to-blue-400 text-3xl text-white font-bold py-10 px-20 rounded-xl drop-shadow-xl hover:shadow-xl transition duration-50 ease-in-out transform hover:-translate-y-1 hover:scale-110"
-              onClick={() => scrollToSection("uploadFiles")}
+              className="bg-gradient-to-r from-teal-300 to-blue-400 text-3xl text-white font-bold py-10 px-20 rounded-xl drop-shadow-xl hover:shadow-xl transition duration-80 ease-in-out transform hover:scale-110"
+              onClick={() => scrollToSection("uploading")}
             >
               Start Now
             </button>
@@ -35,7 +35,7 @@ const LandingPage = () => {
             <li className="flex items-center space-x-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-blue-300"
+                className="h-12 w-12 text-teal-400"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -53,7 +53,7 @@ const LandingPage = () => {
             <li className="flex items-center space-x-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-blue-300"
+                className="h-12 w-12 text-teal-400"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -71,7 +71,7 @@ const LandingPage = () => {
             <li className="flex items-center space-x-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-blue-300"
+                className="h-12 w-12 text-teal-400"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -89,7 +89,7 @@ const LandingPage = () => {
             <li className="flex items-center space-x-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-blue-300"
+                className="h-12 w-12 text-teal-400"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -108,10 +108,41 @@ const LandingPage = () => {
       </div>
 
       <Element
-        name="uploadFiles"
+        name="uploading"
         className="w-screen min-h-screen max-h-full bg-gradient-to-b from-slate-200 to-slate-400"
       >
-        <div> test</div>
+        <div> Upload Files</div>
+
+        <div className="flex items-center justify-center mb-10">
+          <button
+            className="bg-gradient-to-r from-teal-300 to-blue-400 text-3xl text-white font-bold py-10 px-20 rounded-xl drop-shadow-xl hover:shadow-xl transition duration-80 ease-in-out transform hover:scale-110"
+            onClick={() => scrollToSection("processing")}
+          >
+            Submit
+          </button>
+        </div>
+      </Element>
+
+      <Element
+        name="processing"
+        className="w-screen min-h-screen max-h-full bg-gradient-to-b from-slate-400 to-slate-600"
+      >
+        <div> Processing</div>
+        <div className="flex items-center justify-center mb-10">
+          <button
+            className="bg-gradient-to-r from-teal-300 to-blue-400 text-3xl text-white font-bold py-10 px-20 rounded-xl drop-shadow-xl hover:shadow-xl transition duration-80 ease-in-out transform hover:scale-110"
+            onClick={() => scrollToSection("output")}
+          >
+            Processed
+          </button>
+        </div>
+      </Element>
+
+      <Element
+        name="output"
+        className="w-screen min-h-screen max-h-full bg-gradient-to-b from-slate-600 to-slate-800"
+      >
+        <div> Output </div>
       </Element>
     </div>
   );
