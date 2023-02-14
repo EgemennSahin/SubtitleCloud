@@ -11,6 +11,8 @@ import {
 } from "firebase/storage";
 import { tempStorage } from "@/configs/firebase/firebaseConfig";
 import { uuidv4 } from "@firebase/util";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { useCallback, useState } from "react";
 
 const LandingPage = () => {
   const [file, setFile] = React.useState<File | null>(null);
@@ -18,6 +20,25 @@ const LandingPage = () => {
   const [uploadedVideo, setUploadedVideo] = React.useState<string | null>();
   const [processingVideo, setProcessingVideo] = React.useState(false);
   const [processedVideo, setProcessedVideo] = React.useState<string | null>();
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const [token, setToken] = useState<string | null>(null);
+
+  // Create an event handler so you can call the verification on button click event or form submit
+  const handleReCaptchaVerify = useCallback(async () => {
+    if (!executeRecaptcha) {
+      console.log("Execute recaptcha not yet available");
+      return;
+    }
+
+    const token = await executeRecaptcha("test");
+    // Do whatever you want with the token
+    setToken(token);
+    console.log("Token: ", token);
+  }, [executeRecaptcha]);
+
+  useEffect(() => {
+    handleReCaptchaVerify();
+  }, [handleReCaptchaVerify]);
 
   const scrollToSection = (documentId: string) => {
     scroller.scrollTo(documentId, {
@@ -29,13 +50,14 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
-    if (uploadedVideo) {
+    if (uploadedVideo && token) {
       handleVideoProcessing();
     }
-  }, [uploadedVideo]);
+  }, [uploadedVideo, token]);
 
   async function handleVideoProcessing() {
     console.log("Here:", uploadedVideo);
+    setProcessingVideo(true);
     const response_video_processing = await fetch(
       "https://us-central1-captioning-693de.cloudfunctions.net/public_process_video",
       {
@@ -43,8 +65,10 @@ const LandingPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        mode: "no-cors",
         body: JSON.stringify({
           video_id: uploadedVideo,
+          token: token,
         }),
       }
     );
@@ -53,6 +77,8 @@ const LandingPage = () => {
     setProcessingVideo(false);
     console.log("Cloud function invoked: ", data);
     console.log("Data url: ", data.url);
+
+    setProcessingVideo(false);
 
     if (data.url) {
       setProcessedVideo(data.url);
@@ -188,8 +214,7 @@ const LandingPage = () => {
                 await handleFileUpload();
               }}
               text={"Submit"}
-              disabled={!file}
-              recaptcha={true}
+              disabled={!file && !processingVideo}
             />
           </div>
         </div>
