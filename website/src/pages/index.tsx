@@ -52,10 +52,6 @@ const LandingPage = () => {
       "https://us-central1-captioning-693de.cloudfunctions.net/public_process_video",
       {
         method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: formData,
       }
     );
