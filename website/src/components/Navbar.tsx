@@ -36,11 +36,16 @@ const Navbar = () => {
             className="hidden cursor-pointer rounded-lg py-3 px-4 text-xl font-bold text-slate-800 hover:bg-slate-300 hover:text-slate-700 hover:shadow-md sm:block"
             onClick={() => logOut()}
           >
-            Sign Out
+            Log Out
           </button>
 
           <div className="sm:hidden">
-            <Dropdown />
+            <Dropdown
+              Options={[
+                { name: "Dashboard", onClick: () => handleClick("/dashboard") },
+                { name: "Log Out", onClick: logOut },
+              ]}
+            />
           </div>
         </div>
       ) : (
@@ -59,7 +64,12 @@ const Navbar = () => {
           </a>
 
           <div className="sm:hidden">
-            <Dropdown />
+            <Dropdown
+              Options={[
+                { name: "Sign Up", onClick: () => handleClick("/signUp") },
+                { name: "Log In", onClick: () => handleClick("/logIn") },
+              ]}
+            />
           </div>
         </div>
       )}

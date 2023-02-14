@@ -73,14 +73,27 @@ function FileInput({ onFile }: FileInputProps) {
       onDragOver={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      onClick={handleChooseFile}
+      onClick={() => {
+        if (window.innerWidth < 768) {
+          // Close the hamburger menu on mobile
+          const menu = document.querySelector(".navbar-collapse");
+
+          if (menu) {
+            menu.classList.add("hidden");
+          }
+        }
+        handleChooseFile;
+      }}
     >
       {dragging ? (
         <p className="text-lg font-medium text-slate-200">Drop the file here</p>
       ) : (
         <div className="flex flex-col items-center gap-3">
           <ArrowUpTrayIcon className="h-16 w-16 text-slate-200" />
-          <p className="bg-gradient-to-r from-slate-50 to-slate-100 bg-clip-text text-xl font-semibold tracking-wide text-transparent">
+          <p className="bg-gradient-to-r from-slate-50 to-slate-100 bg-clip-text text-xl font-semibold tracking-wide text-transparent sm:hidden">
+            Browse your library
+          </p>
+          <p className="hidden bg-gradient-to-r from-slate-50 to-slate-100 bg-clip-text text-xl font-semibold tracking-wide text-transparent sm:block">
             Drag and drop <br /> or <span className="text-teal-200">click</span>{" "}
             to browse
           </p>
