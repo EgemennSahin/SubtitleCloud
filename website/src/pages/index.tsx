@@ -52,7 +52,7 @@ const LandingPage = () => {
     const data = await response_video_processing.json();
     setProcessingVideo(false);
     console.log("Cloud function invoked: ", data);
-    console.log("Data url: ", data.url)
+    console.log("Data url: ", data.url);
 
     if (data.url) {
       setProcessedVideo(data.url);
@@ -189,6 +189,7 @@ const LandingPage = () => {
               }}
               text={"Submit"}
               disabled={!file}
+              recaptcha={true}
             />
           </div>
         </div>
