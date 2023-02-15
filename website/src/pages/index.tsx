@@ -36,6 +36,10 @@ const LandingPage = () => {
     }
   }, [uploadedVideo, token]);
 
+  useEffect(() => {
+    console.log(token);
+  }, [token]);
+
   async function handleVideoProcessing() {
     if (!uploadedVideo || !token) {
       console.log("Wrong parameters");
@@ -59,6 +63,8 @@ const LandingPage = () => {
           }),
         }
       );
+
+      setUploadedVideo(null);
 
       const data = await response_video_processing.json();
       setProcessingVideo(false);
