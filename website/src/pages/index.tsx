@@ -31,7 +31,7 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
-    if (uploadedVideo && token != null) {
+    if (uploadedVideo != null && token != null) {
       handleVideoProcessing();
     }
   }, [uploadedVideo, token]);
@@ -39,8 +39,8 @@ const LandingPage = () => {
   async function handleVideoProcessing() {
     setProcessingVideo(true);
 
-    if (!token) {
-      console.log("No token");
+    if (!uploadedVideo || !token) {
+      console.log("Wrong parameters");
       return;
     }
 
