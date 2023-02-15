@@ -215,7 +215,7 @@ const LandingPage = () => {
                 scrollToSection("processing");
               }}
               text={"Submit"}
-              disabled={!file && processingVideo && uploading}
+              disabled={!file || processingVideo || uploading}
             />
           </div>
         </div>
