@@ -37,39 +37,42 @@ const LandingPage = () => {
   }, [uploadedVideo, token]);
 
   async function handleVideoProcessing() {
-    setProcessingVideo(true);
-
     if (!uploadedVideo || !token) {
       console.log("Wrong parameters");
       return;
     }
 
-    const response_video_processing = await fetch(
-      "https://us-central1-captioning-693de.cloudfunctions.net/public_process_video",
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          video_id: uploadedVideo,
-          token: token,
-        }),
+    try {
+      setProcessingVideo(true);
+
+      const response_video_processing = await fetch(
+        "https://us-central1-captioning-693de.cloudfunctions.net/public_process_video",
+        {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            video_id: uploadedVideo,
+            token: token,
+          }),
+        }
+      );
+
+      const data = await response_video_processing.json();
+      setProcessingVideo(false);
+      console.log("Cloud function invoked: ", data);
+
+      if (data.url) {
+        setProcessedVideo(data.url);
+        return true;
+      } else {
+        setProcessedVideo(null);
+        return false;
       }
-    );
-
-    const data = await response_video_processing.json();
-    setProcessingVideo(false);
-    console.log("Cloud function invoked: ", data);
-
-    setProcessingVideo(false);
-
-    if (data.url) {
-      setProcessedVideo(data.url);
-      return true;
-    } else {
-      setProcessedVideo(null);
+    } catch {
+      setProcessingVideo(false);
       return false;
     }
   }
@@ -96,6 +99,7 @@ const LandingPage = () => {
 
         const uid = uuidv4();
         const storageRef = ref(tempStorage, uid);
+
         const uploadTask = uploadBytesResumable(storageRef, file);
         setUploading(true);
 
@@ -109,6 +113,7 @@ const LandingPage = () => {
           },
           (error: StorageError) => {
             console.log("Error uploading file: " + error.message);
+            setUploading(false);
           },
           () => {
             setUploadedVideo(uid);
@@ -206,13 +211,11 @@ const LandingPage = () => {
           <div className="mt-10 flex items-center justify-center">
             <TextButton
               onClick={async () => {
-                // TODO: Upload file
-                scrollToSection("processing");
-
                 await handleFileUpload();
+                scrollToSection("processing");
               }}
               text={"Submit"}
-              disabled={!file && !processingVideo}
+              disabled={!file && processingVideo && uploading}
             />
           </div>
         </div>

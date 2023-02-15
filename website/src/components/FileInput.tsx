@@ -53,7 +53,6 @@ function FileInput({ onFile }: FileInputProps) {
     setDragging(false);
     const file = e.dataTransfer.files[0];
     setFile(file);
-    setDragging(false);
   };
 
   const handleChooseFile = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -66,7 +65,6 @@ function FileInput({ onFile }: FileInputProps) {
       const file = (e.target as HTMLInputElement).files![0];
       // handle dropped files
       setFile(file);
-      setDragging(false);
     };
     input.click();
   };
