@@ -185,7 +185,7 @@ const LandingPage = () => {
           </h2>
 
           <FileInput
-            onFile={async (file: File) => {
+            onFile={(file: File) => {
               setFile(file);
             }}
           />
@@ -225,7 +225,7 @@ const LandingPage = () => {
         <div className="mb-10 flex items-center justify-center">
           {processedVideo && (
             <video
-              className="h-64 w-full bg-slate-800"
+              className="h-64 w-64 bg-slate-800"
               style={{ backgroundSize: `contain` }}
               src={processedVideo}
               controls
@@ -233,11 +233,6 @@ const LandingPage = () => {
           )}
         </div>
       </Element>
-
-      <Element
-        name="output"
-        className="max-h-full min-h-screen w-screen bg-gradient-to-b from-slate-600 to-slate-800"
-      ></Element>
     </div>
   );
 };

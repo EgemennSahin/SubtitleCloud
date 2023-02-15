@@ -3,15 +3,17 @@ from google.cloud import storage
 import functions_framework
 from flask import json
 import requests
+import os
 
 
 @functions_framework.http
 def public_process_video(request):
+    # Set CORS headers for the preflight request
     if request.method == 'OPTIONS':
         # Allows GET requests from any origin with the Content-Type
         # header and caches preflight response for an 3600s
         headers = {
-            'Access-Control-Allow-Origin': 'shortzoo.com',
+            'Access-Control-Allow-Origin': 'https://shortzoo.com',
             'Access-Control-Allow-Methods': 'GET, POST',
             'Access-Control-Allow-Headers': 'Content-Type',
             'Access-Control-Max-Age': '3600'
@@ -19,30 +21,29 @@ def public_process_video(request):
 
         return ('', 204, headers)
 
-    print("Checking origin: " + request.headers.get('Origin'))
-    if request.headers.get('Origin') != 'https://shortzoo.com':
-        print("Origin: " + request.headers.get('Origin') + " is not shortzoo.com")
-        return ('', 403)
-
-    secret_recaptcha_key = "6LeXqH0kAAAAABOanzy8ZN94Y7ImteOuuO2FyQHV"
+    print("request: ", request)
+    secret_recaptcha_key = os.getenv('CLOUDFLARE_SECRET')
 
     # Get the video url from the request
     request_data = request.get_json()
+    print("request_data: ", request_data)
     token = request_data.get('token')
 
+    print("Starting verification with the following data:")
     # Verify the token
     captcha_response = requests.post(
-        "https://www.google.com/recaptcha/api/siteverify", {
+        "https://challenges.cloudflare.com/turnstile/v0/siteverify", {
             "secret": secret_recaptcha_key,
             "response": token
         }
     )
+    print("VERIFICATION FINISHED")
 
     captcha_data = captcha_response.json()
 
     if not captcha_data['success']:
         print("Captcha failed")
-        return ('Invalid reCAPTCHA v3 Token', 403)
+        return ('Invalid reCAPTCHA Token', 403)
 
     video_id = request_data.get('video_id')
 
@@ -78,10 +79,9 @@ def public_process_video(request):
 
     # Set CORS headers for the main request
     headers = {
-        'Access-Control-Allow-Origin': 'shortzoo.com',
+        'Access-Control-Allow-Origin': 'https://shortzoo.com',
         'Content-Type': 'application/json'
     }
-
     url_prefix = "https://storage.googleapis.com/"
     processedVideoUrl = url_prefix + bucket_name + "/" + output_file_name
 
