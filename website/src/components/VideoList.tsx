@@ -28,11 +28,16 @@ const VideoList = (props: { isOutput: boolean }) => {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center h-screen">
-        <ul className="p-16 grid grid-cols-4 gap-8 text-center">
+      <div className="flex h-screen flex-col items-center justify-center">
+        <ul className="grid grid-cols-4 gap-8 p-16 text-center">
           {videos.map((video, index) => (
             <li className="flex items-center justify-center" key={index}>
-              <VideoPlayer videoSource={video} />
+              <video
+                className="h-64 w-full bg-slate-800"
+                style={{ backgroundSize: `contain` }}
+                src={video}
+                controls
+              />
             </li>
           ))}
         </ul>
