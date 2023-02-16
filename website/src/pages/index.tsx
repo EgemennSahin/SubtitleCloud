@@ -137,50 +137,53 @@ const LandingPage = () => {
         className="min-h-screen w-screen bg-gradient-to-b from-slate-50 to-slate-200"
       >
         <div className="flex flex-col items-center justify-center p-10">
-          <h1 className="mb-8 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text text-6xl font-bold tracking-tighter text-transparent">
+          <h1 className="mb-3 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text pr-1 text-6xl font-bold leading-tight tracking-tighter text-transparent">
             Add Captions to Video
           </h1>
           <h2 className="mb-10 bg-gradient-to-r from-slate-500 to-slate-700 bg-clip-text text-3xl font-semibold tracking-tight text-transparent">
             Enhance your short video with accurate subtitles.
           </h2>
 
-          <div className="mb-10 flex items-center justify-center">
+          <div className="mb-4 flex items-center justify-center">
             <TextButton
               onClick={() => scrollToSection("uploading")}
               text={"Start Now"}
             />
           </div>
 
-          <ul className="flex list-inside list-disc flex-col flex-wrap gap-3">
-            <li className="flex items-center space-x-2">
-              <CheckCircleIcon className="h-10 w-10 text-teal-400" />
-              <span className="text-2xl font-semibold text-slate-600">
-                Caption every word
-              </span>
+          <h3 className="text-md mb-10 font-normal tracking-wide text-slate-500">
+            Video must be less than 60 seconds long.
+          </h3>
+
+          <ul className="grid grid-cols-1 grid-rows-2 justify-center gap-6 sm:grid-cols-2">
+            <li className="flex items-center space-x-1">
+              <CheckCircleIcon className="h-9 w-9 shrink-0 text-teal-400" />
+              <h3 className="text-2xl font-semibold text-slate-600">
+                No sign up
+              </h3>
             </li>
 
-            <li className="flex items-center space-x-2">
-              <CheckCircleIcon className="h-10 w-10 text-teal-400" />
+            <li className="flex items-center space-x-1">
+              <CheckCircleIcon className="h-9 w-9 shrink-0 text-teal-400" />
 
-              <span className="text-2xl font-semibold text-slate-600">
+              <h3 className="text-2xl font-semibold text-slate-600">
                 Easy to use
-              </span>
+              </h3>
             </li>
 
-            <li className="flex items-center space-x-2">
-              <CheckCircleIcon className="h-10 w-10 text-teal-400" />
+            <li className="flex items-center space-x-1">
+              <CheckCircleIcon className="h-9 w-9 shrink-0 text-teal-400" />
+              <h3 className="text-2xl font-semibold text-slate-600">
+                Caption every word
+              </h3>
+            </li>
 
-              <span className="text-2xl font-semibold text-slate-600">
+            <li className="flex items-center space-x-1">
+              <CheckCircleIcon className="h-9 w-9 shrink-0 text-teal-400" />
+
+              <h3 className="text-2xl font-semibold text-slate-600">
                 Increase engagement
-              </span>
-            </li>
-
-            <li className="flex items-center space-x-2">
-              <CheckCircleIcon className="h-10 w-10 text-teal-400" />
-
-              <span className="text-2xl font-semibold text-slate-600">
-                Increase accessibility
-              </span>
+              </h3>
             </li>
           </ul>
         </div>
