@@ -26,7 +26,7 @@ const LandingPage = () => {
       duration: 700,
       delay: 0,
       smooth: "easeInOutQuart",
-      offset: -120,
+      offset: -100,
     });
   };
 
@@ -136,26 +136,26 @@ const LandingPage = () => {
         name="start"
         className="min-h-screen w-screen bg-gradient-to-b from-slate-50 to-slate-200"
       >
-        <div className="flex flex-col items-center justify-center p-10">
-          <h1 className="mb-3 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text pr-1 text-6xl font-bold leading-tight tracking-tighter text-transparent">
-            Add Captions to Video
+        <div className="mb-10 flex flex-col items-center justify-center px-8 pt-5 sm:pt-9">
+          <h1 className="mb-3 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text pr-1 text-center text-6xl font-bold leading-tight tracking-tighter text-transparent ">
+            Caption Video
           </h1>
-          <h2 className="mb-10 bg-gradient-to-r from-slate-500 to-slate-700 bg-clip-text text-3xl font-semibold tracking-tight text-transparent">
-            Enhance your short video with accurate subtitles.
+          <h2 className="mb-5 shrink-0 bg-gradient-to-r from-slate-500 to-slate-700 bg-clip-text pr-1 text-center text-3xl font-semibold tracking-tight text-transparent sm:mb-8">
+            Enhance your short video with accurate subtitles
           </h2>
 
-          <div className="mb-4 flex items-center justify-center">
+          <div className="mb-4 flex items-center justify-center p-4">
             <TextButton
               onClick={() => scrollToSection("uploading")}
               text={"Start Now"}
             />
           </div>
 
-          <h3 className="text-md mb-10 font-normal tracking-wide text-slate-500">
+          <h3 className="text-md mb-6 font-normal tracking-wide text-slate-500 sm:mb-10">
             Video must be less than 60 seconds long.
           </h3>
 
-          <ul className="grid grid-cols-1 grid-rows-2 justify-center gap-6 sm:grid-cols-2">
+          <ul className="grid grid-cols-1 grid-rows-2 justify-center gap-3 sm:grid-cols-2 sm:gap-7 md:gap-x-12">
             <li className="flex items-center space-x-1">
               <CheckCircleIcon className="h-9 w-9 shrink-0 text-teal-400" />
               <h3 className="text-2xl font-semibold text-slate-600">
@@ -193,27 +193,14 @@ const LandingPage = () => {
         name="uploading"
         className="max-h-full min-h-screen w-screen bg-gradient-to-b from-slate-200 to-slate-400"
       >
-        <div className="flex flex-col items-center justify-center">
-          <h2 className="mb-10 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text text-4xl font-bold tracking-tighter text-transparent">
+        <div className="flex flex-col items-center justify-start">
+          <h2 className="mb-10 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text pr-1 text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
             Upload your video
           </h2>
 
           <FileInput
             onFile={(file: File) => {
               setFile(file);
-            }}
-          />
-
-          <Turnstile
-            siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
-            scriptOptions={{ async: true, defer: true, appendTo: "head" }}
-            onSuccess={(token: string) => {
-              setToken(token);
-              console.log(token);
-            }}
-            options={{
-              theme: "dark",
-              size: "invisible",
             }}
           />
 
@@ -227,6 +214,19 @@ const LandingPage = () => {
               disabled={!file || processingVideo || uploading}
             />
           </div>
+
+          <Turnstile
+            siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
+            scriptOptions={{ async: true, defer: true, appendTo: "head" }}
+            onSuccess={(token: string) => {
+              setToken(token);
+              console.log(token);
+            }}
+            options={{
+              theme: "dark",
+              size: "invisible",
+            }}
+          />
         </div>
       </Element>
 
@@ -234,7 +234,10 @@ const LandingPage = () => {
         name="processing"
         className="max-h-full min-h-screen w-screen bg-gradient-to-b from-slate-400 to-slate-600"
       >
-        <div className="mb-10 flex items-center justify-center">
+        <div className="flex flex-col items-center justify-start">
+          <h2 className="mb-10 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text pr-1 text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
+            Processing...
+          </h2>{" "}
           {processedVideo && (
             <video
               className="h-64 w-64 bg-slate-800"
