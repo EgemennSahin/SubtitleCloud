@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const inDevelopment = true;
   const password = "bruh123";
   const [input, setInput] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
