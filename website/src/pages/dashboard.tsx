@@ -123,14 +123,16 @@ export default function DashboardPage() {
   // Change user.email to user.displayName
   return (
     <>
-      <div className="flex flex-col items-center h-screen gap-7">
+      <div className="flex h-screen flex-col items-center gap-7">
         <div>
           {user && (
             <div className="flex flex-col items-center gap-7">
               Hello, {user.displayName}
-              {!userIsPremium ? (
+              {userIsPremium == null ? (
+                <div>Loading...</div>
+              ) : !userIsPremium ? (
                 <button
-                  className="bg-blue-600 text-white py-4 px-8 rounded-lg"
+                  className="rounded-lg bg-blue-600 py-4 px-8 text-white"
                   onClick={() => createCheckoutSession(user.uid)}
                 >
                   Upgrade to Premium
@@ -141,15 +143,15 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
-        <label className="relative rounded-lg py-6 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200">
+        <label className="relative rounded-lg bg-blue-600 py-6 px-20 transition duration-200 hover:bg-blue-800">
           <input
             type="file"
             accept="video/*"
             onChange={handleFileUpload}
-            className="w-10 h-10 opacity-0"
+            className="h-10 w-10 opacity-0"
             disabled={!userIsPremium}
           />
-          <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-xl">
+          <div className="absolute inset-0 flex items-center justify-center text-xl font-bold text-white">
             Choose Video
           </div>
         </label>
@@ -157,21 +159,21 @@ export default function DashboardPage() {
         {processing && <ProgressBar progress={progress} />}
 
         <Link
-          className="h-10 relative rounded-lg py-6 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200"
+          className="relative h-10 rounded-lg bg-blue-600 py-6 px-20 transition duration-200 hover:bg-blue-800"
           href="/uploadedVideos"
           passHref
         >
-          <div className="absolute inset-0 flex items-center justify-center  text-white font-bold text-xl">
+          <div className="absolute inset-0 flex items-center justify-center  text-xl font-bold text-white">
             Uploaded Videos
           </div>
         </Link>
 
         <Link
-          className="h-10 relative rounded-lg py-6 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200"
+          className="relative h-10 rounded-lg bg-blue-600 py-6 px-20 transition duration-200 hover:bg-blue-800"
           href="/outputVideos"
           passHref
         >
-          <div className="absolute  inset-0 flex items-center justify-center text-center text-white font-bold text-xl">
+          <div className="absolute  inset-0 flex items-center justify-center text-center text-xl font-bold text-white">
             Generated Videos
           </div>
         </Link>

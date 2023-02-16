@@ -10,9 +10,9 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     if (!user) {
       router.push("/logIn");
     }
-  }, [router, user]);
+  }, [user, router]);
 
-  return <>{user ? children : <div>Test</div>}</>;
+  return <>{user && children}</>;
 };
 
 export default ProtectedRoute;
