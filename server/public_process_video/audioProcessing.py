@@ -6,72 +6,29 @@ import whisperx
 import whisperx.utils
 
 from google.cloud import storage
-import pickle
-import bz2
-
-import os
 
 # Create an audio file from the mp4 file and export an accordingly named file
-
-
 def create_mp3(mp4_filename, output_filename):
     (
         ffmpeg.input(mp4_filename)
         .output(output_filename, preset="ultrafast")
         .run()
     )
-
     return output_filename
 
 
 # Transcribe the mp3 file and export a Whisper response
-def transcribe_mp3(audio_filename):
+def transcribe_mp3(audio_filename, models):
+    whisper, align_model, align_model_metadata = models['whisper'], models['align_model'], models['align_model_metadata']
     # Get the models in the bucket under the models bucket
-    client = storage.Client()
-    models_bucket = client.bucket("subtitle-cloud-models")
-
     print("Transcribing the audio")
-    result = transcribe_whisper(audio_filename, models_bucket)
-
-    print("Aligning transcription and audio")
-    results_aligned = align_whisperx(audio_filename, result, models_bucket)
-
-    return results_aligned
-
-
-def transcribe_whisper(audio_filename, models_bucket):
-    model = "whisper"
-    pickled_model = model + ".pkl.bz2"
-    models_bucket.blob("models/" + pickled_model).download_to_filename(
-        "/tmp/" + pickled_model)
-    with bz2.BZ2File("/tmp/" + pickled_model, 'rb') as pickle_file:
-        whisper = pickle.load(pickle_file)
 
     DECODE_OPTIONS = {'language': 'en'}
-
     result = whisper.transcribe(audio_filename, **DECODE_OPTIONS, fp16=False)
 
-    os.remove("/tmp/" + pickled_model)
-    return result
-
-
-def align_whisperx(audio_filename, result, models_bucket):
-    models = {"align_model": None,
-              "align_model_metadata": None}
-
-    for model in models:
-        pickled_model = model + ".pkl.bz2"
-        models_bucket.blob("models/" + pickled_model).download_to_filename(
-            "/tmp/" + pickled_model)
-        with bz2.BZ2File("/tmp/" + pickled_model, 'rb') as pickle_file:
-            models[model] = pickle.load(pickle_file)
-
+    print("Aligning transcription and audio")
     results_aligned = whisperx.align(
-        result["segments"], models["align_model"], models["align_model_metadata"], audio_filename, "cpu")
-
-    for model in models:
-        pickled_model = model + ".pkl.bz2"
-        os.remove("/tmp/" + pickled_model)
+        result["segments"], align_model, align_model_metadata, audio_filename, "cpu")
 
     return results_aligned
 
@@ -116,12 +73,12 @@ def export_srt(whisper_response, output_srt_filename):
 
 
 # Main Function
-def process_audio(main_video, output_name):
+def process_audio(main_video, models, output_name):
     print("Extracting audio from main video.")
     mp3_filename = create_mp3(main_video, output_name + '.mp3')
 
     print("Initializing AI")
-    results = transcribe_mp3(mp3_filename)
+    results = transcribe_mp3(mp3_filename, models)
 
     print("Creating subtitles from the transcription.")
     subtitle_filename = export_srt(results, output_name + '.srt')

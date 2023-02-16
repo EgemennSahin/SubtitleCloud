@@ -4,6 +4,25 @@ import functions_framework
 from flask import json
 import requests
 import os
+import pickle
+import bz2
+
+# Download the models from the bucket
+client = storage.Client()
+models_bucket = client.bucket("subtitle-cloud-models")
+
+models = {
+    "whisper": None,
+    "align_model": None,
+    "align_model_metadata": None}
+
+for model in models:
+    pickled_model = model + ".pkl.bz2"
+    models_bucket.blob("models/" + pickled_model).download_to_filename(
+        "/tmp/" + pickled_model)
+    with bz2.BZ2File("/tmp/" + pickled_model, 'rb') as pickle_file:
+        models[model] = pickle.load(pickle_file)
+
 
 
 @functions_framework.http
@@ -69,6 +88,7 @@ def public_process_video(request):
     print("Starting the editing process")
     output_file = main_function(
         main_video=file_tmp_path,
+        models=models,
         output_name=output_name)
 
     output_file_name = "created/" + video_id
