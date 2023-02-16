@@ -12,7 +12,6 @@ const noAccessRequired = ["/", "/landingPage"];
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const inDevelopment = false;
   const password = "bruh123";
   const [input, setInput] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -28,7 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   };
 
-  if (!isAuthenticated) {
+  if (false) {
     return (
       <form className="mx-auto max-w-md" onSubmit={handleSubmit}>
         <div className="mb-4">
