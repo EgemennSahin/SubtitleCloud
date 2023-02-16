@@ -13,6 +13,7 @@ import React, { BaseSyntheticEvent, useEffect, useState } from "react";
 import usePremiumStatus from "@/configs/stripe/usePremiumStatus";
 import { createCheckoutSession } from "@/configs/stripe/createCheckoutSession";
 import { uuidv4 } from "@firebase/util";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -21,6 +22,7 @@ export default function DashboardPage() {
   const [processedVideo, setProcessedVideo] = useState<string | null>();
   const [processing, setProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [token, setToken] = useState<string>();
 
   useEffect(() => {
     if (processedVideo) {
@@ -103,6 +105,7 @@ export default function DashboardPage() {
                 body: JSON.stringify({
                   video_id: uid,
                   user_id: user.uid,
+                  token: token,
                 }),
               }
             );
@@ -155,6 +158,18 @@ export default function DashboardPage() {
             Choose Video
           </div>
         </label>
+        <Turnstile
+          siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
+          scriptOptions={{ async: true, defer: true, appendTo: "head" }}
+          onSuccess={(token: string) => {
+            setToken(token);
+            console.log(token);
+          }}
+          options={{
+            theme: "dark",
+            size: "invisible",
+          }}
+        />
 
         {processing && <ProgressBar progress={progress} />}
 
