@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { storageUploads } from "@/configs/firebase/firebaseConfig";
 import { useAuth } from "@/configs/firebase/AuthContext";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
-import VideoPlayer from "./VideoPlayer";
 
 const VideoList = (props: { isOutput: boolean }) => {
   const [videos, setVideos] = useState<Array<string>>([]);
