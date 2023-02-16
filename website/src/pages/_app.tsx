@@ -12,7 +12,7 @@ const noAccessRequired = ["/", "/landingPage"];
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const inDevelopment = true;
+  const inDevelopment = false;
   const password = "bruh123";
   const [input, setInput] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(true);
