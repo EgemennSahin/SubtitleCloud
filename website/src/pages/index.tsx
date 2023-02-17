@@ -4,6 +4,7 @@ import { Element, scroller } from "react-scroll";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import TextButton from "@/components/TextButton";
 import {
+  getMetadata,
   ref,
   StorageError,
   uploadBytesResumable,
@@ -12,6 +13,7 @@ import {
 import { tempStorage } from "@/configs/firebase/firebaseConfig";
 import { uuidv4 } from "@firebase/util";
 import { Turnstile } from "@marsidev/react-turnstile";
+import error from "next/error";
 
 const LandingPage = () => {
   const [file, setFile] = React.useState<File | null>(null);
@@ -62,6 +64,16 @@ const LandingPage = () => {
       return;
     }
 
+    // Check if video is uploaded to the google cloud storage bucket
+    const videoRef = ref(tempStorage, uploadedVideo);
+
+    try {
+      await getMetadata(videoRef);
+    } catch (error: any) {
+      console.log("Error getting video metadata: ", error.message);
+      return false;
+    }
+
     try {
       setProcessingVideo(true);
 
@@ -92,7 +104,9 @@ const LandingPage = () => {
       setUploadedVideo(null);
       setProcessingVideo(false);
       return true;
-    } catch {
+    } catch (error: any) {
+      console.log("Error processing video: ", error.message);
+
       setUploadedVideo(null);
       setProcessingVideo(false);
       return false;
@@ -168,7 +182,7 @@ const LandingPage = () => {
           <ul className="grid grid-cols-1 grid-rows-2 justify-center gap-3 sm:grid-cols-2 sm:gap-7 md:gap-x-12">
             <li className="flex items-center space-x-1">
               <CheckCircleIcon className="h-9 w-9 shrink-0 text-teal-400" />
-              <h3 className="text-2xl font-semibold text-slate-600">
+              <h3 className="text-2xl font-semibold text-slate-600 drop-shadow">
                 No sign up
               </h3>
             </li>
@@ -176,14 +190,14 @@ const LandingPage = () => {
             <li className="flex items-center space-x-1">
               <CheckCircleIcon className="h-9 w-9 shrink-0 text-teal-400" />
 
-              <h3 className="text-2xl font-semibold text-slate-600">
+              <h3 className="text-2xl font-semibold text-slate-600 drop-shadow">
                 Easy & Free
               </h3>
             </li>
 
             <li className="flex items-center space-x-1">
               <CheckCircleIcon className="h-9 w-9 shrink-0 text-teal-400" />
-              <h3 className="text-2xl font-semibold text-slate-600">
+              <h3 className="text-2xl font-semibold text-slate-600 drop-shadow">
                 Caption word by word
               </h3>
             </li>
@@ -191,7 +205,7 @@ const LandingPage = () => {
             <li className="flex items-center space-x-1">
               <CheckCircleIcon className="h-9 w-9 shrink-0 text-teal-400" />
 
-              <h3 className="text-2xl font-semibold text-slate-600">
+              <h3 className="text-2xl font-semibold text-slate-600 drop-shadow">
                 Increase engagement
               </h3>
             </li>
@@ -237,6 +251,7 @@ const LandingPage = () => {
                   }, 1000);
                 }}
                 options={{
+                  size: "compact",
                   theme: "light",
                 }}
               />
