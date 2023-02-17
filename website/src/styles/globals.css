@@ -8,7 +8,7 @@
   border-top: 11px solid #2dd4bf;
   border-radius: 50%;
 
-  animation: spin 5s ease-in-out infinite;
+  animation: spin 4.7s ease-in-out infinite;
 }
 
 @keyframes spin {
@@ -29,10 +29,10 @@
 .linear-wipe {
   background: linear-gradient(
     to right,
-    #fff 20%,
-    #60a5fa 40%,
-    #2dd4bf 60%,
-    #fff 80%
+    #1e293b 20%,
+    #1e3a8a 40%,
+    #115e59 60%,
+    #1e293b 80%
   );
   background-size: 200% auto;
 
@@ -42,7 +42,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 
-  animation: shine 10s ease-in-out infinite;
+  animation: shine 10.3s ease-in-out infinite;
 }
 
 @keyframes shine {

@@ -8,7 +8,7 @@ const LandingPage = () => {
   const router = useRouter();
 
   return (
-    <div className="flex max-h-full min-h-screen items-start justify-center bg-gradient-to-b from-slate-50 to-slate-200 py-5 sm:py-9">
+    <div className="flex max-h-fit min-h-screen items-start justify-center bg-gradient-to-b from-slate-50 to-slate-200 py-5 sm:py-9">
       <div className="flex w-fit flex-col items-center justify-start px-5">
         <h1 className="mb-3 bg-gradient-to-r from-slate-600 to-slate-800 bg-clip-text pr-1 text-center text-6xl font-bold leading-tight tracking-tighter text-transparent ">
           Caption Video

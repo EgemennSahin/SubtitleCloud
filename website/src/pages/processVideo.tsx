@@ -136,17 +136,21 @@ const ProcessVideo = () => {
   }
 
   return (
-    <div className="h-full items-center justify-center bg-gradient-to-b from-slate-200 to-slate-400 py-5 sm:h-9/10 sm:py-9">
+    <div className="flex max-h-fit min-h-screen flex-col items-center justify-start bg-gradient-to-b from-slate-200 to-slate-400 py-5 sm:py-9">
       {processingVideo || uploading ? (
-        <div className="max-w-screen flex max-h-full min-h-9/10 min-w-fit flex-col items-center justify-between">
-          <h2 className="bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text px-4 text-center text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
+        <div className="flex h-fit w-fit flex-col items-center justify-start px-5">
+          <h2 className="mb-8 bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text px-4 text-center text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
             Your video is being processed.
           </h2>
 
-          <div className="loader h-56 w-56" />
-          <h3 className="text-md linear-wipe mb-8 px-4 text-center ">
+          <div className="loader mb-12 h-40 w-40" />
+          <h3 className="text-md linear-wipe mb-8 px-4 text-center sm:hidden ">
             This may take a few minutes. Please do not close the window or
             navigate away from this page.
+          </h3>
+
+          <h3 className="text-md linear-wipe mb-8 hidden px-4 text-center sm:block ">
+            This may take a few minutes.
           </h3>
         </div>
       ) : (
