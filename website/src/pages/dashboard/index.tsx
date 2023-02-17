@@ -180,7 +180,7 @@ export default function DashboardPage() {
 
         <Link
           className="relative h-10 rounded-lg bg-blue-600 py-6 px-20 transition duration-200 hover:bg-blue-800"
-          href="/uploadedVideos"
+          href="/dashboard/uploadedVideos"
           passHref
         >
           <div className="absolute inset-0 flex items-center justify-center  text-xl font-bold text-white">
@@ -190,7 +190,7 @@ export default function DashboardPage() {
 
         <Link
           className="relative h-10 rounded-lg bg-blue-600 py-6 px-20 transition duration-200 hover:bg-blue-800"
-          href="/outputVideos"
+          href="/dashboard/outputVideos"
           passHref
         >
           <div className="absolute  inset-0 flex items-center justify-center text-center text-xl font-bold text-white">

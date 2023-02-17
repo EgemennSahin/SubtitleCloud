@@ -7,7 +7,7 @@ import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 
 const noAuthRequired = ["/logIn", "/signUp", "/passwordReset"];
-const noAccessRequired = ["/", "/processVideo", "/content"];
+const authRequired = "/dashboard";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -19,12 +19,12 @@ export default function App({ Component, pageProps }: AppProps) {
         <NonProtectedRoute>
           <Component {...pageProps} />
         </NonProtectedRoute>
-      ) : noAccessRequired.includes(router.pathname) ? (
-        <Component {...pageProps} />
-      ) : (
+      ) : router.pathname.startsWith(authRequired) ? (
         <ProtectedRoute>
           <Component {...pageProps} />
         </ProtectedRoute>
+      ) : (
+        <Component {...pageProps} />
       )}
     </AuthContextProvider>
   );
