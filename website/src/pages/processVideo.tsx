@@ -12,6 +12,7 @@ import { tempStorage } from "@/configs/firebase/firebaseConfig";
 import { uuidv4 } from "@firebase/util";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useRouter } from "next/router";
+import error from "next/error";
 
 const ProcessVideo = () => {
   const [file, setFile] = React.useState<File | null>(null);
@@ -32,7 +33,11 @@ const ProcessVideo = () => {
 
   useEffect(() => {
     if (processedVideo != null) {
-      router.push("/content/", processedVideo);
+      // Get the video id from the processedVideo url
+      // and redirect to the video page
+      const id = processedVideo.split("/").pop();
+
+      router.push("/content/", id);
     }
   }, [processedVideo]);
 
@@ -42,13 +47,15 @@ const ProcessVideo = () => {
       return;
     }
 
+    console.log("Starting video processing...");
+
     // Check if video is uploaded to the google cloud storage bucket
     const videoRef = ref(tempStorage, uploadedVideo);
 
-    try {
-      await getMetadata(videoRef);
-    } catch (error: any) {
-      console.log("Error getting video metadata: ", error.message);
+    const videoExists = await getMetadata(videoRef);
+
+    if (!videoExists) {
+      console.log("Error getting video");
       return false;
     }
 
@@ -81,11 +88,11 @@ const ProcessVideo = () => {
 
       setUploadedVideo(null);
       setProcessingVideo(false);
+
       return true;
     } catch (error: any) {
       console.log("Error processing video: ", error.message);
 
-      setUploadedVideo(null);
       setProcessingVideo(false);
       return false;
     }
@@ -126,9 +133,10 @@ const ProcessVideo = () => {
             setUploading(false);
           },
           () => {
+            console.log("Upload complete");
             setUploadedVideo(uid);
-            setProcessingVideo(true);
             setUploading(false);
+            return;
           }
         );
       };

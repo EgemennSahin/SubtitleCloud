@@ -1,7 +1,6 @@
 import React from "react";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import TextButton from "@/components/TextButton";
-
 import { useRouter } from "next/router";
 
 const LandingPage = () => {
