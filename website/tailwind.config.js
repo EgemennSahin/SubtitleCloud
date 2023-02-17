@@ -18,7 +18,12 @@ module.exports = {
 
       minHeight: {
         "1/2": "50vh",
+        "3/4": "75vh",
         "9/10": "calc(100vh - 80px)",
+      },
+
+      maxHeight: {
+        "3/4": "75vh",
       },
     },
   },

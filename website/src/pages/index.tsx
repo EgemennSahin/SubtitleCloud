@@ -144,9 +144,9 @@ const LandingPage = () => {
   }
 
   return (
-    <div className="flex-cols flex flex-wrap items-center justify-center bg-gradient-to-b from-slate-50 to-slate-200">
-      <Element name="start" className="max-w-screen min-h-9/10 min-w-fit">
-        <div className="mb-10 flex flex-auto flex-col items-center justify-center px-8 pt-5 sm:pt-9">
+    <div className="flex flex-col flex-wrap items-center justify-center gap-72 bg-gradient-to-b from-slate-50 to-slate-600">
+      <Element name="start" className="max-w-screen max-h-full min-w-fit">
+        <div className="flex flex-auto flex-col items-center justify-center px-8 pt-5 sm:pt-9">
           <h1 className="mb-3 grow bg-gradient-to-r from-slate-600 to-slate-800 bg-clip-text pr-1 text-center text-6xl font-bold leading-tight tracking-tighter text-transparent ">
             Caption Video
           </h1>
@@ -154,7 +154,7 @@ const LandingPage = () => {
             Enhance your short video with accurate subtitles
           </h2>
 
-          <div className="mb-4 flex-1 items-center justify-center p-4">
+          <div className="flex-1 items-center justify-center p-4">
             <TextButton
               onClick={() => scrollToSection("uploading")}
               text={"Start Now"}
@@ -199,10 +199,7 @@ const LandingPage = () => {
         </div>
       </Element>
 
-      <Element
-        name="uploading"
-        className="max-w-screen max-h-full min-h-9/10 min-w-fit"
-      >
+      <Element name="uploading" className="max-w-screen max-h-full min-w-fit">
         <div className="flex flex-col items-center justify-start">
           <h2 className="mb-10 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text pr-1 text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
             Upload your video
@@ -248,9 +245,7 @@ const LandingPage = () => {
         </div>
       </Element>
 
-      <div className="max-h-screen min-h-1/2 w-screen" />
-
-      {(processingVideo || uploading || processedVideo) && (
+      {processingVideo || uploading || processedVideo ? (
         <Element
           name="output"
           className="max-w-screen flex max-h-full min-h-9/10 min-w-fit flex-col items-center justify-between"
@@ -262,37 +257,40 @@ const LandingPage = () => {
               </h2>
 
               <div className="loader h-56 w-56" />
-              <h3 className="text-md linear-wipe mb-8 px-4 ">
+              <h3 className="text-md linear-wipe mb-8 px-4 text-center ">
                 This may take a few minutes. Please do not close the window or
                 navigate away from this page.
               </h3>
             </>
           )}
 
-          {processedVideo && (
-            <>
-              <h2 className="bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text px-4 text-center text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
-                Your video has been processed.
-              </h2>
-              <video
-                playsInline
-                className="h-80 w-80 bg-slate-800"
-                style={{ backgroundSize: `contain` }}
-                src={processedVideo}
-                controls
-              />
-
-              <div className="my-4">
-                <TextButton
-                  onClick={() => {
-                    downloadVideo(processedVideo, "captioned-video.mp4");
-                  }}
-                  text={"Download"}
+          {processedVideo ||
+            (true && (
+              <>
+                <h2 className="bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text px-4 text-center text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
+                  Your video has been processed.
+                </h2>
+                <video
+                  playsInline
+                  className="h-80 w-80 bg-slate-800"
+                  style={{ backgroundSize: `contain` }}
+                  src={processedVideo}
+                  controls
                 />
-              </div>
-            </>
-          )}
+
+                <div className="my-4">
+                  <TextButton
+                    onClick={() => {
+                      downloadVideo(processedVideo, "captioned-video.mp4");
+                    }}
+                    text={"Download"}
+                  />
+                </div>
+              </>
+            ))}
         </Element>
+      ) : (
+        <div></div>
       )}
     </div>
   );
