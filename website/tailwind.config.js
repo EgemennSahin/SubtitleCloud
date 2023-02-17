@@ -20,10 +20,15 @@ module.exports = {
         "1/2": "50vh",
         "3/4": "75vh",
         "9/10": "calc(100vh - 80px)",
+        "19/20": "95vh",
       },
 
       maxHeight: {
         "3/4": "75vh",
+      },
+
+      height: {
+        "9/10": "calc(100vh - 60px)",
       },
     },
   },
