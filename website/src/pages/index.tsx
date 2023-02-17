@@ -264,30 +264,29 @@ const LandingPage = () => {
             </>
           )}
 
-          {processedVideo ||
-            (true && (
-              <>
-                <h2 className="bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text px-4 text-center text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
-                  Your video has been processed.
-                </h2>
-                <video
-                  playsInline
-                  className="h-80 w-80 bg-slate-800"
-                  style={{ backgroundSize: `contain` }}
-                  src={processedVideo}
-                  controls
-                />
+          {processedVideo && (
+            <>
+              <h2 className="bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text px-4 text-center text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
+                Your video has been processed.
+              </h2>
+              <video
+                playsInline
+                className="h-80 w-80 bg-slate-800"
+                style={{ backgroundSize: `contain` }}
+                src={processedVideo}
+                controls
+              />
 
-                <div className="my-4">
-                  <TextButton
-                    onClick={() => {
-                      downloadVideo(processedVideo, "captioned-video.mp4");
-                    }}
-                    text={"Download"}
-                  />
-                </div>
-              </>
-            ))}
+              <div className="my-4">
+                <TextButton
+                  onClick={() => {
+                    downloadVideo(processedVideo, "captioned-video.mp4");
+                  }}
+                  text={"Download"}
+                />
+              </div>
+            </>
+          )}
         </Element>
       ) : (
         <div></div>
