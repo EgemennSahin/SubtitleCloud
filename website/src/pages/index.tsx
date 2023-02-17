@@ -144,11 +144,8 @@ const LandingPage = () => {
   }
 
   return (
-    <div className="flex flex-wrap">
-      <Element
-        name="start"
-        className="min-h-9/10 w-screen bg-gradient-to-b from-slate-50 to-slate-200"
-      >
+    <div className="flex-cols flex flex-wrap items-center justify-center bg-gradient-to-b from-slate-50 to-slate-200">
+      <Element name="start" className="max-w-screen min-h-9/10 min-w-fit">
         <div className="mb-10 flex flex-auto flex-col items-center justify-center px-8 pt-5 sm:pt-9">
           <h1 className="mb-3 grow bg-gradient-to-r from-slate-600 to-slate-800 bg-clip-text pr-1 text-center text-6xl font-bold leading-tight tracking-tighter text-transparent ">
             Caption Video
@@ -204,7 +201,7 @@ const LandingPage = () => {
 
       <Element
         name="uploading"
-        className="max-h-full min-h-9/10 w-screen bg-gradient-to-b from-slate-200 to-slate-400"
+        className="max-w-screen max-h-full min-h-9/10 min-w-fit"
       >
         <div className="flex flex-col items-center justify-start">
           <h2 className="mb-10 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text pr-1 text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
@@ -254,7 +251,7 @@ const LandingPage = () => {
       {(processingVideo || uploading || processedVideo) && (
         <Element
           name="output"
-          className="flex max-h-full min-h-9/10 w-screen flex-col items-center justify-between bg-gradient-to-b from-slate-400 to-slate-600 py-5"
+          className="max-w-screen flex max-h-full min-h-9/10 min-w-fit flex-col items-center justify-between"
         >
           {(uploading || processingVideo) && (
             <>

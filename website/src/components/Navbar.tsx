@@ -24,6 +24,7 @@ const Navbar = () => {
         </button>
       </div>
 
+      {/*
       {user ? (
         <div className="flex items-center gap-4">
           <a
@@ -73,6 +74,7 @@ const Navbar = () => {
           </div>
         </div>
       )}
+            */}
     </nav>
   );
 };
