@@ -248,6 +248,8 @@ const LandingPage = () => {
         </div>
       </Element>
 
+      <div className="max-h-screen min-h-1/2 w-screen" />
+
       {(processingVideo || uploading || processedVideo) && (
         <Element
           name="output"
