@@ -282,6 +282,7 @@ const LandingPage = () => {
                 Your video has been processed.
               </h2>
               <video
+                playsInline
                 className="h-80 w-80 bg-slate-800"
                 style={{ backgroundSize: `contain` }}
                 src={processedVideo}
