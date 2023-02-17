@@ -41,11 +41,6 @@ const LandingPage = () => {
   useEffect(() => {
     if (processedVideo != null) {
       scrollToSection("output");
-
-      // Notify the user that the video is ready
-      const notification = new Notification("Video ready", {
-        body: "Your video has been processed and is ready to be downloaded.",
-      });
     }
   }, [processedVideo]);
 
@@ -249,7 +244,6 @@ const LandingPage = () => {
                 }}
                 options={{
                   theme: "light",
-                  size: "compact",
                 }}
               />
             </div>
@@ -281,6 +275,13 @@ const LandingPage = () => {
               <h2 className="bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text px-4 text-center text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
                 Your video has been processed.
               </h2>
+              <video
+                playsInline
+                className="h-80 w-80 bg-slate-800"
+                style={{ backgroundSize: `contain` }}
+                src={processedVideo}
+                controls
+              />
 
               <div className="my-4">
                 <TextButton
