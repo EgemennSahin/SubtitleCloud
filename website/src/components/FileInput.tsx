@@ -3,9 +3,10 @@ import { ArrowUpTrayIcon } from "@heroicons/react/24/solid";
 
 type FileInputProps = {
   onFile: (file: File) => void;
+  disabled: boolean;
 };
 
-function FileInput({ onFile }: FileInputProps) {
+function FileInput({ onFile, disabled }: FileInputProps) {
   const [dragging, setDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
 
@@ -71,10 +72,17 @@ function FileInput({ onFile }: FileInputProps) {
 
   return (
     <div
-      className={`flex flex-col justify-center rounded-md p-8 text-center shadow-inner-lg duration-200 hover:bg-slate-600 ${
-        dragging ? "border-blue-500 bg-blue-200" : "bg-slate-500"
+      className={`flex flex-col justify-center rounded-md p-8 text-center shadow-inner-lg transition duration-200 ${
+        disabled
+          ? "cursor-default bg-slate-400"
+          : "cursor-pointer bg-slate-600 hover:bg-slate-700"
       }`}
-      style={{ boxSizing: "border-box", height: "15rem", width: "20rem" }}
+      style={{
+        boxSizing: "border-box",
+        height: "15rem",
+        width: "20rem",
+        border: dragging ? "2px dashed" : "none",
+      }}
       onDragEnter={handleDragEnter}
       onDragOver={handleDragEnter}
       onDragLeave={handleDragLeave}
@@ -82,15 +90,21 @@ function FileInput({ onFile }: FileInputProps) {
       onClick={handleChooseFile}
     >
       {dragging ? (
-        <p className="text-lg font-medium text-slate-200">Drop the file here</p>
+        <p className="text-xl font-semibold tracking-wide text-slate-200">
+          Drop the file here
+        </p>
+      ) : disabled ? (
+        <p className="text-xl font-semibold tracking-wide text-slate-300">
+          Cannot upload files during processing
+        </p>
       ) : (
         <div className="flex flex-col items-center gap-3">
-          <ArrowUpTrayIcon className="h-16 w-16 text-slate-200" />
-          <p className="bg-gradient-to-r from-slate-50 to-slate-100 bg-clip-text text-xl font-semibold tracking-wide text-transparent sm:hidden">
+          <ArrowUpTrayIcon className="h-16 w-16 text-slate-50" />
+          <p className="bg-gradient-to-b from-slate-100 to-slate-200 bg-clip-text text-xl font-semibold tracking-wide text-transparent sm:hidden">
             Browse your library
           </p>
-          <p className="hidden bg-gradient-to-r from-slate-50 to-slate-100 bg-clip-text text-xl font-semibold tracking-wide text-transparent sm:block">
-            Drag and drop <br /> or <span className="text-teal-200">click</span>{" "}
+          <p className="hidden bg-gradient-to-b from-slate-100 to-slate-200 bg-clip-text text-xl font-semibold tracking-wide text-transparent sm:block">
+            Drag and drop <br /> or <span className="text-teal-300">click</span>{" "}
             to browse
           </p>
         </div>

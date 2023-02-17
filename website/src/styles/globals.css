@@ -1,4 +1,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Jost:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Jost:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+.loader {
+  border: 10px solid #f3f3f3;
+  border-top: 11px solid #2dd4bf;
+  border-radius: 50%;
+
+  animation: spin 5s ease-in-out infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+    border-top-color: #2dd4bf;
+  }
+  50% {
+    transform: rotate(360deg);
+    border-top-color: #2563eb;
+  }
+  100% {
+    transform: rotate(720deg);
+    border-top-color: #2dd4bf;
+  }
+}
+
+.linear-wipe {
+  background: linear-gradient(
+    to right,
+    #fff 20%,
+    #60a5fa 40%,
+    #2dd4bf 60%,
+    #fff 80%
+  );
+  background-size: 200% auto;
+
+  color: #000;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: shine 10s ease-in-out infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}

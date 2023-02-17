@@ -158,18 +158,23 @@ export default function DashboardPage() {
             Choose Video
           </div>
         </label>
-        <Turnstile
-          siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
-          scriptOptions={{ async: true, defer: true, appendTo: "head" }}
-          onSuccess={(token: string) => {
-            setToken(token);
-            console.log(token);
-          }}
-          options={{
-            theme: "dark",
-            size: "invisible",
-          }}
-        />
+        {!token && (
+          <div style={{ position: "fixed", bottom: 0, right: 0 }}>
+            <Turnstile
+              className="mt-7"
+              siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
+              scriptOptions={{ async: true, defer: true, appendTo: "head" }}
+              onSuccess={(token: string) => {
+                setTimeout(() => {
+                  setToken(token);
+                }, 1000);
+              }}
+              options={{
+                theme: "light",
+              }}
+            />
+          </div>
+        )}
 
         {processing && <ProgressBar progress={progress} />}
 
