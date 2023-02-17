@@ -21,7 +21,7 @@ const ProcessVideo = () => {
   const [processingVideo, setProcessingVideo] = React.useState(false);
   const [processedVideo, setProcessedVideo] = React.useState<string | null>();
 
-  const [token, setToken] = React.useState<string>();
+  const [token, setToken] = React.useState<string | null>();
   const [gettingToken, setGettingToken] = React.useState(false);
   const router = useRouter();
 
@@ -104,7 +104,6 @@ const ProcessVideo = () => {
       return;
     } else {
       setUploading(true);
-      setGettingToken(true);
 
       const video = document.createElement("video");
       video.preload = "metadata";
@@ -115,6 +114,7 @@ const ProcessVideo = () => {
         if (video.duration > 60) {
           return;
         }
+        setGettingToken(true);
 
         const uid = uuidv4();
         const storageRef = ref(tempStorage, uid);
@@ -135,6 +135,7 @@ const ProcessVideo = () => {
           () => {
             console.log("Upload complete");
             setUploadedVideo(uid);
+            setProcessingVideo(true);
             setUploading(false);
             return;
           }
@@ -183,27 +184,27 @@ const ProcessVideo = () => {
               disabled={!file || processingVideo || uploading}
             />
           </div>
+        </div>
+      )}
 
-          {gettingToken && (
-            <div style={{ position: "fixed", bottom: 0, right: 0 }}>
-              <Turnstile
-                className="mt-7"
-                siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
-                scriptOptions={{ async: true, defer: true, appendTo: "head" }}
-                onSuccess={(token: string) => {
-                  setToken(token);
+      {gettingToken && (
+        <div style={{ position: "fixed", bottom: 0, right: 0 }}>
+          <Turnstile
+            className="mt-7"
+            siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
+            scriptOptions={{ async: true, defer: true, appendTo: "head" }}
+            onSuccess={(token: string) => {
+              setToken(token);
 
-                  setTimeout(() => {
-                    setGettingToken(false);
-                  }, 1000);
-                }}
-                options={{
-                  size: "compact",
-                  theme: "light",
-                }}
-              />
-            </div>
-          )}
+              setTimeout(() => {
+                setGettingToken(false);
+              }, 1000);
+            }}
+            options={{
+              size: "compact",
+              theme: "light",
+            }}
+          />
         </div>
       )}
     </div>
