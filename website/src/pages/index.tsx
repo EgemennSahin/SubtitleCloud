@@ -90,15 +90,13 @@ const LandingPage = () => {
 
       if (data.url) {
         setProcessedVideo(data.url);
-        setUploadedVideo(null);
-        setProcessingVideo(false);
-        return true;
       } else {
         setProcessedVideo(null);
-        setUploadedVideo(null);
-        setProcessingVideo(false);
-        return false;
       }
+
+      setUploadedVideo(null);
+      setProcessingVideo(false);
+      return true;
     } catch {
       setUploadedVideo(null);
       setProcessingVideo(false);
@@ -228,9 +226,8 @@ const LandingPage = () => {
           <div className="mt-10 flex items-center justify-center">
             <TextButton
               onClick={async () => {
-                scrollToSection("output");
-
                 await handleFileUpload();
+                scrollToSection("output");
               }}
               text={"Submit"}
               disabled={!file || processingVideo || uploading}
@@ -291,7 +288,7 @@ const LandingPage = () => {
                 controls
               />
 
-              <div className="mb-4">
+              <div className="my-4">
                 <TextButton
                   onClick={() => {
                     downloadVideo(processedVideo, "captioned-video.mp4");
