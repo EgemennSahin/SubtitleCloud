@@ -1,0 +1,64 @@
+swagger: "2.0"
+host: "public-process-api-3uhvqd62v9z7a.apigateway.captioning-693de.cloud.goog"
+x-google-endpoints:
+- name: "public-process-api-3uhvqd62v9z7a.apigateway.captioning-693de.cloud.goog"
+  allowCors: true
+info:
+  title: public-process-api
+  version: 1.0.0
+schemes:
+  - https
+produces:
+  - application/json
+paths:
+  /subtitle:
+    post:
+      summary: Call my Google Cloud Function
+      operationId: "subtitle"
+      x-google-backend:
+        address: https://us-central1-captioning-693de.cloudfunctions.net/public_process_video
+        deadline: 360.0
+      security:
+        - api_key: []
+      parameters:
+        - name: video_id
+          in: body
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: body
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              url:
+                type: string
+                description: The response message
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized request
+        "403":
+          description: Error in parameters
+        "500":
+          description: Internal server error
+    options:
+      operationId: create-cors
+      x-google-backend:
+        address: https://us-central1-captioning-693de.cloudfunctions.net/public_process_video
+      responses:
+        "200":
+          description: Success
+        "204":
+          description: Success 204
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "key"
+    in: "query"
