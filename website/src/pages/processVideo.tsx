@@ -36,7 +36,9 @@ const ProcessVideo = () => {
       // and redirect to the video page
       const id = processedVideo.split("/").pop();
 
-      router.push("/content/", id);
+      console.log("Redirecting to video page: ", id);
+
+      router.push(`/content/${id}`);
     }
   }, [processedVideo]);
 
