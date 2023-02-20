@@ -12,7 +12,6 @@ import { tempStorage } from "@/configs/firebase/firebaseConfig";
 import { uuidv4 } from "@firebase/util";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useRouter } from "next/router";
-import error from "next/error";
 
 const ProcessVideo = () => {
   const [file, setFile] = React.useState<File | null>(null);
@@ -63,10 +62,9 @@ const ProcessVideo = () => {
       setProcessingVideo(true);
 
       const response_video_processing = await fetch(
-        "https://us-central1-captioning-693de.cloudfunctions.net/public_process_video",
+        "https://public-process-api-gateway-6dipdkfs.uc.gateway.dev/subtitle?key=AIzaSyA8gNrXERBjLwY8MlAGNYawoQgfzbhdRYY",
         {
           method: "POST",
-          mode: "cors",
           headers: {
             "Content-Type": "application/json",
           },
