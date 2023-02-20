@@ -24,7 +24,6 @@ for model in models:
         models[model] = pickle.load(pickle_file)
 
 
-
 @functions_framework.http
 def public_process_video(request):
     # Set CORS headers for the preflight request
@@ -32,7 +31,7 @@ def public_process_video(request):
         # Allows GET requests from any origin with the Content-Type
         # header and caches preflight response for an 3600s
         headers = {
-            'Access-Control-Allow-Origin': 'https://shortzoo.com',
+            'Access-Control-Allow-Origin': 'https://www.shortzoo.com',
             'Access-Control-Allow-Methods': 'GET, POST',
             'Access-Control-Allow-Headers': 'Content-Type',
             'Access-Control-Max-Age': '3600'
@@ -99,7 +98,7 @@ def public_process_video(request):
 
     # Set CORS headers for the main request
     headers = {
-        'Access-Control-Allow-Origin': 'https://shortzoo.com',
+        'Access-Control-Allow-Origin': 'https://www.shortzoo.com',
         'Content-Type': 'application/json'
     }
     url_prefix = "https://storage.googleapis.com/"

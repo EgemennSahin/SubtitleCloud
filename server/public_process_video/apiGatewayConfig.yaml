@@ -1,8 +1,8 @@
 swagger: "2.0"
 host: "public-process-api-3uhvqd62v9z7a.apigateway.captioning-693de.cloud.goog"
 x-google-endpoints:
-- name: "public-process-api-3uhvqd62v9z7a.apigateway.captioning-693de.cloud.goog"
-  allowCors: true
+  - name: "public-process-api-3uhvqd62v9z7a.apigateway.captioning-693de.cloud.goog"
+    allowCors: True
 info:
   title: public-process-api
   version: 1.0.0
@@ -18,6 +18,8 @@ paths:
       x-google-backend:
         address: https://us-central1-captioning-693de.cloudfunctions.net/public_process_video
         deadline: 360.0
+      produces:
+        - "application/json"
       security:
         - api_key: []
       parameters:
@@ -48,15 +50,6 @@ paths:
           description: Error in parameters
         "500":
           description: Internal server error
-    options:
-      operationId: create-cors
-      x-google-backend:
-        address: https://us-central1-captioning-693de.cloudfunctions.net/public_process_video
-      responses:
-        "200":
-          description: Success
-        "204":
-          description: Success 204
 securityDefinitions:
   api_key:
     type: "apiKey"
