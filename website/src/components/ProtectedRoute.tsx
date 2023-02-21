@@ -7,8 +7,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
+    // If user is not logged in or not verified, redirect to login page
     if (!user) {
       router.push("/logIn");
+    } else if (!user.emailVerified) {
+      router.push("/verifyEmail");
     }
   }, [user, router]);
 
