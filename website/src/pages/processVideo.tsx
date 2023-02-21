@@ -50,7 +50,7 @@ const ProcessVideo = () => {
     console.log("Starting video processing...");
 
     // Check if video is uploaded to the google cloud storage bucket
-    const videoRef = ref(tempStorage, uploadedVideo);
+    const videoRef = ref(tempStorage, "uploads/" + uploadedVideo);
 
     const videoExists = await getMetadata(videoRef);
 
@@ -133,7 +133,7 @@ const ProcessVideo = () => {
           },
           () => {
             console.log("Upload complete");
-            setUploadedVideo("uploads/" + uid);
+            setUploadedVideo(uid);
             setProcessingVideo(true);
             setUploading(false);
             return;
