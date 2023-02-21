@@ -7,14 +7,13 @@ import TextButton from "@/components/TextButton";
 import { useAuth } from "@/configs/firebase/AuthContext";
 
 export default function VerifyEmailPage() {
-  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
   const router = useRouter();
   const { user } = useAuth();
 
-  function handleVerifyEmail() {
+  async function handleVerifyEmail() {
     sendEmailVerification(user!)
       .then(() => {
         console.log("Verification email sent");
@@ -27,22 +26,21 @@ export default function VerifyEmailPage() {
   }
 
   return (
-    <div className="mx-auto mt-8 max-w-2xl flex-col rounded-lg bg-white px-16 py-14 drop-shadow-2xl">
+    <div className="mx-auto mt-8 flex max-w-2xl flex-col rounded-lg bg-white px-16 py-14 drop-shadow-2xl">
       <h2 className="mb-6 text-center text-3xl font-bold text-slate-800">
         Verify your email
       </h2>
 
-      <h3 className="mb-4 text-slate-600">
-        Click the button and you will receive a verification email.
+      <h3 className="text-md mb-4 text-slate-600">
+        Click the button to receive a verification email at{" "}
+        {user?.email && <span className="font-semibold">{user.email}</span>}
       </h3>
 
-      <div className="flex flex-col">
-        <TextButton
-          size="small"
-          text="Continue"
-          onClick={() => handleVerifyEmail}
-        />
-      </div>
+      <TextButton
+        size="small"
+        text="Send"
+        onClick={() => handleVerifyEmail()}
+      />
     </div>
   );
 }

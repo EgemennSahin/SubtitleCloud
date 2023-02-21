@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     if (!user) {
       router.push("/logIn");
     } else if (!user.emailVerified) {
-      router.push("/verifyEmail");
+      router.push("/dashboard/verifyEmail");
     }
   }, [user, router]);
 
