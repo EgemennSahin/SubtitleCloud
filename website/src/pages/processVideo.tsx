@@ -32,7 +32,7 @@ const ProcessVideo = () => {
 
   useEffect(() => {
     if (processedVideo != null) {
-      console.log("Redirecting to video page: ", id);
+      console.log("Redirecting to video page: ", processedVideo);
 
       router.push(`/content/${processedVideo}`);
     }
@@ -113,7 +113,7 @@ const ProcessVideo = () => {
         setGettingToken(true);
 
         const uid = uuidv4();
-        const storageRef = ref(tempStorage, uid);
+        const storageRef = ref(tempStorage, "uploads/" + uid);
         const uploadTask = uploadBytesResumable(storageRef, file);
 
         uploadTask.on(
