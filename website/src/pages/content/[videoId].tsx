@@ -9,8 +9,8 @@ const ProcessVideo = () => {
 
   // Get the video URL from the video ID
   const url_prefix = "https://storage.googleapis.com/";
-  const bucket_name = "short-zoo-temp-videos";
-  const processedVideoUrl = url_prefix + bucket_name + "/created/" + videoId;
+  const bucket_name = "short-zoo-temp-videos/";
+  const processedVideoUrl = url_prefix + bucket_name + videoId;
 
   function downloadVideo() {
     fetch(processedVideoUrl)

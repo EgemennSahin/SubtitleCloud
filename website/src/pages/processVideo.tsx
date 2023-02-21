@@ -32,13 +32,9 @@ const ProcessVideo = () => {
 
   useEffect(() => {
     if (processedVideo != null) {
-      // Get the video id from the processedVideo url
-      // and redirect to the video page
-      const id = processedVideo.split("/").pop();
-
       console.log("Redirecting to video page: ", id);
 
-      router.push(`/content/${id}`);
+      router.push(`/content/${processedVideo}`);
     }
   }, [processedVideo]);
 

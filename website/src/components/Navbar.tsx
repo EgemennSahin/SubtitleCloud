@@ -27,7 +27,7 @@ const Navbar = () => {
       {user ? (
         <div className="flex items-center gap-4">
           <a
-            className="hidden rounded-lg bg-blue-100 py-3 px-4 text-xl font-semibold text-blue-700 shadow-md hover:bg-blue-200 hover:text-blue-900 sm:block"
+            className="hidden cursor-pointer rounded-lg bg-blue-100 py-3 px-4 text-xl font-semibold text-blue-700 shadow-md hover:bg-blue-200 hover:text-blue-900 sm:block"
             onClick={() => handleClick("/dashboard")}
           >
             Dashboard
