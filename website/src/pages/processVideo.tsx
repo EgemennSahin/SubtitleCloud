@@ -24,12 +24,14 @@ const ProcessVideo = () => {
   const [gettingToken, setGettingToken] = React.useState(false);
   const router = useRouter();
 
+  // Process video if it is uploaded and token is received
   useEffect(() => {
     if (uploadedVideo != null && token != null) {
       handleVideoProcessing();
     }
   }, [uploadedVideo, token]);
 
+  // Redirect to video page if video is processed
   useEffect(() => {
     if (processedVideo != null) {
       console.log("Redirecting to video page: ", processedVideo);
@@ -38,6 +40,7 @@ const ProcessVideo = () => {
     }
   }, [processedVideo]);
 
+  // Process video
   async function handleVideoProcessing() {
     if (!uploadedVideo || !token) {
       console.log("Wrong parameters");
@@ -53,7 +56,7 @@ const ProcessVideo = () => {
 
     if (!videoExists) {
       console.log("Error getting video");
-      return false;
+      return;
     }
 
     try {
@@ -130,7 +133,7 @@ const ProcessVideo = () => {
           },
           () => {
             console.log("Upload complete");
-            setUploadedVideo(uid);
+            setUploadedVideo("uploads/" + uid);
             setProcessingVideo(true);
             setUploading(false);
             return;
