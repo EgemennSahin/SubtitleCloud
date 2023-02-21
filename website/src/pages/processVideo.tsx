@@ -36,7 +36,10 @@ const ProcessVideo = () => {
     if (processedVideo != null) {
       console.log("Redirecting to video page: ", processedVideo);
 
-      router.push(`/content/${processedVideo}`);
+      router.push({
+        pathname: `/content/${uploadedVideo}`,
+        query: { video_url: processedVideo },
+      });
     }
   }, [processedVideo]);
 

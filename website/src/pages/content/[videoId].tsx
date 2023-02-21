@@ -3,18 +3,12 @@ import TextButton from "@/components/TextButton";
 import router from "next/router";
 import ReactPlayer from "react-player";
 
-const ProcessVideo = () => {
+const GeneratedVideo = () => {
   // Get the video ID from the URL
-  const { videoId } = router.query as { videoId: string };
-
-  // Get the video URL from the video ID
-  const url_prefix = "https://storage.googleapis.com/";
-  const bucket_name = "short-zoo-temp-videos/";
-  const processedVideoUrl =
-    url_prefix + bucket_name + videoId.replace(/,/g, "%");
+  const { videoUrl } = router.query;
 
   function downloadVideo() {
-    fetch(processedVideoUrl)
+    fetch(videoUrl?.toString()!)
       .then((response) => response.blob())
       .then((blob) => {
         const url = window.URL.createObjectURL(new Blob([blob]));
@@ -33,7 +27,7 @@ const ProcessVideo = () => {
         </h2>
         <ReactPlayer
           className="mb-7"
-          url={processedVideoUrl}
+          url={videoUrl}
           controls={true}
           width="fit"
         />
@@ -52,4 +46,4 @@ const ProcessVideo = () => {
   );
 };
 
-export default ProcessVideo;
+export default GeneratedVideo;
