@@ -5,12 +5,13 @@ import ReactPlayer from "react-player";
 
 const ProcessVideo = () => {
   // Get the video ID from the URL
-  const { videoId } = router.query;
+  const { videoId } = router.query as { videoId: string };
 
   // Get the video URL from the video ID
   const url_prefix = "https://storage.googleapis.com/";
   const bucket_name = "short-zoo-temp-videos/";
-  const processedVideoUrl = url_prefix + bucket_name + videoId;
+  const processedVideoUrl =
+    url_prefix + bucket_name + videoId.replace(/,/g, "%");
 
   function downloadVideo() {
     fetch(processedVideoUrl)
