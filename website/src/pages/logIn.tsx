@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "@/configs/firebase/AuthContext";
 import Link from "next/link";
+import TextButton from "@/components/TextButton";
 
 export default function LogInPage() {
   const { logIn, authGoogle } = useAuth();
@@ -10,9 +11,7 @@ export default function LogInPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleSignIn = async (e: FormEvent) => {
-    e.preventDefault();
-
+  const handleSignIn = async () => {
     try {
       await logIn(email, password);
 
@@ -22,9 +21,7 @@ export default function LogInPage() {
     }
   };
 
-  const handleGoogleSignIn = async (e: FormEvent) => {
-    e.preventDefault();
-
+  const handleGoogleSignIn = async () => {
     try {
       await authGoogle();
 
@@ -35,58 +32,50 @@ export default function LogInPage() {
   };
 
   return (
-    <div className="bg-white max-w-2xl mx-auto p-16 rounded-md drop-shadow-2xl flex-col space-y-4">
-      <h2 className="text-4xl text-transparent bg-gradient-to-r bg-clip-text from-slate-700 to-slate-800 font-bold mb-4 tracking-tighter">
-        Sign in to your account
+    <div className="mx-auto mt-8 max-w-2xl flex-col rounded-lg bg-white px-16 py-14 drop-shadow-2xl">
+      <h2 className="mb-6 text-center text-3xl font-bold text-slate-800">
+        Log in to your Shortzoo account
       </h2>
 
-      <form onSubmit={handleSignIn}>
-        <div className="flex flex-col gap-9">
-          <div className="flex flex-col gap-1">
-            <label className="text-slate-600 font-bold text-xl tracking-wider">
-              Email
-            </label>
-            <input
-              type="email"
-              className="bg-white border-2 border-slate-700 shadow-inner rounded-md text-black p-2.5"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-between">
-              <label className="text-slate-700 font-bold text-lg tracking-wide">
-                Password
-              </label>
-              <Link href="/passwordReset" passHref>
-                <p className="text-blue-600 font-bold text-lg tracking-wide">
-                  Forgot Password?
-                </p>
-              </Link>
-            </div>
-
-            <input
-              type="password"
-              className="bg-white border-2 border-slate-700 shadow-inner rounded-md text-black p-2.5"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          <input
-            type="submit"
-            value="Continue"
-            className="text-white font-bold rounded-md mt-5 py-4 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200"
-          />
-        </div>
-      </form>
-
-      <form onSubmit={handleGoogleSignIn}>
+      <div className="mb-8 flex flex-col">
+        <label className="text-lg font-bold tracking-wide text-slate-600">
+          Email
+        </label>
         <input
-          type="submit"
-          value="Sign in with Google"
-          className="text-white font-bold rounded-md mt-5 py-4 px-20 bg-blue-600 hover:bg-blue-800 transition duration-200"
+          type="email"
+          className="rounded-md border-2 border-slate-700 bg-white p-2.5 text-black shadow-inner"
+          onChange={(e) => setEmail(e.target.value)}
         />
-      </form>
+      </div>
+
+      <div className="mb-8 flex flex-col">
+        <div className="flex justify-between">
+          <label className="text-lg font-bold tracking-wide text-slate-600">
+            Password
+          </label>
+          <Link href="/passwordReset" passHref>
+            <p className="text-lg font-bold tracking-wide text-blue-600 hover:text-blue-500">
+              Forgot Password?
+            </p>
+          </Link>
+        </div>
+
+        <input
+          type="password"
+          className="rounded-md border-2 border-slate-700 bg-white p-2.5 text-black shadow-inner"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col gap-5">
+        <TextButton size="small" text="Continue" onClick={handleSignIn} />
+        <TextButton
+          color="bg-red-400"
+          size="small"
+          text="Sign in with Google"
+          onClick={handleGoogleSignIn}
+        />
+      </div>
     </div>
   );
 }

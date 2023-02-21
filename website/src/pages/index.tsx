@@ -18,6 +18,7 @@ const LandingPage = () => {
 
         <div className="items-center justify-center p-4">
           <TextButton
+            size="large"
             onClick={() => router.push("/processVideo")}
             text={"Start Now"}
           />

@@ -24,7 +24,6 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/*
       {user ? (
         <div className="flex items-center gap-4">
           <a
@@ -34,7 +33,7 @@ const Navbar = () => {
             Dashboard
           </a>
           <button
-            className="hidden cursor-pointer rounded-lg py-3 px-4 text-xl font-bold text-slate-800 hover:bg-slate-300 hover:text-slate-700 hover:shadow-md sm:block"
+            className="hidden cursor-pointer rounded-lg py-3 px-4 text-xl font-bold text-slate-700 hover:bg-slate-300 hover:text-slate-800 hover:shadow-md sm:block"
             onClick={() => logOut()}
           >
             Log Out
@@ -58,7 +57,7 @@ const Navbar = () => {
             Sign Up
           </button>
           <a
-            className="hidden cursor-pointer rounded-lg py-3 px-4 text-xl font-bold text-slate-800 hover:bg-slate-300 hover:text-slate-700 hover:shadow-md sm:block"
+            className="hidden cursor-pointer rounded-lg py-3 px-4 text-xl font-bold text-slate-700 hover:bg-slate-300 hover:text-slate-800 hover:shadow-md sm:block"
             onClick={() => handleClick("/logIn")}
           >
             Log In
@@ -74,7 +73,6 @@ const Navbar = () => {
           </div>
         </div>
       )}
-            */}
     </nav>
   );
 };

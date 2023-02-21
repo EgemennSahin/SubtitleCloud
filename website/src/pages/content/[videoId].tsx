@@ -39,6 +39,7 @@ const ProcessVideo = () => {
 
         <div>
           <TextButton
+            size="medium"
             onClick={() => {
               downloadVideo();
             }}

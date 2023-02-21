@@ -177,6 +177,7 @@ const ProcessVideo = () => {
 
           <div className="mt-10 flex items-center justify-center">
             <TextButton
+              size="medium"
               onClick={async () => {
                 await handleFileUpload();
               }}
