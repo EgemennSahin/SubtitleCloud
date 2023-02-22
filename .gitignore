@@ -7,3 +7,4 @@ assets
 
 server/localFunctions
 server/backup
+server/public_process_video/public-process-account-key.json
