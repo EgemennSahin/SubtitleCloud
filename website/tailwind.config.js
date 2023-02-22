@@ -27,6 +27,10 @@ module.exports = {
         "3/4": "75vh",
       },
 
+      width: {
+        full2: "102%",
+      },
+
       height: {
         "9/10": "calc(100vh - 60px)",
       },
