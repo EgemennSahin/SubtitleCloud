@@ -53,7 +53,7 @@ export default function PasswordResetPage() {
           text="Continue"
           onClick={() => handlePasswordReset}
         />
-        <Link href="/logIn" passHref>
+        <Link href="/login" passHref>
           <p className="mt-5 text-center text-lg font-bold tracking-wide text-blue-600 hover:text-blue-500">
             Return to sign in
           </p>

@@ -53,7 +53,7 @@ export default function LogInPage() {
           <label className="text-lg font-bold tracking-wide text-slate-600">
             Password
           </label>
-          <Link href="/passwordReset" passHref>
+          <Link href="/password-reset" passHref>
             <p className="text-lg font-bold tracking-wide text-blue-600 hover:text-blue-500">
               Forgot Password?
             </p>

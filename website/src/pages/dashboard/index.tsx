@@ -2,7 +2,6 @@ import ProgressBar from "@/components/ProgressBar";
 import { storageUploads } from "@/configs/firebase/firebaseConfig";
 import { useAuth } from "@/configs/firebase/AuthContext";
 import {
-  getDownloadURL,
   ref,
   StorageError,
   uploadBytesResumable,
@@ -180,7 +179,7 @@ export default function DashboardPage() {
 
         <Link
           className="relative h-10 rounded-lg bg-blue-600 py-6 px-20 transition duration-200 hover:bg-blue-800"
-          href="/dashboard/uploadedVideos"
+          href="/dashboard/uploaded-videos"
           passHref
         >
           <div className="absolute inset-0 flex items-center justify-center  text-xl font-bold text-white">
@@ -190,7 +189,7 @@ export default function DashboardPage() {
 
         <Link
           className="relative h-10 rounded-lg bg-blue-600 py-6 px-20 transition duration-200 hover:bg-blue-800"
-          href="/dashboard/outputVideos"
+          href="/dashboard/output-videos"
           passHref
         >
           <div className="absolute  inset-0 flex items-center justify-center text-center text-xl font-bold text-white">

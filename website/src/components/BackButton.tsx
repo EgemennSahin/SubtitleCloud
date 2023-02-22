@@ -3,11 +3,11 @@ import Router from "next/router";
 
 const BackButton = () => (
   <button
-    className="bg-transparent text-black font-semibold py-2 px-4 border border-black rounded-full"
+    className="rounded-full border border-black bg-transparent py-2 px-4 font-semibold text-black"
     onClick={() => Router.back()}
   >
     <svg
-      className="fill-current h-4 w-4"
+      className="h-4 w-4 fill-current"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
     >

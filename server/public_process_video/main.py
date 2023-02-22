@@ -116,7 +116,6 @@ def public_process_video(request):
     new_blob = bucket.blob(output_file_name)
     new_blob.upload_from_filename(output_file, content_type='video/mp4')
 
-    expiration_timedelta = dt.utcnow() + dt.timedelta(days=30)
 
     # Generate a signed URL
     url = new_blob.generate_signed_url(

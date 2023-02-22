@@ -52,13 +52,13 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           <button
             className="hidden rounded-lg bg-slate-200 py-3 px-4 text-xl font-semibold text-slate-700 shadow-md hover:bg-slate-300 sm:block"
-            onClick={() => handleClick("/signUp")}
+            onClick={() => handleClick("/signup")}
           >
             Sign Up
           </button>
           <a
             className="hidden cursor-pointer rounded-lg py-3 px-4 text-xl font-bold text-slate-700 hover:bg-slate-300 hover:text-slate-800 hover:shadow-md sm:block"
-            onClick={() => handleClick("/logIn")}
+            onClick={() => handleClick("/login")}
           >
             Log In
           </a>
@@ -66,8 +66,8 @@ const Navbar = () => {
           <div className="sm:hidden">
             <Dropdown
               Options={[
-                { name: "Sign Up", onClick: () => handleClick("/signUp") },
-                { name: "Log In", onClick: () => handleClick("/logIn") },
+                { name: "Sign Up", onClick: () => handleClick("/signup") },
+                { name: "Log In", onClick: () => handleClick("/login") },
               ]}
             />
           </div>

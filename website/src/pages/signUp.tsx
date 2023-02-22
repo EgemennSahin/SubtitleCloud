@@ -118,7 +118,7 @@ export default function SignUpPage() {
           )}
         </div>
         <TextButton size="small" text="Sign Up" onClick={handleSignUp} />
-        <Link href="/logIn" passHref>
+        <Link href="/login" passHref>
           <p className="mt-5 text-center text-lg font-bold tracking-wide text-blue-600 hover:text-blue-500">
             Return to sign in
           </p>

@@ -40,7 +40,7 @@ function TextButton({ onClick, text, disabled, size, color }: TextButtonProps) {
     <button
       className={`${
         disabled
-          ? "cursor-not-allowed bg-slate-400 bg-slate-400 text-slate-300"
+          ? "cursor-not-allowed bg-slate-400 text-slate-300"
           : "text-white drop-shadow-xl transition ease-in-out hover:scale-105 hover:shadow-xl " +
             bgColor
       }  duration-80 transform rounded-xl ${padding} ${fontSize} font-bold`}
