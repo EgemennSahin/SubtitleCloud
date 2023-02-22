@@ -6,7 +6,7 @@ import requests
 import os
 import pickle
 import bz2
-import datetime as dt
+from datetime import timedelta
 
 # Download the models from the bucket
 client = storage.Client.from_service_account_json('public-process-account-key.json')
@@ -79,18 +79,7 @@ def public_process_video(request):
         print("Video: ", video_id, " doesn't exist in the bucket")
         return ('Video does not exist', 403)
 
-    # Download the file
-    print("Downloading the video")
-    file_tmp_path = "/tmp/raw_" + video_id
-    blob.download_to_filename(file_tmp_path)
-
-    # Delete the raw video
-    blob.delete()
-
-    # This is where the output will be saved
-    output_name = "/tmp/edited_" + video_id
-    
-    # Download the models if everything has been verified
+        # Download the models if everything has been verified
     # Only download models if they haven't been downloaded
     non_downloaded_models = [key for key, value in models.items() if value is None]
 
@@ -102,6 +91,17 @@ def public_process_video(request):
                 "/tmp/" + pickled_model)
             with bz2.BZ2File("/tmp/" + pickled_model, 'rb') as pickle_file:
                 models[model] = pickle.load(pickle_file)
+
+    # Download the file
+    print("Downloading the video")
+    file_tmp_path = "/tmp/raw_" + video_id
+    blob.download_to_filename(file_tmp_path)
+
+    # Delete the raw video
+    blob.delete()
+
+    # This is where the output will be saved
+    output_name = "/tmp/edited_" + video_id
 
     # Run the main function
     print("Starting the editing process")
@@ -116,10 +116,11 @@ def public_process_video(request):
     new_blob = bucket.blob(output_file_name)
     new_blob.upload_from_filename(output_file, content_type='video/mp4')
 
-
     # Generate a signed URL
     url = new_blob.generate_signed_url(
-        expiration=2592000,  # The URL will be valid for 1 month (in seconds)
+        version="v4",
+        # This URL is valid for 7 days
+        expiration=timedelta(days=7),
         method='GET'      # This URL will allow GET requests
     )
 

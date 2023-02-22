@@ -23,6 +23,19 @@ const ProcessVideo = () => {
   const [token, setToken] = React.useState<string | null>();
   const [gettingToken, setGettingToken] = React.useState(false);
   const router = useRouter();
+  const [notificationPermission, setNotificationPermission] =
+    React.useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  // Set notification permission to true if user has granted permission
+  useEffect(() => {
+    setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+    if (!isMobile && "Notification" in window) {
+      if (Notification.permission === "granted") {
+        setNotificationPermission(true);
+      }
+    }
+  }, []);
 
   // Process video if it is uploaded and token is received
   useEffect(() => {
@@ -35,6 +48,12 @@ const ProcessVideo = () => {
   useEffect(() => {
     if (processedVideo != null) {
       console.log("Redirecting to video page: ", processedVideo);
+
+      if (!isMobile && "Notification" in window && notificationPermission) {
+        const notification = new Notification("Process finished!", {
+          body: "Your video has been processed.",
+        });
+      }
 
       router.push({
         pathname: `/content/${uploadedVideo}`,
@@ -163,6 +182,21 @@ const ProcessVideo = () => {
           <h3 className="text-md linear-wipe mb-8 hidden px-4 text-center sm:block ">
             This may take a few minutes.
           </h3>
+
+          {!notificationPermission && (
+            <TextButton
+              size="small"
+              onClick={async () => {
+                const permission = await Notification.requestPermission();
+
+                if (permission === "granted") {
+                  setNotificationPermission(true);
+                }
+              }}
+              color="bg-gradient-to-r from-teal-500 to-teal-600"
+              text="Notify me when finished"
+            />
+          )}
         </div>
       ) : (
         <div className="max-w-screen flex h-screen min-w-fit flex-col items-center justify-start px-5 sm:h-full">
@@ -181,6 +215,16 @@ const ProcessVideo = () => {
             <TextButton
               size="medium"
               onClick={async () => {
+                // Notify user
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(
+                  navigator.userAgent
+                );
+                if (!isMobile && "Notification" in window) {
+                  if (Notification.permission !== "granted") {
+                    Notification.requestPermission();
+                  }
+                }
+
                 await handleFileUpload();
               }}
               text={"Submit"}
