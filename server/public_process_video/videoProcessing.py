@@ -14,7 +14,7 @@ def add_audio_subtitles(mp4_filename, mp3_filename, srt_filename, output_mp4_fil
         (
             ffmpeg.concat(input_video, input_audio, v=1, a=1)
             .filter("subtitles", srt_filename, fontsdir="fonts", force_style=style)
-            .output(output_mp4_filename, preset="veryfast")
+            .output(output_mp4_filename, preset="ultrafast")
             .run()
         )
     except ffmpeg.Error as e:

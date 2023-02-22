@@ -58,8 +58,6 @@ def adjust_subtitles(subtitles, start_pad=0.05, end_pad=0.1):
     return subtitles
 
 # Create subtitles from Whisper response and export an accordingly named srt file
-
-
 def export_srt(whisper_response, output_srt_filename):
     for i in whisper_response["word_segments"]:
         i["text"] = i["text"].upper()
@@ -77,7 +75,6 @@ def process_audio(main_video, models, output_name):
     print("Extracting audio from main video.")
     mp3_filename = create_mp3(main_video, output_name + '.mp3')
 
-    print("Initializing AI")
     results = transcribe_mp3(mp3_filename, models)
 
     print("Creating subtitles from the transcription.")
