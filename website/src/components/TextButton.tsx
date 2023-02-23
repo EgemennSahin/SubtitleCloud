@@ -6,11 +6,20 @@ interface TextButtonProps {
   disabled?: boolean;
   size: "small" | "medium" | "large";
   color?: string;
+  hover?: string;
+  style?: string;
 }
 
-function TextButton({ onClick, text, disabled, size, color }: TextButtonProps) {
+function TextButton({
+  onClick,
+  text,
+  disabled,
+  size,
+  color,
+  hover,
+  style,
+}: TextButtonProps) {
   // Set font color and padding based on size
-  const [fontColor, setFontColor] = useState("text-white");
   const [padding, setPadding] = useState("px-12 py-6");
   const [fontSize, setFontSize] = useState("text-4xl");
 
@@ -33,10 +42,9 @@ function TextButton({ onClick, text, disabled, size, color }: TextButtonProps) {
         disabled
           ? "cursor-not-allowed bg-slate-400 text-slate-300"
           : color
-          ? "text-white drop-shadow-xl transition ease-in-out hover:scale-105 hover:shadow-xl " +
-            color
-          : "bg-gradient-to-r from-teal-400 to-blue-600 text-white drop-shadow-xl transition ease-in-out hover:scale-105 hover:shadow-xl"
-      }  duration-80 transform rounded-xl ${padding} ${fontSize} font-bold`}
+          ? "text-white drop-shadow-xl duration-200 " + color + " " + hover!
+          : "bg-gradient-to-r from-teal-400 to-blue-600 text-white drop-shadow-xl duration-100 hover:scale-105 hover:shadow-xl"
+      } rounded-xl text-center transition ease-in-out ${padding} ${fontSize} font-bold ${style}`}
       onClick={onClick}
       disabled={disabled || false}
     >

@@ -2,13 +2,21 @@ import React from "react";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import TextButton from "@/components/TextButton";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const LandingPage = () => {
   const router = useRouter();
 
   return (
-    <div className="flex max-h-fit min-h-screen items-start justify-center bg-gradient-to-b from-slate-50 to-slate-200 py-5 sm:py-9">
-      <div className="flex w-fit flex-col items-center justify-start px-5">
+    <>
+      <Head>
+        <title>Shortzoo</title>
+        <meta
+          name="description"
+          content="Shortzoo is a short video subtitling platform that subtitles each word in your videos. Our platform is perfect for making your videos more engaging."
+        />
+      </Head>
+      <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-50 to-slate-200 px-4 py-5 sm:py-9">
         <h1 className="mb-3 bg-gradient-to-r from-slate-600 to-slate-800 bg-clip-text pr-1 text-center text-6xl font-bold leading-tight tracking-tighter text-transparent ">
           Caption Video
         </h1>
@@ -20,12 +28,12 @@ const LandingPage = () => {
           <TextButton
             size="large"
             onClick={() => router.push("/process-video")}
-            text={"Start Now"}
+            text={"Start now"}
           />
         </div>
 
         <h3 className="text-md mb-6 font-normal tracking-wide text-slate-500 sm:mb-10">
-          Video must be less than 60 seconds long.
+          Short video must be less than 60 seconds long.
         </h3>
 
         <ul className="grid grid-cols-1 grid-rows-2 justify-center gap-3 sm:grid-cols-2 sm:gap-7 md:gap-x-12">
@@ -60,7 +68,7 @@ const LandingPage = () => {
           </li>
         </ul>
       </div>
-    </div>
+    </>
   );
 };
 

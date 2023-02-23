@@ -6,26 +6,28 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 
-const noAuthRequired = ["/logIn", "/signUp"];
+const noAuthRequired = ["/login", "/signup"];
 const authRequired = "/dashboard";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   return (
-    <AuthContextProvider>
-      <Navbar />
-      {noAuthRequired.includes(router.pathname) ? (
-        <NonProtectedRoute>
+    <div className="flex max-h-fit min-h-screen flex-col">
+      <AuthContextProvider>
+        <Navbar />
+        {noAuthRequired.includes(router.pathname) ? (
+          <NonProtectedRoute>
+            <Component {...pageProps} />
+          </NonProtectedRoute>
+        ) : router.pathname.startsWith(authRequired) ? (
+          <ProtectedRoute>
+            <Component {...pageProps} />
+          </ProtectedRoute>
+        ) : (
           <Component {...pageProps} />
-        </NonProtectedRoute>
-      ) : router.pathname.startsWith(authRequired) ? (
-        <ProtectedRoute>
-          <Component {...pageProps} />
-        </ProtectedRoute>
-      ) : (
-        <Component {...pageProps} />
-      )}
-    </AuthContextProvider>
+        )}
+      </AuthContextProvider>
+    </div>
   );
 }

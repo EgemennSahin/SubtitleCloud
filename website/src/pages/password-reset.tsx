@@ -4,6 +4,7 @@ import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import TextButton from "@/components/TextButton";
+import Head from "next/head";
 
 export default function PasswordResetPage() {
   const [email, setEmail] = useState("");
@@ -26,39 +27,51 @@ export default function PasswordResetPage() {
   }
 
   return (
-    <div className="mx-auto mt-8 max-w-2xl flex-col rounded-lg bg-white px-16 py-14 drop-shadow-2xl">
-      <h2 className="mb-6 text-center text-3xl font-bold text-slate-800">
-        Reset your password
-      </h2>
-
-      <h3 className="mb-4 text-slate-600">
-        Enter the email associated with your account and you will receive a link
-        to reset your password.
-      </h3>
-
-      <div className="flex flex-col">
-        <div className="mb-8 flex flex-col" style={{ position: "relative" }}>
-          <label className="text-lg font-bold tracking-wide text-slate-600">
-            Email
-          </label>
-          <input
-            type="email"
-            className="rounded-md border-2 border-slate-700 bg-white p-2.5 text-black shadow-inner"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <TextButton
-          size="small"
-          text="Continue"
-          onClick={() => handlePasswordReset}
+    <>
+      <Head>
+        <title>Reset Password - Shortzoo</title>
+        <meta
+          name="description"
+          content="Reset your password and regain access to your account on our short video subtitling solution."
         />
-        <Link href="/login" passHref>
-          <p className="mt-5 text-center text-lg font-bold tracking-wide text-blue-600 hover:text-blue-500">
-            Return to sign in
-          </p>
-        </Link>
+      </Head>
+      <div className="mx-auto mt-8 max-w-xl flex-col rounded-lg bg-white px-12 py-14 drop-shadow-2xl sm:px-16">
+        <h2 className="mb-6 text-center text-3xl font-bold text-slate-800">
+          <span className="hidden sm:block">Reset your Shortzoo password</span>
+          <span className="sm:hidden">Reset password</span>
+        </h2>
+
+        <h3 className="mb-4 hidden text-slate-600 sm:block">
+          Enter the email associated with your account and you will receive a
+          link to reset your password.
+        </h3>
+
+        <div className="flex flex-col">
+          <div className="mb-8 flex flex-col" style={{ position: "relative" }}>
+            <label className="text-lg font-bold tracking-wide text-slate-600">
+              Email
+            </label>
+            <input
+              type="email"
+              className="rounded-md border-2 border-slate-700 bg-white p-2.5 text-black shadow-inner"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <TextButton
+            size="small"
+            text="Continue"
+            color="bg-blue-400"
+            hover="hover:bg-blue-500"
+            onClick={() => handlePasswordReset}
+          />
+          <Link href="/login" passHref>
+            <p className="mt-5 text-center text-lg font-bold tracking-wide text-teal-500 transition duration-200 ease-in-out hover:text-teal-600">
+              Return to sign in
+            </p>
+          </Link>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

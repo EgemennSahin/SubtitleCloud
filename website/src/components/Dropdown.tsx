@@ -1,18 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Bars3Icon } from "@heroicons/react/24/solid";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 
-type DropdownProps = {
-  Options: { name: string; onClick: () => void }[];
-};
-function Dropdown({ Options }: DropdownProps) {
+function Dropdown({ children }: any) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const handleClick = () => {
-    setIsOpen(false);
-  };
-
-  const handleBlur = (event: React.FocusEvent<HTMLButtonElement>) => {
+  const handleBlur = (event: any) => {
     setTimeout(() => {
       if (
         dropdownRef.current &&
@@ -24,38 +17,24 @@ function Dropdown({ Options }: DropdownProps) {
   };
 
   return (
-    <div className="inline-block text-left">
-      <button
-        className="py-3 px-6 text-xl font-semibold text-blue-700 "
-        onClick={() => setIsOpen(!isOpen)}
-        onBlur={handleBlur}
-      >
-        <Bars3Icon className="h-7 w-7" />
+    <div
+      className="inline-block text-left"
+      onBlur={handleBlur}
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      <button className="py-3 px-6 text-xl font-semibold text-blue-500">
+        {isOpen ? (
+          <ChevronUpIcon className="h-7 w-7" />
+        ) : (
+          <ChevronDownIcon className="h-7 w-7" />
+        )}
       </button>
       {isOpen && (
         <div
           ref={dropdownRef}
           className="absolute right-0 mt-2 w-48 origin-top-right rounded-md shadow-lg"
         >
-          <div className="shadow-xs rounded-md bg-white">
-            <div className="py-1">
-              {
-                /* Add options here */
-                Options.map((option) => (
-                  <a
-                    key={option.name}
-                    onClick={() => {
-                      handleClick();
-                      option.onClick();
-                    }}
-                    className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  >
-                    {option.name}
-                  </a>
-                ))
-              }
-            </div>
-          </div>
+          <div className="shadow-xs rounded-md bg-slate-50">{children}</div>
         </div>
       )}
     </div>

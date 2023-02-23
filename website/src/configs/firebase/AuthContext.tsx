@@ -8,6 +8,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   UserCredential,
+  signInAnonymously,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/configs/firebase/firebaseConfig";
@@ -59,8 +60,12 @@ export function AuthContextProvider({ children }: any) {
     });
   };
 
-  const logIn = (email: string, password: string) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const anonymousSignIn = async () => {
+    await signInAnonymously(auth);
+  };
+
+  const logIn = async (email: string, password: string) => {
+    await signInWithEmailAndPassword(auth, email, password);
   };
 
   const authGoogle = async () => {

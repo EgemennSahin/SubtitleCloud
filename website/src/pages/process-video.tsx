@@ -12,6 +12,8 @@ import { tempStorage } from "@/configs/firebase/firebaseConfig";
 import { uuidv4 } from "@firebase/util";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useRouter } from "next/router";
+import Head from "next/head";
+import { useAuth } from "@/configs/firebase/AuthContext";
 
 const ProcessVideo = () => {
   const [file, setFile] = React.useState<File | null>(null);
@@ -26,6 +28,8 @@ const ProcessVideo = () => {
   const [notificationPermission, setNotificationPermission] =
     React.useState(false);
   const [isMobile, setIsMobile] = React.useState(false);
+
+  const { user } = useAuth();
 
   // Set notification permission to true if user has granted permission
   useEffect(() => {
@@ -166,95 +170,107 @@ const ProcessVideo = () => {
   }
 
   return (
-    <div className="flex max-h-fit min-h-screen flex-col items-center justify-start bg-gradient-to-b from-slate-200 to-slate-400 py-5 sm:py-9">
-      {processingVideo || uploading ? (
-        <div className="flex h-fit w-fit flex-col items-center justify-start px-5">
-          <h2 className="mb-8 bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text px-4 text-center text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
-            Your video is being processed.
-          </h2>
+    <>
+      <Head>
+        <title>Process Video - Shortzoo</title>
+        <meta
+          name="description"
+          content="Upload your video to be processed in our cloud servers. Be notified when your video is ready. Quickly and securely process your video files."
+        />
+      </Head>
 
-          <div className="loader mb-12 h-40 w-40" />
-          <h3 className="text-md linear-wipe mb-8 px-4 text-center sm:hidden ">
-            This may take a few minutes. Please do not close the window or
-            navigate away from this page.
-          </h3>
+      <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-200 to-slate-400 py-5 sm:py-9">
+        {processingVideo || uploading ? (
+          <div className="flex h-fit w-fit flex-col items-center justify-start px-5">
+            <h2 className="mb-8 bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text px-4 text-center text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
+              Your video is being processed.
+            </h2>
 
-          <h3 className="text-md linear-wipe mb-8 hidden px-4 text-center sm:block ">
-            This may take a few minutes.
-          </h3>
+            <div className="loader mb-16 h-56 w-56" />
 
-          {!notificationPermission && (
-            <TextButton
-              size="small"
-              onClick={async () => {
-                const permission = await Notification.requestPermission();
+            <h3 className="text-md linear-wipe mb-8 px-4 text-center sm:hidden ">
+              This may take a few minutes. Please do not close the window or
+              navigate away from this page.
+            </h3>
 
-                if (permission === "granted") {
-                  setNotificationPermission(true);
-                }
-              }}
-              color="bg-gradient-to-r from-teal-500 to-teal-600"
-              text="Notify me when finished"
-            />
-          )}
-        </div>
-      ) : (
-        <div className="max-w-screen flex h-screen min-w-fit flex-col items-center justify-start px-5 sm:h-full">
-          <h2 className="my-10 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text pr-1 text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
-            Upload your video
-          </h2>
+            <h3 className="text-md linear-wipe mb-8 hidden px-4 text-center sm:block ">
+              This may take a few minutes.
+            </h3>
 
-          <FileInput
-            onFile={(file: File) => {
-              setFile(file);
-            }}
-            disabled={processingVideo || uploading}
-          />
+            {!notificationPermission && (
+              <TextButton
+                size="small"
+                onClick={async () => {
+                  const permission = await Notification.requestPermission();
 
-          <div className="mt-10 flex items-center justify-center">
-            <TextButton
-              size="medium"
-              onClick={async () => {
-                // Notify user
-                const isMobile = /iPhone|iPad|iPod|Android/i.test(
-                  navigator.userAgent
-                );
-                if (!isMobile && "Notification" in window) {
-                  if (Notification.permission !== "granted") {
-                    Notification.requestPermission();
+                  if (permission === "granted") {
+                    setNotificationPermission(true);
                   }
-                }
+                }}
+                color="bg-teal-500"
+                hover="hover:bg-teal-600"
+                text="Notify me when finished"
+              />
+            )}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center">
+            <h2 className="mb-8 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text pr-1 text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
+              Upload your video
+            </h2>
 
-                await handleFileUpload();
+            <FileInput
+              onFile={(file: File) => {
+                setFile(file);
               }}
-              text={"Submit"}
-              disabled={!file || processingVideo || uploading}
+              disabled={processingVideo || uploading}
+            />
+
+            <div className="mt-10 flex items-center justify-center">
+              <TextButton
+                size="medium"
+                onClick={async () => {
+                  // Notify user
+                  const isMobile = /iPhone|iPad|iPod|Android/i.test(
+                    navigator.userAgent
+                  );
+                  if (!isMobile && "Notification" in window) {
+                    if (Notification.permission !== "granted") {
+                      Notification.requestPermission();
+                    }
+                  }
+
+                  await handleFileUpload();
+                }}
+                text={"Submit"}
+                disabled={!file || processingVideo || uploading}
+              />
+            </div>
+          </div>
+        )}
+
+        {gettingToken && (
+          <div style={{ position: "fixed", bottom: 0, right: 0 }}>
+            <Turnstile
+              className="mt-7"
+              siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
+              scriptOptions={{ async: true, defer: true, appendTo: "head" }}
+              onSuccess={(token: string) => {
+                setToken(token);
+
+                setTimeout(() => {
+                  setGettingToken(false);
+                }, 1000);
+              }}
+              options={{
+                size: "compact",
+                theme: "light",
+              }}
             />
           </div>
-        </div>
-      )}
-
-      {gettingToken && (
-        <div style={{ position: "fixed", bottom: 0, right: 0 }}>
-          <Turnstile
-            className="mt-7"
-            siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
-            scriptOptions={{ async: true, defer: true, appendTo: "head" }}
-            onSuccess={(token: string) => {
-              setToken(token);
-
-              setTimeout(() => {
-                setGettingToken(false);
-              }, 1000);
-            }}
-            options={{
-              size: "compact",
-              theme: "light",
-            }}
-          />
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 };
 

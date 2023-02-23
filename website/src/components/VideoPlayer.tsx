@@ -17,6 +17,7 @@ export const VideoPlayer = ({ src }: { src: string }) => {
   const [isMuted, setIsMuted] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
 
   const handlePlayPause = () => {
     if (videoRef.current) {
@@ -52,35 +53,6 @@ export const VideoPlayer = ({ src }: { src: string }) => {
     }
   };
 
-  const handleDownload = () => {
-    if (videoRef.current) {
-      fetch(src, {
-        method: "GET",
-        headers: {
-          "Content-Type": "video/mp4",
-        },
-      })
-        .then((response) => {
-          if (response.ok) {
-            return response.blob();
-          }
-          throw new Error("Network response was not ok.");
-        })
-        .then((blob) => {
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "video.mp4";
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-        })
-        .catch((error) => {
-          console.error("Error downloading video:", error);
-        });
-    }
-  };
-
   // Update the slider value as the video plays
   useEffect(() => {
     const interval = setInterval(() => {
@@ -96,7 +68,16 @@ export const VideoPlayer = ({ src }: { src: string }) => {
 
   // Gets the total duration of the video in seconds
   function getDuration(): number {
-    return videoRef.current ? videoRef.current.duration : 0;
+    return videoRef.current ? videoRef.current.duration : 100;
+  }
+
+  function getWatchedPercentage(): number {
+    const percentage = (getCurrentTime() / getDuration()) * 100;
+
+    if (percentage > 99) {
+      setIsFinished(true);
+    }
+    return percentage;
   }
 
   return (
@@ -127,36 +108,30 @@ export const VideoPlayer = ({ src }: { src: string }) => {
           <div
             className="h-2 bg-gradient-to-r from-teal-400 to-blue-400"
             style={{
-              width: `${(getCurrentTime() / getDuration()) * 100}%`,
+              width: `${getWatchedPercentage()}%`,
               transition: "width 1s linear ",
             }}
           />
         </div>
 
-        <div className="flex w-full items-center justify-between rounded-b-lg bg-slate-900 bg-opacity-50 px-3 pt-1">
-          <button
-            className="p-2 text-white hover:text-teal-400"
-            onClick={handleDownload}
-          >
-            <ArrowDownTrayIcon className="h-6 w-6" />
-          </button>
+        <div className="flex w-full items-center justify-between rounded-b-lg bg-slate-900 bg-opacity-50 px-2 py-1">
           <button
             className="p-2 text-white hover:text-slate-200"
             onClick={handlePlayPause}
           >
             {isPlaying ? (
-              <PauseIcon className="h-8 w-8" />
-            ) : getCurrentTime() === getDuration() ? (
-              <ArrowPathIcon className="h-8 w-8" />
+              <PauseIcon className="h-10 w-10" />
+            ) : isFinished ? (
+              <ArrowPathIcon className="h-10 w-10" />
             ) : (
-              <PlayIcon className="h-8 w-8" />
+              <PlayIcon className="h-10 w-10" />
             )}
           </button>
           <button
             className="p-2 text-white hover:text-slate-200"
             onClick={handleFullScreen}
           >
-            <ArrowsPointingOutIcon className="h-6 w-6" />
+            <ArrowsPointingOutIcon className="h-10 w-10" />
           </button>
         </div>
       </div>

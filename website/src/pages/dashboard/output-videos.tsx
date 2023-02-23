@@ -6,7 +6,7 @@ const VideosPage = () => {
   return (
     <>
       <BackButton />
-      <VideoList isOutput={true} />
+      <VideoList/>
     </>
   );
 };
