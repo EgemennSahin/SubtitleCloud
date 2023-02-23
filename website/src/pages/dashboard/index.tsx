@@ -1,5 +1,4 @@
 import { useAuth } from "@/configs/firebase/AuthContext";
-import Link from "next/link";
 import React from "react";
 import usePremiumStatus from "@/configs/stripe/usePremiumStatus";
 import { createCheckoutSession } from "@/configs/stripe/createCheckoutSession";

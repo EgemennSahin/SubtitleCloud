@@ -144,7 +144,7 @@ export default function SignUpPage() {
             />
             <Link href="/login" passHref>
               <p className="transition-textcolor mt-5 text-center text-lg font-bold tracking-wide text-teal-500 hover:text-teal-600">
-                Return to sign in
+                Go to sign in
               </p>
             </Link>
           </div>

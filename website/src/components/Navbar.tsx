@@ -37,9 +37,9 @@ const Navbar = () => {
             onClick={() => router.push("/dashboard")}
             text="Dashboard"
             size="small"
-            color="bg-slate-200"
+            color="bg-slate-500"
             style="hidden sm:block text-slate-700"
-            hover="hover:bg-slate-300"
+            hover="hover:bg-slate-600"
           />
 
           <a
@@ -76,9 +76,9 @@ const Navbar = () => {
             onClick={() => router.push("/signup")}
             text="Sign up"
             size="small"
-            color="bg-slate-200"
+            color="bg-slate-500"
             style="hidden sm:block text-slate-700"
-            hover="hover:bg-slate-300"
+            hover="hover:bg-slate-600"
           />
 
           <a
