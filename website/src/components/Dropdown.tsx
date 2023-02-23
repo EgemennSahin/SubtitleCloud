@@ -18,23 +18,23 @@ function Dropdown({ children }: any) {
 
   return (
     <div
-      className="inline-block text-left"
+      className="flex flex-col items-center justify-center"
       onBlur={handleBlur}
       onClick={() => setIsOpen(!isOpen)}
     >
-      <button className="py-3 px-6 text-xl font-semibold text-blue-500">
+      <button className="text-xl font-semibold ">
         {isOpen ? (
-          <ChevronUpIcon className="h-7 w-7" />
+          <ChevronUpIcon className="h-7 w-7 text-slate-900" />
         ) : (
-          <ChevronDownIcon className="h-7 w-7" />
+          <ChevronDownIcon className="h-7 w-7 text-slate-500" />
         )}
       </button>
       {isOpen && (
         <div
           ref={dropdownRef}
-          className="absolute right-0 mt-2 w-48 origin-top-right rounded-md shadow-lg"
+          className="absolute right-0 top-12 mt-2 w-48 cursor-pointer rounded-b-md shadow-lg"
         >
-          <div className="shadow-xs rounded-md bg-slate-50">{children}</div>
+          <div className="shadow-xs rounded-b-md bg-white">{children}</div>
         </div>
       )}
     </div>

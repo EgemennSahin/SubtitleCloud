@@ -21,35 +21,31 @@ export default function DashboardPage() {
         />
       </Head>
 
-      <div className="flex h-screen flex-col items-center">
-        <div>
-          {user && (
-            <div className="flex flex-col items-center">
-              Hello, {user.displayName}
-              {userIsPremium == null ? (
-                <div>Loading...</div>
-              ) : !userIsPremium ? (
-                <button
-                  className="rounded-lg bg-blue-600 py-4 px-8 text-white"
-                  onClick={() => createCheckoutSession(user.uid)}
-                >
-                  Upgrade to Premium
-                </button>
-              ) : (
-                <div>You are a premium user</div>
-              )}
-            </div>
-          )}
-        </div>
+      <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-50 to-slate-200 px-4 py-5 sm:py-9">
+        <h1 className="mb-3 bg-gradient-to-r from-slate-600 to-slate-800 bg-clip-text pr-1 text-center text-6xl font-bold leading-tight tracking-tighter text-transparent ">
+          Dashboard
+        </h1>
 
-        <div className="flex">
+        {user && (
+          <div className="flex flex-col items-center">
+            {userIsPremium != null && !userIsPremium && (
+              <h2
+                onClick={() => createCheckoutSession(user.uid)}
+                className="transition-textcolor mb-5 cursor-pointer bg-gradient-to-r from-slate-500 to-slate-700 bg-clip-text pr-1 text-center text-3xl font-semibold tracking-tight text-transparent hover:from-slate-600 hover:to-slate-800 sm:mb-8"
+              >
+                Upgrade to Premium
+              </h2>
+            )}
+          </div>
+        )}
+        <div className="flex gap-4">
           <TextButton
             size="medium"
             text="Subtitle"
             onClick={() => {
-              router.push("/dashboard/output-videos");
+              router.push("/");
             }}
-            hover="hover:bg-teal-600 transition duration-200"
+            hover="hover:bg-teal-600 transition-textcolor"
           />
           <TextButton
             size="medium"
@@ -58,7 +54,7 @@ export default function DashboardPage() {
             onClick={() => {
               router.push("/dashboard/output-videos");
             }}
-            hover="hover:bg-teal-600 transition duration-200"
+            hover="hover:bg-teal-600 transition-textcolor"
           />
         </div>
       </div>

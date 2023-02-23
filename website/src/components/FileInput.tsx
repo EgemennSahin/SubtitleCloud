@@ -72,7 +72,7 @@ function FileInput({ onFile, disabled }: FileInputProps) {
 
   return (
     <div
-      className={`flex flex-col justify-center rounded-md p-8 text-center shadow-inner-lg transition duration-200 ${
+      className={`transition-textcolor flex flex-col justify-center rounded-md p-8 text-center shadow-inner-lg ${
         disabled
           ? "cursor-default bg-slate-400"
           : "cursor-pointer bg-slate-600 hover:bg-slate-700"

@@ -35,41 +35,46 @@ export default function PasswordResetPage() {
           content="Reset your password and regain access to your account on our short video subtitling solution."
         />
       </Head>
-      <div className="mx-auto mt-8 max-w-xl flex-col rounded-lg bg-white px-12 py-14 drop-shadow-2xl sm:px-16">
-        <h2 className="mb-6 text-center text-3xl font-bold text-slate-800">
-          <span className="hidden sm:block">Reset your Shortzoo password</span>
-          <span className="sm:hidden">Reset password</span>
-        </h2>
+      <div className="my-8 flex max-w-xl grow flex-col self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
+        <div className="drop-shadow">
+          <h2 className="mb-6 text-center text-3xl font-bold text-slate-800">
+            <span className="hidden sm:block">
+              Reset your Shortzoo password
+            </span>
+            <span className="sm:hidden">Reset password</span>
+          </h2>
+          <h3 className="mb-4 hidden text-slate-600 sm:block">
+            Enter the email associated with your account and you will receive a
+            link to reset your password.
+          </h3>
+          <div className="flex flex-col">
+            <div
+              className="mb-8 flex flex-col"
+              style={{ position: "relative" }}
+            >
+              <label className="text-lg font-bold tracking-wide text-slate-600">
+                Email
+              </label>
+              <input
+                type="email"
+                className="rounded-md border-2 border-slate-700 bg-white p-2.5 text-black shadow-inner"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
 
-        <h3 className="mb-4 hidden text-slate-600 sm:block">
-          Enter the email associated with your account and you will receive a
-          link to reset your password.
-        </h3>
-
-        <div className="flex flex-col">
-          <div className="mb-8 flex flex-col" style={{ position: "relative" }}>
-            <label className="text-lg font-bold tracking-wide text-slate-600">
-              Email
-            </label>
-            <input
-              type="email"
-              className="rounded-md border-2 border-slate-700 bg-white p-2.5 text-black shadow-inner"
-              onChange={(e) => setEmail(e.target.value)}
+            <TextButton
+              size="small"
+              text="Continue"
+              color="bg-blue-400"
+              hover="hover:bg-blue-500"
+              onClick={() => handlePasswordReset}
             />
+            <Link href="/login" passHref>
+              <p className="transition-textcolor mt-5 text-center text-lg font-bold tracking-wide text-teal-500 hover:text-teal-600">
+                Return to sign in
+              </p>
+            </Link>
           </div>
-
-          <TextButton
-            size="small"
-            text="Continue"
-            color="bg-blue-400"
-            hover="hover:bg-blue-500"
-            onClick={() => handlePasswordReset}
-          />
-          <Link href="/login" passHref>
-            <p className="mt-5 text-center text-lg font-bold tracking-wide text-teal-500 transition duration-200 ease-in-out hover:text-teal-600">
-              Return to sign in
-            </p>
-          </Link>
         </div>
       </div>
     </>
