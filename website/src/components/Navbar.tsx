@@ -11,20 +11,19 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 flex flex-wrap items-center justify-between bg-white py-3 px-8 shadow">
       <div className="flex flex-shrink-0 items-center text-white">
-        {/* Add logo here */}
         <button className="flex items-center" onClick={() => router.push("/")}>
           <img src="/logo.svg" alt="Shortzoo Logo" className="h-10 w-10" />
           <span
-            className="bg-gradient-to-r from-teal-400
-          to-blue-600 bg-clip-text px-2 py-2 text-2xl font-semibold uppercase tracking-wider text-transparent
-          hover:from-teal-500 hover:to-blue-700"
+            className="hidden bg-gradient-to-r from-teal-400 to-blue-600
+          bg-clip-text px-2 py-2 text-2xl font-semibold uppercase tracking-wider text-transparent hover:from-teal-500
+          hover:to-blue-700 sm:block"
           >
             ShortZoo
           </span>
         </button>
 
         <a
-          className="transition-textcolor mx-1 hidden cursor-pointer p-3 text-xl font-bold tracking-wide text-slate-500 hover:text-slate-900 sm:block"
+          className="transition-textcolor mx-1 cursor-pointer p-3 text-xl font-bold tracking-wide text-slate-500 hover:text-slate-900"
           onClick={() => router.push("/pricing")}
         >
           Pricing
