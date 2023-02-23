@@ -67,7 +67,7 @@ export default function LogInPage() {
                 Password
               </label>
               <Link href="/password-reset" passHref>
-                <p className="text-lg font-bold tracking-wide text-teal-500 transition-textcolor hover:text-teal-600">
+                <p className="transition-textcolor text-lg font-bold tracking-wide text-teal-500 hover:text-teal-600">
                   <span className="hidden sm:block">Forgot password? </span>
                   <span className="sm:hidden">Forgot?</span>
                 </p>
@@ -89,6 +89,11 @@ export default function LogInPage() {
               text="Continue"
               onClick={handleSignIn}
             />
+
+            <span className="text-center text-lg font-bold tracking-wide text-slate-600">
+              or
+            </span>
+
             <TextButton
               color="bg-red-400"
               hover="hover:bg-red-500"
@@ -96,6 +101,16 @@ export default function LogInPage() {
               text="Sign in with Google"
               onClick={handleGoogleSignIn}
             />
+
+            <span className="text-lg font-bold tracking-wide text-slate-600">
+              Don't have an account?{" "}
+              <Link
+                className="transition-textcolor text-teal-500 hover:text-teal-600"
+                href="/signup"
+              >
+                Sign up
+              </Link>
+            </span>
           </div>
         </div>
       </div>

@@ -8,7 +8,6 @@ import router from "next/router";
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const userIsPremium = usePremiumStatus(user);
 
   return (
     <>
@@ -25,18 +24,6 @@ export default function DashboardPage() {
           Dashboard
         </h1>
 
-        {user && (
-          <div className="flex flex-col items-center">
-            {userIsPremium != null && !userIsPremium && (
-              <h2
-                onClick={() => createCheckoutSession(user.uid)}
-                className="transition-textcolor mb-5 cursor-pointer bg-gradient-to-r from-slate-500 to-slate-700 bg-clip-text pr-1 text-center text-3xl font-semibold tracking-tight text-transparent hover:from-slate-600 hover:to-slate-800 sm:mb-8"
-              >
-                Upgrade to Premium
-              </h2>
-            )}
-          </div>
-        )}
         <div className="flex gap-4">
           <TextButton
             size="medium"

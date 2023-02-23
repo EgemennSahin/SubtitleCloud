@@ -48,7 +48,7 @@ function TextButton({
             " " +
             hover!
           : "bg-gradient-to-r from-teal-400 to-blue-600 text-white drop-shadow-xl duration-100 hover:scale-105 hover:shadow-xl"
-      } rounded-xl text-center transition  ease-in-out ${padding} ${fontSize} font-bold ${style}`}
+      } rounded-xl text-center transition ease-in-out ${padding} ${fontSize} font-bold ${style}`}
       onClick={onClick}
       disabled={disabled || false}
     >

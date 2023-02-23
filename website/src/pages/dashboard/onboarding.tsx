@@ -5,7 +5,7 @@ import TextButton from "@/components/TextButton";
 import { useAuth } from "@/configs/firebase/AuthContext";
 import Head from "next/head";
 
-export default function VerifyEmailPage() {
+export default function OnboardingPage() {
   const router = useRouter();
   const { user } = useAuth();
   const [emailSent, setEmailSent] = React.useState(false);
@@ -26,13 +26,16 @@ export default function VerifyEmailPage() {
   // Redirect to dashboard if user becomes verified
   useEffect(() => {
     if (user?.emailVerified) {
-      router.push("/dashboard");
+      router.push("/dashboard/premium");
     }
   }, [user]);
 
   // Allow user to resend email every 30 seconds
   useEffect(() => {
     const interval = setInterval(() => {
+      if (user?.emailVerified) {
+        router.push("/dashboard/premium");
+      }
       setEmailSent(false);
     }, 30000);
 
@@ -48,8 +51,8 @@ export default function VerifyEmailPage() {
           content="Verify your email to gain access to generate subtitles for your videos."
         />
       </Head>
-      <div className="my-8 flex max-w-xl grow flex-col self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
-        <div className="drop-shadow">
+      <div className="my-8 max-w-xl grow self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
+        <div className="flex flex-col items-center drop-shadow">
           <h2 className="mb-6 text-center text-3xl font-bold text-slate-800">
             Verify your email
           </h2>

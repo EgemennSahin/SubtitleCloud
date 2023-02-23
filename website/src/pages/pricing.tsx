@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Pricing() {
-  const [isAnnual, setIsAnnual] = useState(true);
+  const [isAnnual, setIsAnnual] = useState(false);
 
   const toggle = () => {
     setIsAnnual(!isAnnual);
@@ -60,20 +60,20 @@ export default function Pricing() {
                 isAnnual ? "text-slate-600" : "text-slate-400"
               }`}
             >
-              Annual <span className="text-teal-500">(20% off!)</span>
+              Annual <span className="font-bold text-teal-500">(20% off!)</span>
             </p>
           </div>
 
           <div className="flex flex-col justify-between gap-6 md:flex-row">
-            <div className="flex w-full rounded-xl bg-slate-300 p-1 shadow-2xl lg:w-1/3">
+            <div className="flex w-full rounded-xl bg-slate-300 p-1 shadow-lg lg:w-1/3">
               <div className="flex w-full flex-col rounded-lg bg-slate-100 px-8 pt-4 pb-6">
                 <h2 className="text-center text-3xl font-semibold tracking-tight text-slate-600">
                   Basic
                 </h2>
-                <h3 className="mt-3 text-center text-xl text-slate-600">
+                <h3 className="mt-3 text-center text-xl font-bold text-slate-600">
                   Always free
                 </h3>
-                <div className="mt-4 grid grid-cols-2 gap-y-4 text-2xl md:text-lg">
+                <div className="mx-8 mt-4 grid grid-cols-2 gap-y-4 text-2xl md:text-lg">
                   <p className="text-slate-700">Videos:</p>
                   <p className="text-slate-700">5</p>
                   <p className="text-slate-700">Length:</p>
@@ -99,10 +99,10 @@ export default function Pricing() {
                   Premium
                 </h2>
 
-                <h3 className="mt-3 text-center text-xl text-slate-600">
+                <h3 className="mt-3 text-center text-xl font-bold text-slate-600">
                   {isAnnual ? "$47.99" : "$4.99"}
                 </h3>
-                <div className="mt-4 grid grid-cols-2 gap-y-4 text-2xl md:text-lg">
+                <div className="mx-8 mt-4 grid grid-cols-2 gap-y-4 text-2xl md:text-lg">
                   <p className="text-slate-700">Videos:</p>
                   <p className="text-slate-700">20</p>
                   <p className="text-slate-700">Length:</p>
@@ -142,10 +142,10 @@ export default function Pricing() {
                 <h2 className="bg-gradient-to-r from-white to-slate-200 bg-clip-text text-center text-3xl font-semibold tracking-tight text-transparent">
                   Business
                 </h2>
-                <h3 className="mt-3 text-center text-xl text-slate-200">
+                <h3 className="mt-3 text-center text-xl font-bold text-slate-200">
                   Customized for you
                 </h3>
-                <div className="mt-4 grid grid-cols-2 gap-y-4 text-2xl md:text-lg">
+                <div className="mx-8 mt-4 grid grid-cols-2 gap-y-4 text-2xl md:text-lg">
                   <p className="text-slate-200">Videos:</p>
                   <p className="text-slate-200">100/$9.99</p>
                   <p className="text-slate-200">Length:</p>

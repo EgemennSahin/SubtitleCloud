@@ -5,9 +5,7 @@ import {
   PauseIcon,
   SpeakerWaveIcon,
   SpeakerXMarkIcon,
-  ArrowDownTrayIcon,
   ArrowsPointingOutIcon,
-  ArrowsPointingInIcon,
   ArrowPathIcon,
 } from "@heroicons/react/24/solid";
 
@@ -20,35 +18,41 @@ export const VideoPlayer = ({ src }: { src: string }) => {
   const [isFinished, setIsFinished] = useState(false);
 
   const handlePlayPause = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
+    if (!videoRef.current) {
+      return;
     }
+
+    if (isPlaying) {
+      videoRef.current.pause();
+    } else {
+      videoRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
   };
 
   const handleMuteUnmute = () => {
-    if (videoRef.current) {
-      if (isMuted) {
-        videoRef.current.muted = false;
-      } else {
-        videoRef.current.muted = true;
-      }
-      setIsMuted(!isMuted);
+    if (!videoRef.current) {
+      return;
     }
+
+    if (isMuted) {
+      videoRef.current.muted = false;
+    } else {
+      videoRef.current.muted = true;
+    }
+    setIsMuted(!isMuted);
   };
 
   const handleFullScreen = () => {
-    if (videoRef.current) {
-      if (videoRef.current.requestFullscreen) {
-        videoRef.current.requestFullscreen();
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        }
+    if (!videoRef.current) {
+      return;
+    }
+
+    if (videoRef.current.requestFullscreen) {
+      videoRef.current.requestFullscreen();
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
       }
     }
   };
@@ -109,7 +113,7 @@ export const VideoPlayer = ({ src }: { src: string }) => {
             className="h-2 bg-gradient-to-r from-teal-400 to-blue-400"
             style={{
               width: `${getWatchedPercentage()}%`,
-              transition: "width 1s linear ",
+              transition: "width 1s linear",
             }}
           />
         </div>
