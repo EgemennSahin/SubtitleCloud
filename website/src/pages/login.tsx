@@ -103,7 +103,7 @@ export default function LogInPage() {
             />
 
             <span className="text-lg font-bold tracking-wide text-slate-600">
-              Don't have an account?{" "}
+              Don&apos;t have an account?
               <Link
                 className="transition-textcolor text-teal-500 hover:text-teal-600"
                 href="/signup"
