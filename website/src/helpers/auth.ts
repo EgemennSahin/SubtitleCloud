@@ -48,7 +48,7 @@ export const logOut = async () => {
   await signOut(auth);
 };
 
-export const idTokenListener = () => {
+export const useIdTokenListener = () => {
   const tokenName = "firebasetoken";
 
   useEffect(() => {

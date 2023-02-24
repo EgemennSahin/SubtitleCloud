@@ -20,21 +20,24 @@ function TextButton({
   style,
 }: TextButtonProps) {
   // Set font color and padding based on size
-  const [padding, setPadding] = useState("px-12 py-6");
-  const [fontSize, setFontSize] = useState("text-4xl");
 
-  useEffect(() => {
-    if (size === "small") {
-      setPadding("px-4 py-3");
-      setFontSize("text-xl");
-    } else if (size === "medium") {
-      setPadding("px-12 py-6");
-      setFontSize("text-4xl");
-    } else if (size === "large") {
-      setPadding("px-20 py-10");
-      setFontSize("text-5xl");
-    }
-  }, [size]);
+  let padding = "px-4 py-3";
+  let fontSize = "text-xl";
+
+  switch (size) {
+    case "small":
+      padding = "px-4 py-3";
+      fontSize = "text-xl";
+      break;
+    case "medium":
+      padding = "px-12 py-6";
+      fontSize = "text-4xl";
+      break;
+    case "large":
+      padding = "px-20 py-10";
+      fontSize = "text-5xl";
+      break;
+  }
 
   return (
     <button

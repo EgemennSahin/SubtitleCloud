@@ -1,5 +1,6 @@
 import { logOut } from "@/helpers/auth";
 import { User } from "firebase/auth";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Dropdown from "./dropdown-menu";
@@ -12,7 +13,14 @@ function Navbar({ user }: { user: User }) {
     <nav className="sticky top-0 z-50 flex flex-wrap items-center justify-between bg-white py-3 px-8 shadow">
       <div className="flex flex-shrink-0 items-center text-white">
         <Link className="flex items-center" href="/">
-          <img src="/logo.svg" alt="Shortzoo Logo" className="h-10 w-10" />
+          <Image
+            src="/logo.svg"
+            alt="Shortzoo Logo"
+            width="0"
+            height="0"
+            sizes="100vw"
+            className="h-10 w-10"
+          />
           <span
             className="hidden bg-gradient-to-r from-teal-400 to-blue-600
           bg-clip-text px-2 py-2 text-2xl font-semibold uppercase tracking-wider text-transparent hover:from-teal-500

@@ -79,7 +79,8 @@ import { handleError } from "@/helpers/error";
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const token = await getIdToken({ context });
-    const user = await getUser({ uid: token.uid });
+
+    const user = await getUser({ uid: token?.uid });
 
     return {
       props: { user: JSON.parse(JSON.stringify(user)) },

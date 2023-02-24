@@ -2,16 +2,14 @@ import BackButton from "@/components/back-button";
 import VideoList from "@/components/video-list";
 import React from "react";
 
-const VideosPage = () => {
+export default function VideosPage({ uid }: { uid: string }) {
   return (
     <>
       <BackButton />
-      <VideoList />
+      <VideoList uid={uid} />
     </>
   );
-};
-
-export default VideosPage;
+}
 
 import { GetServerSidePropsContext } from "next";
 import { getIdToken, getUser } from "@/helpers/user";
@@ -43,7 +41,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const user = await getUser({ uid: token.uid });
 
     return {
-      props: { user: JSON.parse(JSON.stringify(user)) },
+      props: { user: JSON.parse(JSON.stringify(user)), uid: token.uid },
     };
   } catch (error) {
     return handleError(error);
