@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 
 interface TextButtonProps {
-  onClick: () => void;
+  onClick?: () => void;
   text: string;
   disabled?: boolean;
   size: "small" | "medium" | "large";

@@ -3,7 +3,7 @@ import isUserPremium from "./isUserPremium";
 import { User } from "firebase/auth";
 
 export default function usePremiumStatus(user: User | null) {
-  const [premiumStatus, setPremiumStatus] = useState<boolean | null>();
+  const [premiumStatus, setPremiumStatus] = useState<string>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -27,8 +27,8 @@ export async function createCheckoutSession(
   const premium_annually = "price_1MenijHRv5JZrE6u5gv4cYKm";
   const business_100_monthly = "price_1MenrvHRv5JZrE6ulZKs6Ade";
   const business_100_annually = "price_1MenrvHRv5JZrE6uW1l8H7QF";
-  const business_300_monthly = "price_1MenrvHRv5JZrE6uj60Tou2e";
-  const business_300_annually = "price_1MenrvHRv5JZrE6uILozbyw0";
+  const business_300_monthly = "price_1MeooeHRv5JZrE6uGBGaQziE";
+  const business_300_annually = "price_1MeooeHRv5JZrE6usNosLdF0";
 
   let priceId = "";
 
@@ -58,12 +58,17 @@ export async function createCheckoutSession(
     cancel_url: window.location.origin,
   });
 
-  // Wait for the CheckoutSession to get attached by the extension
-  onSnapshot(checkoutSessionRef, async (snap: DocumentData) => {
-    const { sessionId } = snap.data();
-    if (sessionId) {
-      const stripe = await getStripe();
-      stripe?.redirectToCheckout({ sessionId });
-    }
+  return new Promise<string>((resolve, reject) => {
+    // Wait for the CheckoutSession to get attached by the extension
+    onSnapshot(
+      checkoutSessionRef,
+      async (snap: DocumentData) => {
+        const { sessionId } = snap.data();
+        if (sessionId) {
+          resolve(sessionId);
+        }
+      },
+      reject
+    );
   });
 }

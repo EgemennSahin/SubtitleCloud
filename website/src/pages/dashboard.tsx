@@ -1,13 +1,18 @@
 import { useAuth } from "@/configs/firebase/AuthContext";
 import React from "react";
-import usePremiumStatus from "@/configs/stripe/usePremiumStatus";
-import { createCheckoutSession } from "@/configs/stripe/createCheckoutSession";
 import Head from "next/head";
 import TextButton from "@/components/TextButton";
 import router from "next/router";
+import usePremiumStatus from "@/configs/stripe/usePremiumStatus";
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const userPremiumStatus = usePremiumStatus(user);
+
+  // If user is not verified or premium, redirect to login page
+  if (!user?.emailVerified || userPremiumStatus == "NotPremium") {
+    router.push("/onboarding");
+  }
 
   return (
     <>
@@ -38,7 +43,7 @@ export default function DashboardPage() {
             color="bg-teal-500"
             text="Videos"
             onClick={() => {
-              router.push("/dashboard/output-videos");
+              router.push("/output-videos");
             }}
             hover="hover:bg-teal-600 transition-textcolor"
           />

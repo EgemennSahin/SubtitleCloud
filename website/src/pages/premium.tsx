@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import TextButton from "@/components/TextButton";
 import { useAuth } from "@/configs/firebase/AuthContext";
 import Head from "next/head";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { createCheckoutSession } from "@/configs/stripe/createCheckoutSession";
+import getStripe from "@/configs/stripe/stripeConfig";
+import usePremiumStatus from "@/configs/stripe/usePremiumStatus";
 
 export default function PremiumPage() {
   const router = useRouter();
   const [isAnnual, setIsAnnual] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("premium");
   const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const userPremiumStatus = usePremiumStatus(user);
 
   const handleSelectPlan = (plan: string) => {
     setSelectedPlan(plan);
@@ -18,6 +22,31 @@ export default function PremiumPage() {
 
   const toggle = () => {
     setIsAnnual(!isAnnual);
+  };
+
+  // Redirect user to dashboard if they are already premium
+  useEffect(() => {
+    if (userPremiumStatus != "NotPremium") {
+      router.push("/dashboard");
+    }
+  }, [user]);
+
+  const handleCheckout = async () => {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const sessionId = await createCheckoutSession(
+        user?.uid,
+        selectedPlan,
+        isAnnual
+      );
+      const stripe = await getStripe();
+      stripe?.redirectToCheckout({ sessionId });
+    } catch (error) {}
   };
 
   return (
@@ -165,13 +194,7 @@ export default function PremiumPage() {
             size="medium"
             text={selectedPlan == "premium" ? "Checkout" : "Customize"}
             style="mt-8"
-            onClick={() => {
-              {
-                selectedPlan == "premium"
-                  ? createCheckoutSession(user?.uid!, "premium", isAnnual)
-                  : createCheckoutSession(user?.uid!, "business", isAnnual);
-              }
-            }}
+            onClick={handleCheckout}
           />
         </div>
       </div>

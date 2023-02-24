@@ -6,18 +6,13 @@ import React, { useEffect } from "react";
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
   const router = useRouter();
-  const isPremium = usePremiumStatus(user);
 
   useEffect(() => {
     // If user is not logged in or not verified, redirect to login page
     if (!user) {
       router.push("/");
-    } else if (!user.emailVerified) {
-      router.push("/dashboard/onboarding");
-    } else if (!isPremium) {
-      router.push("/dashboard/premium");
     }
-  }, [user, router]);
+  }, [user]);
 
   return <>{user && children}</>;
 };

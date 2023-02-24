@@ -26,7 +26,7 @@ export default function OnboardingPage() {
   // Redirect to dashboard if user becomes verified
   useEffect(() => {
     if (user?.emailVerified) {
-      router.push("/dashboard/premium");
+      router.push("/premium");
     }
   }, [user]);
 
@@ -34,7 +34,7 @@ export default function OnboardingPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       if (user?.emailVerified) {
-        router.push("/dashboard/premium");
+        router.push("/premium");
       }
       setEmailSent(false);
     }, 30000);
