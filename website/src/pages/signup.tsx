@@ -1,18 +1,16 @@
 import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
-import { useAuth } from "@/configs/firebase/AuthContext";
 import Link from "next/link";
-import TextButton from "@/components/TextButton";
+import TextButton from "@/components/text-button";
 import Head from "next/head";
+import { signUp } from "@/helpers/auth";
 
 export default function SignUpPage() {
-  const { signUp } = useAuth();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [validEmail, setValidEmail] = useState(true);
-  const [validPassword, setValidPassword] = useState(true);
   const [showPasswordMessage, setShowPasswordMessage] = useState(false);
 
   function isValidEmail(email: string) {
@@ -152,4 +150,29 @@ export default function SignUpPage() {
       </div>
     </>
   );
+}
+
+import { GetServerSidePropsContext } from "next";
+import { getIdToken } from "@/helpers/user";
+import { handleError } from "@/helpers/error";
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  try {
+    const token = await getIdToken({ context });
+
+    if (token) {
+      return {
+        redirect: {
+          destination: "/dashboard",
+          permanent: false,
+        },
+      };
+    }
+
+    return {
+      props: {},
+    };
+  } catch (error) {
+    return handleError(error);
+  }
 }

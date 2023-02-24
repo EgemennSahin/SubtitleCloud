@@ -1,9 +1,9 @@
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "@/configs/firebase/firebaseConfig";
+import { auth } from "@/config/firebase";
 import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import TextButton from "@/components/TextButton";
+import TextButton from "@/components/text-button";
 import Head from "next/head";
 
 export default function PasswordResetPage() {
@@ -79,4 +79,29 @@ export default function PasswordResetPage() {
       </div>
     </>
   );
+}
+
+import { GetServerSidePropsContext } from "next";
+import { getIdToken } from "@/helpers/user";
+import { handleError } from "@/helpers/error";
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  try {
+    const token = await getIdToken({ context });
+
+    if (token) {
+      return {
+        redirect: {
+          destination: "/dashboard",
+          permanent: false,
+        },
+      };
+    }
+
+    return {
+      props: {},
+    };
+  } catch (error) {
+    return handleError(error);
+  }
 }

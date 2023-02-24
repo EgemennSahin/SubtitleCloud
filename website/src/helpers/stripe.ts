@@ -1,11 +1,12 @@
-import getStripe from "@/configs/stripe/stripeConfig";
-import { db } from "@/configs/firebase/firebaseConfig";
+import { db } from "@/config/firebase";
+import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import {
   collection,
-  setDoc,
   addDoc,
   DocumentData,
   onSnapshot,
+  doc,
+  getDoc,
 } from "firebase/firestore";
 
 export async function createCheckoutSession(
@@ -32,24 +33,30 @@ export async function createCheckoutSession(
 
   let priceId = "";
 
-  if (plan === "premium") {
-    if (annually) {
-      priceId = premium_annually;
-    } else {
-      priceId = premium_monthly;
-    }
-  } else if (plan === "business_100") {
-    if (annually) {
-      priceId = business_100_annually;
-    } else {
-      priceId = business_100_monthly;
-    }
-  } else if (plan === "business_300") {
-    if (annually) {
-      priceId = business_300_annually;
-    } else {
-      priceId = business_300_monthly;
-    }
+  switch (plan) {
+    case "premium":
+      if (annually) {
+        priceId = premium_annually;
+      } else {
+        priceId = premium_monthly;
+      }
+      break;
+    case "business_100":
+      if (annually) {
+        priceId = business_100_annually;
+      } else {
+        priceId = business_100_monthly;
+      }
+      break;
+    case "business_300":
+      if (annually) {
+        priceId = business_300_annually;
+      } else {
+        priceId = business_300_monthly;
+      }
+      break;
+    default:
+      break;
   }
 
   const checkoutSessionRef = await addDoc(checkoutSessionCollectionRef, {
@@ -71,4 +78,12 @@ export async function createCheckoutSession(
       reject
     );
   });
+}
+
+export function isPaidUser({ token }: { token: DecodedIdToken }) {
+  return (
+    token.stripeRole == "premium" ||
+    token.stripeRole == "business100" ||
+    token.stripeRole == "business300"
+  );
 }

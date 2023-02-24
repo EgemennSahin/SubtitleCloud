@@ -1,46 +1,21 @@
-import { sendEmailVerification } from "firebase/auth";
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
-import TextButton from "@/components/TextButton";
-import { useAuth } from "@/configs/firebase/AuthContext";
+import { sendEmailVerification, User } from "firebase/auth";
+import React from "react";
+import TextButton from "@/components/text-button";
 import Head from "next/head";
 
-export default function OnboardingPage() {
-  const router = useRouter();
-  const { user } = useAuth();
-  const [emailSent, setEmailSent] = React.useState(false);
-  const [emailSending, setEmailSending] = React.useState(false);
+export default function OnboardingPage({ user }: { user: User }) {
+  const [status, setStatus] = React.useState("available");
 
   async function handleVerifyEmail() {
-    setEmailSending(true);
     if (!user) {
-      setEmailSent(false);
-    } else {
-      await sendEmailVerification(user);
-      setEmailSent(true);
+      setStatus("error");
+      return;
     }
 
-    setEmailSending(false);
+    setStatus("sending");
+    await sendEmailVerification(user);
+    setStatus("sent");
   }
-
-  // Redirect to dashboard if user becomes verified
-  useEffect(() => {
-    if (user?.emailVerified) {
-      router.push("/premium");
-    }
-  }, [user]);
-
-  // Allow user to resend email every 30 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (user?.emailVerified) {
-        router.push("/premium");
-      }
-      setEmailSent(false);
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <>
@@ -63,16 +38,56 @@ export default function OnboardingPage() {
           </h3>
           <TextButton
             size="small"
-            color={emailSending ? "bg-slate-500" : "bg-teal-500"}
-            hover={emailSending ? "" : "hover:bg-teal-600"}
+            color={status == "sending" ? "bg-slate-500" : "bg-teal-500"}
+            hover={status == "sending" ? "" : "hover:bg-teal-600"}
             text={
-              emailSending ? "Sending" : emailSent ? "Email sent" : "Send email"
+              status == "sending"
+                ? "Sending"
+                : status == "sent"
+                ? "Email sent"
+                : "Send email"
             }
             onClick={() => handleVerifyEmail()}
-            disabled={emailSent || emailSending}
+            disabled={status != "available"}
           />
         </div>
       </div>
     </>
   );
+}
+
+import { GetServerSidePropsContext } from "next";
+import { getIdToken, getUser } from "@/helpers/user";
+import { handleError } from "@/helpers/error";
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  try {
+    const token = await getIdToken({ context });
+
+    if (!token) {
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
+
+    if (token.email_verified) {
+      return {
+        redirect: {
+          destination: "/dashboard",
+          permanent: false,
+        },
+      };
+    }
+
+    const user = await getUser({ uid: token.uid });
+
+    return {
+      props: { user: JSON.parse(JSON.stringify(user)) },
+    };
+  } catch (error) {
+    return handleError(error);
+  }
 }

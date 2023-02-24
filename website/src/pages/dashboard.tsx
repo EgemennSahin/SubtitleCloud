@@ -1,19 +1,12 @@
-import { useAuth } from "@/configs/firebase/AuthContext";
 import React from "react";
 import Head from "next/head";
-import TextButton from "@/components/TextButton";
+import TextButton from "@/components/text-button";
 import router from "next/router";
-import usePremiumStatus from "@/configs/stripe/usePremiumStatus";
 
-export default function DashboardPage() {
-  const { user } = useAuth();
-  const userPremiumStatus = usePremiumStatus(user);
+export default function DashboardPage({ ...props }) {
+  const { user } = props;
 
-  // If user is not verified or premium, redirect to login page
-  if (!user?.emailVerified || userPremiumStatus == "NotPremium") {
-    router.push("/onboarding");
-  }
-
+  console.log(user);
   return (
     <>
       <Head>
@@ -51,4 +44,30 @@ export default function DashboardPage() {
       </div>
     </>
   );
+}
+
+import { GetServerSidePropsContext } from "next";
+import { getIdToken, getUser } from "@/helpers/user";
+import { handleError } from "@/helpers/error";
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  try {
+    const token = await getIdToken({ context });
+    if (!token) {
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
+
+    const user = await getUser({ uid: token.uid });
+
+    return {
+      props: { user: JSON.parse(JSON.stringify(user)) },
+    };
+  } catch (error) {
+    return handleError(error);
+  }
 }

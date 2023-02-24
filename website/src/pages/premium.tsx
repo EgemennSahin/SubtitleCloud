@@ -1,20 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import TextButton from "@/components/TextButton";
-import { useAuth } from "@/configs/firebase/AuthContext";
+import React, { useState } from "react";
+import TextButton from "@/components/text-button";
 import Head from "next/head";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import { createCheckoutSession } from "@/configs/stripe/createCheckoutSession";
-import getStripe from "@/configs/stripe/stripeConfig";
-import usePremiumStatus from "@/configs/stripe/usePremiumStatus";
+import { createCheckoutSession, isPaidUser } from "@/helpers/stripe";
+import getStripe from "@/config/stripe";
 
-export default function PremiumPage() {
-  const router = useRouter();
+export default function PremiumPage({ user, uid }: { user: any; uid: string }) {
   const [isAnnual, setIsAnnual] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("premium");
-  const { user } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const userPremiumStatus = usePremiumStatus(user);
 
   const handleSelectPlan = (plan: string) => {
     setSelectedPlan(plan);
@@ -24,23 +17,10 @@ export default function PremiumPage() {
     setIsAnnual(!isAnnual);
   };
 
-  // Redirect user to dashboard if they are already premium
-  useEffect(() => {
-    if (userPremiumStatus != "NotPremium") {
-      router.push("/dashboard");
-    }
-  }, [user]);
-
   const handleCheckout = async () => {
-    if (!user) {
-      router.push("/login");
-      return;
-    }
-
-    setLoading(true);
     try {
       const sessionId = await createCheckoutSession(
-        user?.uid,
+        uid,
         selectedPlan,
         isAnnual
       );
@@ -200,4 +180,40 @@ export default function PremiumPage() {
       </div>
     </>
   );
+}
+
+import { GetServerSidePropsContext } from "next";
+import { getIdToken, getUser } from "@/helpers/user";
+import { handleError } from "@/helpers/error";
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  try {
+    const token = await getIdToken({ context });
+
+    if (!token) {
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
+
+    if (isPaidUser({ token })) {
+      return {
+        redirect: {
+          destination: "/dashboard",
+          permanent: false,
+        },
+      };
+    }
+
+    const user = await getUser({ uid: token.uid });
+
+    return {
+      props: { user: JSON.parse(JSON.stringify(user)) },
+    };
+  } catch (error) {
+    return handleError(error);
+  }
 }
