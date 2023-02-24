@@ -1,13 +1,11 @@
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { useAuth } from "@/configs/firebase/AuthContext";
 import Link from "next/link";
-import TextButton from "@/components/TextButton";
+import TextButton from "@/components/text-button";
 import Head from "next/head";
+import { authGoogle, logIn } from "@/helpers/auth";
 
-export default function LogInPage() {
-  const { logIn, authGoogle } = useAuth();
-
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -15,6 +13,8 @@ export default function LogInPage() {
   const handleSignIn = async () => {
     try {
       await logIn(email, password);
+
+      console.log("logged in");
 
       router.push("/dashboard");
     } catch (err: any) {
@@ -25,6 +25,7 @@ export default function LogInPage() {
   const handleGoogleSignIn = async () => {
     try {
       await authGoogle();
+      console.log("logged in");
 
       router.push("/dashboard");
     } catch (err: any) {
@@ -106,4 +107,29 @@ export default function LogInPage() {
       </div>
     </>
   );
+}
+
+import { GetServerSidePropsContext } from "next";
+import { getIdToken } from "@/helpers/user";
+import { handleError } from "@/helpers/error";
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  try {
+    const token = await getIdToken({ context });
+
+    if (token) {
+      return {
+        redirect: {
+          destination: "/dashboard",
+          permanent: false,
+        },
+      };
+    }
+
+    return {
+      props: {},
+    };
+  } catch (error) {
+    return handleError(error);
+  }
 }

@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { storageUploads } from "@/configs/firebase/firebaseConfig";
-import { useAuth } from "@/configs/firebase/AuthContext";
+import { storageUploads } from "@/config/firebase";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
-import { VideoPlayer } from "./VideoPlayer";
+import { VideoPlayer } from "./video-player";
 
-const VideoList = () => {
+const VideoList = ({ uid }: { uid: string }) => {
   const [videos, setVideos] = useState<Array<string>>([]);
-  const { user } = useAuth();
-  const videoRef = ref(storageUploads, `videos/${user?.uid}/outputs`);
+  const videoRef = ref(storageUploads, `videos/${uid}/outputs`);
 
   useEffect(() => {
     listAll(videoRef)
@@ -22,7 +20,7 @@ const VideoList = () => {
       .catch((error) => {
         console.error(error);
       });
-  }, [user, videoRef]);
+  }, [uid, videoRef]);
 
   return (
     <ul className="grid grid-cols-4 gap-8">

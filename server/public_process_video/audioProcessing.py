@@ -8,6 +8,8 @@ import whisperx.utils
 from google.cloud import storage
 
 # Create an audio file from the mp4 file and export an accordingly named file
+
+
 def create_mp3(mp4_filename, output_filename):
     (
         ffmpeg.input(mp4_filename)
@@ -19,7 +21,8 @@ def create_mp3(mp4_filename, output_filename):
 
 # Transcribe the mp3 file and export a Whisper response
 def transcribe_mp3(audio_filename, models):
-    whisper, align_model, align_model_metadata = models['whisper'], models['align_model'], models['align_model_metadata']
+    whisper, align_model, align_model_metadata = models[
+        'whisper'], models['align_model'], models['align_model_metadata']
     # Get the models in the bucket under the models bucket
     print("Transcribing the audio")
 
@@ -58,6 +61,8 @@ def adjust_subtitles(subtitles, start_pad=0.05, end_pad=0.1):
     return subtitles
 
 # Create subtitles from Whisper response and export an accordingly named srt file
+
+
 def export_srt(whisper_response, output_srt_filename):
     for i in whisper_response["word_segments"]:
         i["text"] = i["text"].upper()

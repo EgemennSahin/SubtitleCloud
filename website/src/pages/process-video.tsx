@@ -1,6 +1,6 @@
-import FileInput from "@/components/FileInput";
+import FileInput from "@/components/file-input";
 import React, { useEffect } from "react";
-import TextButton from "@/components/TextButton";
+import TextButton from "@/components/text-button";
 import {
   getMetadata,
   ref,
@@ -8,12 +8,11 @@ import {
   uploadBytesResumable,
   UploadTaskSnapshot,
 } from "firebase/storage";
-import { tempStorage } from "@/configs/firebase/firebaseConfig";
+import { tempStorage } from "@/config/firebase";
 import { uuidv4 } from "@firebase/util";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { useAuth } from "@/configs/firebase/AuthContext";
 
 const ProcessVideo = () => {
   const [file, setFile] = React.useState<File | null>(null);
@@ -28,8 +27,6 @@ const ProcessVideo = () => {
   const [notificationPermission, setNotificationPermission] =
     React.useState(false);
   const [isMobile, setIsMobile] = React.useState(false);
-
-  const { user } = useAuth();
 
   // Set notification permission to true if user has granted permission
   useEffect(() => {
@@ -275,3 +272,40 @@ const ProcessVideo = () => {
 };
 
 export default ProcessVideo;
+
+import { GetServerSidePropsContext } from "next";
+import { getIdToken, getUser } from "@/helpers/user";
+import { handleError } from "@/helpers/error";
+import { isPaidUser } from "@/helpers/stripe";
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  try {
+    const token = await getIdToken({ context });
+
+    if (!token) {
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
+
+    if (!isPaidUser({ token })) {
+      return {
+        redirect: {
+          destination: "/dashboard",
+          permanent: false,
+        },
+      };
+    }
+
+    const user = await getUser({ uid: token.uid });
+
+    return {
+      props: { user: JSON.parse(JSON.stringify(user)) },
+    };
+  } catch (error) {
+    return handleError(error);
+  }
+}

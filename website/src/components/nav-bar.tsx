@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import { useAuth } from "@/configs/firebase/AuthContext";
-import { useRouter } from "next/router";
-import Dropdown from "./Dropdown";
-import TextButton from "./TextButton";
+import { logOut } from "@/helpers/auth";
+import { User } from "firebase/auth";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import Dropdown from "./dropdown-menu";
+import TextButton from "./text-button";
 
-const Navbar = () => {
-  const { user, logOut } = useAuth();
+function Navbar({ user }: { user: User }) {
   const router = useRouter();
 
   return (
@@ -63,6 +62,7 @@ const Navbar = () => {
               <button
                 onClick={async () => {
                   await logOut();
+                  router.push("/");
                 }}
                 className="w-full rounded-b-md px-4 py-4 text-left text-lg font-medium text-gray-700"
               >
@@ -109,6 +109,6 @@ const Navbar = () => {
       )}
     </nav>
   );
-};
+}
 
 export default Navbar;

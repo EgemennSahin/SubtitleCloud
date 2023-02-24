@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import TextButton from "@/components/TextButton";
+import TextButton from "@/components/text-button";
 import router from "next/router";
-import { VideoPlayer } from "@/components/VideoPlayer";
+import { VideoPlayer } from "@/components/video-player";
 import Head from "next/head";
 
 const GeneratedVideo = () => {
@@ -59,3 +59,20 @@ const GeneratedVideo = () => {
 };
 
 export default GeneratedVideo;
+
+import { GetServerSidePropsContext } from "next";
+import { getIdToken, getUser } from "@/helpers/user";
+import { handleError } from "@/helpers/error";
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  try {
+    const token = await getIdToken({ context });
+    const user = await getUser({ uid: token.uid });
+
+    return {
+      props: { user: JSON.parse(JSON.stringify(user)) },
+    };
+  } catch (error) {
+    return handleError(error);
+  }
+}
