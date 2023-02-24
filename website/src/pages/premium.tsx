@@ -4,6 +4,7 @@ import Head from "next/head";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { createCheckoutSession, isPaidUser } from "@/helpers/stripe";
 import getStripe from "@/config/stripe";
+import Image from "next/image";
 
 export default function PremiumPage({ user, uid }: { user: any; uid: string }) {
   const [isAnnual, setIsAnnual] = useState(false);
@@ -104,19 +105,28 @@ export default function PremiumPage({ user, uid }: { user: any; uid: string }) {
                   </p>
                   <div className="flex items-center gap-2">
                     <p className="text-slate-700">Automatically publish to</p>
-                    <img
+                    <Image
                       src="/logos/youtube.svg"
                       alt="Youtube"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
                       className="h-6 w-6"
                     />
-                    <img
+                    <Image
                       src="/logos/instagram.svg"
                       alt="Instagram"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
                       className="h-6 w-6"
-                    />
-                    <img
+                    />{" "}
+                    <Image
                       src="/logos/tiktok.svg"
                       alt="Tiktok"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
                       className="h-6 w-6"
                     />
                   </div>
@@ -150,19 +160,28 @@ export default function PremiumPage({ user, uid }: { user: any; uid: string }) {
                   <p className="text-slate-200">No limit on video duration</p>
                   <div className="flex items-center gap-2">
                     <p className="text-slate-200">Automatically publish to</p>
-                    <img
+                    <Image
                       src="/logos/youtube.svg"
                       alt="Youtube"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
                       className="h-6 w-6"
                     />
-                    <img
+                    <Image
                       src="/logos/instagram.svg"
                       alt="Instagram"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
                       className="h-6 w-6"
-                    />
-                    <img
+                    />{" "}
+                    <Image
                       src="/logos/tiktok.svg"
                       alt="Tiktok"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
                       className="h-6 w-6"
                     />
                   </div>

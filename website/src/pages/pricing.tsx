@@ -1,9 +1,9 @@
 // Create a default react page
-
 import TextButton from "@/components/text-button";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function Pricing() {
   const [isAnnual, setIsAnnual] = useState(false);
@@ -109,19 +109,28 @@ export default function Pricing() {
                   <p className="text-slate-700">3 minutes</p>
                   <p className="text-slate-700">Publish:</p>
                   <div className="flex gap-2">
-                    <img
+                    <Image
                       src="/logos/youtube.svg"
                       alt="Youtube"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
                       className="h-6 w-6"
                     />
-                    <img
+                    <Image
                       src="/logos/instagram.svg"
                       alt="Instagram"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
                       className="h-6 w-6"
                     />
-                    <img
+                    <Image
                       src="/logos/tiktok.svg"
                       alt="Tiktok"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
                       className="h-6 w-6"
                     />
                   </div>
@@ -152,19 +161,28 @@ export default function Pricing() {
                   <p className="text-slate-200">No limit</p>
                   <p className="text-slate-200">Publish:</p>
                   <div className="flex gap-2">
-                    <img
+                    <Image
                       src="/logos/youtube.svg"
                       alt="Youtube"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
                       className="h-6 w-6"
                     />
-                    <img
+                    <Image
                       src="/logos/instagram.svg"
                       alt="Instagram"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
                       className="h-6 w-6"
                     />
-                    <img
+                    <Image
                       src="/logos/tiktok.svg"
                       alt="Tiktok"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
                       className="h-6 w-6"
                     />
                   </div>

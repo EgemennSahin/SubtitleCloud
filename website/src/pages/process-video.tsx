@@ -36,10 +36,67 @@ const ProcessVideo = () => {
         setNotificationPermission(true);
       }
     }
-  }, []);
+  }, [isMobile]);
 
   // Process video if it is uploaded and token is received
   useEffect(() => {
+    // Process video
+    async function handleVideoProcessing() {
+      if (!uploadedVideo || !token) {
+        console.log("Wrong parameters");
+        return;
+      }
+
+      console.log("Starting video processing...");
+
+      // Check if video is uploaded to the google cloud storage bucket
+      const videoRef = ref(tempStorage, "uploads/" + uploadedVideo);
+
+      const videoExists = await getMetadata(videoRef);
+
+      if (!videoExists) {
+        console.log("Error getting video");
+        return;
+      }
+
+      try {
+        setProcessingVideo(true);
+
+        const response_video_processing = await fetch(
+          "https://public-process-api-gateway-6dipdkfs.uc.gateway.dev/subtitle?key=AIzaSyA8gNrXERBjLwY8MlAGNYawoQgfzbhdRYY",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              video_id: uploadedVideo,
+              token: token,
+            }),
+          }
+        );
+
+        const data = await response_video_processing.json();
+        console.log("Cloud function invoked: ", data);
+
+        if (data.url) {
+          setProcessedVideo(data.url);
+        } else {
+          setProcessedVideo(null);
+        }
+
+        setUploadedVideo(null);
+        setProcessingVideo(false);
+
+        return true;
+      } catch (error: any) {
+        console.log("Error processing video: ", error.message);
+
+        setProcessingVideo(false);
+        return false;
+      }
+    }
+
     if (uploadedVideo != null && token != null) {
       handleVideoProcessing();
     }
@@ -51,9 +108,14 @@ const ProcessVideo = () => {
       console.log("Redirecting to video page: ", processedVideo);
 
       if (!isMobile && "Notification" in window && notificationPermission) {
+        // Show notification
         const notification = new Notification("Process finished!", {
           body: "Your video has been processed.",
         });
+
+        notification.onclick = () => {
+          window.focus();
+        };
       }
 
       router.push({
@@ -61,64 +123,7 @@ const ProcessVideo = () => {
         query: { video_url: processedVideo },
       });
     }
-  }, [processedVideo]);
-
-  // Process video
-  async function handleVideoProcessing() {
-    if (!uploadedVideo || !token) {
-      console.log("Wrong parameters");
-      return;
-    }
-
-    console.log("Starting video processing...");
-
-    // Check if video is uploaded to the google cloud storage bucket
-    const videoRef = ref(tempStorage, "uploads/" + uploadedVideo);
-
-    const videoExists = await getMetadata(videoRef);
-
-    if (!videoExists) {
-      console.log("Error getting video");
-      return;
-    }
-
-    try {
-      setProcessingVideo(true);
-
-      const response_video_processing = await fetch(
-        "https://public-process-api-gateway-6dipdkfs.uc.gateway.dev/subtitle?key=AIzaSyA8gNrXERBjLwY8MlAGNYawoQgfzbhdRYY",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            video_id: uploadedVideo,
-            token: token,
-          }),
-        }
-      );
-
-      const data = await response_video_processing.json();
-      console.log("Cloud function invoked: ", data);
-
-      if (data.url) {
-        setProcessedVideo(data.url);
-      } else {
-        setProcessedVideo(null);
-      }
-
-      setUploadedVideo(null);
-      setProcessingVideo(false);
-
-      return true;
-    } catch (error: any) {
-      console.log("Error processing video: ", error.message);
-
-      setProcessingVideo(false);
-      return false;
-    }
-  }
+  }, [processedVideo, isMobile, notificationPermission, router, uploadedVideo]);
 
   async function handleFileUpload() {
     if (!file) {

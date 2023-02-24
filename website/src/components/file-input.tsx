@@ -14,7 +14,7 @@ function FileInput({ onFile, disabled }: FileInputProps) {
     if (file && !dragging) {
       onFile(file);
     }
-  }, [file]);
+  }, [file, dragging, onFile]);
 
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
