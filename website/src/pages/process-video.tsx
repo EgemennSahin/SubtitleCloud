@@ -303,7 +303,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     if (!isPaidUser({ token })) {
       return {
         redirect: {
-          destination: "/dashboard",
+          destination: "/premium",
           permanent: false,
         },
       };

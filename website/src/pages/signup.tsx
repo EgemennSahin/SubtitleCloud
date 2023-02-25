@@ -1,6 +1,5 @@
 import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import TextButton from "@/components/text-button";
 import Head from "next/head";
 import { signUp, authGoogle } from "@/helpers/auth";
