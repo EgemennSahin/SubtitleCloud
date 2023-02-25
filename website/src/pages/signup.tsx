@@ -3,11 +3,9 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import TextButton from "@/components/text-button";
 import Head from "next/head";
-import { signUp } from "@/helpers/auth";
+import { signUp, authGoogle } from "@/helpers/auth";
 
 export default function SignUpPage() {
-  const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [validEmail, setValidEmail] = useState(true);
@@ -45,20 +43,6 @@ export default function SignUpPage() {
 
     return validEmail && validPassword;
   }
-
-  const handleSignUp = async () => {
-    // Check if the e-mail and password are valid
-    if (!checkRegex()) {
-      return;
-    }
-
-    try {
-      await signUp(email, password);
-      router.push("/dashboard");
-    } catch (err: any) {
-      console.log(err);
-    }
-  };
 
   return (
     <>
@@ -138,13 +122,25 @@ export default function SignUpPage() {
               hover="hover:bg-blue-500"
               size="small"
               text="Sign up"
-              onClick={handleSignUp}
+              onClick={async () => {
+                if (!checkRegex()) {
+                  return;
+                }
+                await signUp(email, password);
+              }}
             />
-            <Link href="/login" passHref>
-              <p className="transition-textcolor mt-5 text-center text-lg font-bold tracking-wide text-teal-500 hover:text-teal-600">
-                Go to sign in
-              </p>
-            </Link>
+
+            <span className="my-4 text-center text-lg font-bold tracking-wide text-slate-600">
+              or
+            </span>
+
+            <TextButton
+              color="bg-red-400"
+              hover="hover:bg-red-500"
+              size="small"
+              text="Sign up with Google"
+              onClick={async () => await authGoogle()}
+            />
           </div>
         </div>
       </div>

@@ -8,30 +8,6 @@ import { authGoogle, logIn } from "@/helpers/auth";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
-
-  const handleSignIn = async () => {
-    try {
-      await logIn(email, password);
-
-      console.log("logged in");
-
-      router.push("/dashboard");
-    } catch (err: any) {
-      console.log(err);
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    try {
-      await authGoogle();
-      console.log("logged in");
-
-      router.push("/dashboard");
-    } catch (err: any) {
-      console.log(err);
-    }
-  };
 
   return (
     <>
@@ -88,7 +64,7 @@ export default function LoginPage() {
               hover="hover:bg-blue-500"
               size="small"
               text="Continue"
-              onClick={handleSignIn}
+              onClick={async () => await logIn(email, password)}
             />
 
             <span className="my-4 text-center text-lg font-bold tracking-wide text-slate-600">
@@ -100,7 +76,7 @@ export default function LoginPage() {
               hover="hover:bg-red-500"
               size="small"
               text="Sign in with Google"
-              onClick={handleGoogleSignIn}
+              onClick={async () => await authGoogle()}
             />
           </div>
         </div>

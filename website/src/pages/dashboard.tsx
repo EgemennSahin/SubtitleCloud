@@ -22,7 +22,7 @@ export default function DashboardPage({ ...props }) {
           Dashboard
         </h1>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row">
           <TextButton
             size="medium"
             text="Subtitle"

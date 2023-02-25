@@ -228,7 +228,11 @@ const ProcessVideo = () => {
               disabled={processingVideo || uploading}
             />
 
-            <div className="mt-10 flex items-center justify-center">
+            <h3 className="text-md mt-7 text-center text-xl font-normal tracking-wide text-slate-900 sm:mt-12">
+              Video duration must be less than 3 minutes.
+            </h3>
+
+            <div className="mt-6 flex items-center justify-center">
               <TextButton
                 size="medium"
                 onClick={async () => {
