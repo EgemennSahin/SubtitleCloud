@@ -6,6 +6,7 @@ import {
   signInWithPopup,
   signOut,
   onIdTokenChanged,
+  User,
 } from "firebase/auth";
 import { setDoc, doc, getDoc } from "firebase/firestore";
 import { useEffect } from "react";
@@ -52,13 +53,28 @@ export const useIdTokenListener = () => {
   const tokenName = "firebasetoken";
 
   useEffect(() => {
-    return onIdTokenChanged(auth, async (user) => {
+    async function handleCookie(user: User | null) {
       if (!user) {
         nookies.set(undefined, tokenName, "", { path: "/" });
       } else {
         const token = await user.getIdToken();
         nookies.set(undefined, tokenName, token, { path: "/" });
       }
-    });
+    }
+
+    const unsubscribe = onIdTokenChanged(auth, handleCookie);
+
+    // Refresh the cookie after 1 hour
+    const timeout = setTimeout(() => {
+      const user = auth.currentUser;
+      if (user) {
+        handleCookie(user);
+      }
+    }, 60 * 60 * 1000);
+
+    return () => {
+      unsubscribe();
+      clearTimeout(timeout);
+    };
   }, []);
 };
