@@ -209,8 +209,6 @@ export default function PremiumPage({ user, uid }: { user: any; uid: string }) {
 import { GetServerSidePropsContext } from "next";
 import { getIdToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import { refreshToken } from "firebase-admin/app";
-import { refreshUserToken } from "@/helpers/auth";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
