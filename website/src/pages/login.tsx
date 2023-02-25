@@ -8,6 +8,7 @@ import { authGoogle, logIn } from "@/helpers/auth";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   return (
     <>
@@ -64,7 +65,20 @@ export default function LoginPage() {
               hover="hover:bg-blue-500"
               size="small"
               text="Continue"
-              onClick={async () => await logIn(email, password)}
+              onClick={async () => {
+                try {
+                  await logIn(email, password);
+                  router.push("/dashboard");
+                } catch (error: any) {
+                  if (error.code === "auth/user-not-found") {
+                    alert("No user found with this email.");
+                  } else if (error.code === "auth/wrong-password") {
+                    alert("Incorrect password.");
+                  } else {
+                    alert("An error occurred. Please try again.");
+                  }
+                }
+              }}
             />
 
             <span className="my-4 text-center text-lg font-bold tracking-wide text-slate-600">
@@ -76,7 +90,14 @@ export default function LoginPage() {
               hover="hover:bg-red-500"
               size="small"
               text="Sign in with Google"
-              onClick={async () => await authGoogle()}
+              onClick={async () => {
+                try {
+                  await authGoogle();
+                  router.push("/dashboard");
+                } catch (error: any) {
+                  alert("An error occured. Please try again.");
+                }
+              }}
             />
           </div>
         </div>

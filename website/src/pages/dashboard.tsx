@@ -27,7 +27,7 @@ export default function DashboardPage({ ...props }) {
             size="medium"
             text="Subtitle"
             onClick={() => {
-              router.push("/");
+              router.push("/process-video");
             }}
             hover="hover:bg-teal-600 transition-textcolor"
           />
@@ -49,6 +49,7 @@ export default function DashboardPage({ ...props }) {
 import { GetServerSidePropsContext } from "next";
 import { getIdToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
+import { isPaidUser } from "@/helpers/stripe";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -57,6 +58,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       return {
         redirect: {
           destination: "/login",
+          permanent: false,
+        },
+      };
+    }
+
+    if (!isPaidUser({ token })) {
+      return {
+        redirect: {
+          destination: "/premium",
           permanent: false,
         },
       };

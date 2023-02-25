@@ -25,8 +25,11 @@ export default function PremiumPage({ user, uid }: { user: any; uid: string }) {
         selectedPlan,
         isAnnual
       );
+
       const stripe = await getStripe();
       stripe?.redirectToCheckout({ sessionId });
+
+      await refreshUserToken();
     } catch (error) {}
   };
 
@@ -193,7 +196,9 @@ export default function PremiumPage({ user, uid }: { user: any; uid: string }) {
             size="medium"
             text={selectedPlan == "premium" ? "Checkout" : "Customize"}
             style="mt-8"
-            onClick={handleCheckout}
+            onClick={async () => {
+              await handleCheckout();
+            }}
           />
         </div>
       </div>
@@ -204,6 +209,8 @@ export default function PremiumPage({ user, uid }: { user: any; uid: string }) {
 import { GetServerSidePropsContext } from "next";
 import { getIdToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
+import { refreshToken } from "firebase-admin/app";
+import { refreshUserToken } from "@/helpers/auth";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -230,7 +237,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const user = await getUser({ uid: token.uid });
 
     return {
-      props: { user: JSON.parse(JSON.stringify(user)) },
+      props: {
+        uid: token.uid,
+        user: JSON.parse(JSON.stringify(user)),
+      },
     };
   } catch (error) {
     return handleError(error);

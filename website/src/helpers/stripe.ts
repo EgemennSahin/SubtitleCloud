@@ -5,8 +5,6 @@ import {
   addDoc,
   DocumentData,
   onSnapshot,
-  doc,
-  getDoc,
 } from "firebase/firestore";
 
 export async function createCheckoutSession(
@@ -81,6 +79,7 @@ export async function createCheckoutSession(
 }
 
 export function isPaidUser({ token }: { token: DecodedIdToken }) {
+  console.log(token);
   return (
     token.stripeRole == "premium" ||
     token.stripeRole == "business100" ||

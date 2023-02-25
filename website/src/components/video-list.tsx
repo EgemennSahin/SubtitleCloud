@@ -3,7 +3,7 @@ import { storageUploads } from "@/config/firebase";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
 import { VideoPlayer } from "./video-player";
 
-const VideoList = ({ uid }: { uid: string }) => {
+export default function VideoList({ uid }: { uid: string }) {
   const [videos, setVideos] = useState<Array<string>>([]);
   const videoRef = ref(storageUploads, `videos/${uid}/outputs`);
 
@@ -31,6 +31,4 @@ const VideoList = ({ uid }: { uid: string }) => {
       ))}
     </ul>
   );
-};
-
-export default VideoList;
+}

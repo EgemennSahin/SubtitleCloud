@@ -228,7 +228,7 @@ const ProcessVideo = () => {
               disabled={processingVideo || uploading}
             />
 
-            <h3 className="text-md mt-7 text-center text-xl font-normal tracking-wide text-slate-900 sm:mt-12">
+            <h3 className="text-md mt-7 text-center text-xl font-normal tracking-wide text-slate-800">
               Video duration must be less than 3 minutes.
             </h3>
 

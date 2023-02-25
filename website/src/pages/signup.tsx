@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import TextButton from "@/components/text-button";
 import Head from "next/head";
@@ -9,39 +9,7 @@ export default function SignUpPage() {
   const [password, setPassword] = useState("");
   const [validEmail, setValidEmail] = useState(true);
   const [showPasswordMessage, setShowPasswordMessage] = useState(false);
-
-  function isValidEmail(email: string) {
-    // Regular expression to validate email addresses
-    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    if (regex.test(email)) {
-      setValidEmail(true);
-      return true;
-    } else {
-      setValidEmail(false);
-      setEmail("");
-      return false;
-    }
-  }
-
-  function isValidPassword(password: string) {
-    // Regular expression to validate email password
-    const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
-    if (regex.test(password)) {
-      setShowPasswordMessage(false);
-      return true;
-    } else {
-      setShowPasswordMessage(true);
-      setPassword("");
-      return false;
-    }
-  }
-
-  function checkRegex() {
-    const validEmail = isValidEmail(email);
-    const validPassword = isValidPassword(password);
-
-    return validEmail && validPassword;
-  }
+  const router = useRouter();
 
   return (
     <>
@@ -122,10 +90,20 @@ export default function SignUpPage() {
               size="small"
               text="Sign up"
               onClick={async () => {
-                if (!checkRegex()) {
-                  return;
+                try {
+                  await signUp(email, password);
+                  router.push("/dashboard");
+                } catch (error: any) {
+                  if (error.message === "Invalid email") {
+                    setValidEmail(false);
+                  } else if (error.message === "Invalid password") {
+                    setValidEmail(true);
+                    setShowPasswordMessage(true);
+                  } else {
+                    alert("An error occured. Please try again.");
+                    console.error(error);
+                  }
                 }
-                await signUp(email, password);
               }}
             />
 
@@ -138,7 +116,14 @@ export default function SignUpPage() {
               hover="hover:bg-red-500"
               size="small"
               text="Sign up with Google"
-              onClick={async () => await authGoogle()}
+              onClick={async () => {
+                try {
+                  await authGoogle();
+                  router.push("/dashboard");
+                } catch (error: any) {
+                  alert("An error occured. Please try again.");
+                }
+              }}
             />
           </div>
         </div>
