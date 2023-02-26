@@ -2,8 +2,11 @@ import React, { useEffect } from "react";
 import Head from "next/head";
 import { isPaidUser } from "@/helpers/stripe";
 import { auth } from "@/config/firebase";
+import { useRouter } from "next/router";
 
 export default function VerifyCheckoutPage() {
+  const router = useRouter();
+
   // Refresh the token
   useEffect(() => {
     async function verify() {
@@ -11,8 +14,8 @@ export default function VerifyCheckoutPage() {
       if (!user) {
         return;
       }
-      const token = await user.getIdToken(true);
-      console.log("Token refreshed: ", token);
+      await user.getIdToken(true);
+      router.push("/dashboard");
     }
 
     const unsubscribe = auth.onAuthStateChanged((user) => {
