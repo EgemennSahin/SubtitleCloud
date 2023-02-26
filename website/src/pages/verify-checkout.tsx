@@ -54,7 +54,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const user = await getUser({ uid: token.uid });
 
     // Check if user has already verified their payment
-    refreshIdToken();
+    await refreshIdToken();
 
     return {
       props: {
