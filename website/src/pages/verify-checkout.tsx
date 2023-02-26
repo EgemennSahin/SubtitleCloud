@@ -5,13 +5,24 @@ import { auth } from "@/config/firebase";
 
 export default function VerifyCheckoutPage() {
   // Refresh the token
-
   useEffect(() => {
     async function verify() {
-      await auth.currentUser?.getIdToken(true);
+      const user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+      const token = await user.getIdToken(true);
+      console.log("Token refreshed: ", token);
     }
-    verify();
-  }, [auth.currentUser]);
+
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        verify();
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <>
