@@ -54,7 +54,7 @@ export function PlanBox({
     <div
       onClick={() => onClick()}
       className={
-        "flex cursor-pointer rounded-xl bg-gradient-to-br from-slate-300 via-slate-400 to-blue-400 p-1 drop-shadow-xl duration-200 hover:opacity-100 " +
+        "flex w-fit cursor-pointer rounded-xl bg-gradient-to-br from-slate-300 via-slate-400 to-blue-400 p-1 drop-shadow-xl duration-200 hover:opacity-100 " +
         (selected ? "opacity-100 shadow-lg" : "opacity-80 shadow")
       }
     >
@@ -119,7 +119,7 @@ export default function PricingPlans({ uid }: { uid?: string }) {
             >
               <p className="whitespace-nowrap">Automatically publish to</p>
               {["youtube", "instagram", "tiktok"].map((platform) => (
-                <div key="logo" className="w-6 drop-shadow">
+                <div key={platform} className="w-6 drop-shadow">
                   <Image
                     src={`/logos/${platform}.svg`}
                     alt={platform}
@@ -149,7 +149,7 @@ export default function PricingPlans({ uid }: { uid?: string }) {
             >
               <p className="whitespace-nowrap">Automatically publish to</p>
               {["youtube", "instagram", "tiktok"].map((platform) => (
-                <div key="logo" className="w-6 drop-shadow">
+                <div key={platform} className="w-6 drop-shadow">
                   <Image
                     src={`/logos/${platform}.svg`}
                     alt={platform}

@@ -1,4 +1,4 @@
-import { db } from "@/config/firebase";
+import { auth, db } from "@/config/firebase";
 import getStripe from "@/config/stripe";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import {
@@ -7,7 +7,6 @@ import {
   DocumentData,
   onSnapshot,
 } from "firebase/firestore";
-import { refreshUserToken } from "./auth";
 
 export async function createCheckoutSession(
   uid: string,
@@ -15,16 +14,6 @@ export async function createCheckoutSession(
   isMonthly: boolean
 ) {
   console.log("uid: ", uid);
-  // Create a new checkout session in the subcollection inside the user document
-  const checkoutSessionCollectionRef = collection(
-    db,
-    "users",
-    uid,
-    "checkout_sessions"
-  );
-
-  console.log("Test");
-
   // Plan = "premium" or "business"
   // Term = "monthly" or "annually"
   const premium_monthly = "price_1MenijHRv5JZrE6u5gv4cYKm";
@@ -62,10 +51,18 @@ export async function createCheckoutSession(
       break;
   }
 
+  // Create a new checkout session in the subcollection inside the user document
+  const checkoutSessionCollectionRef = collection(
+    db,
+    "users",
+    uid,
+    "checkout_sessions"
+  );
+
   const checkoutSessionRef = await addDoc(checkoutSessionCollectionRef, {
     price: priceId,
-    success_url: window.location.origin,
-    cancel_url: window.location.origin,
+    success_url: "https://www.shortzoo.com/verify-checkout",
+    cancel_url: "https://www.shortzoo.com/premium",
   });
 
   return new Promise<string>((resolve, reject) => {
@@ -104,9 +101,13 @@ export async function handleCheckout({
   try {
     const sessionId = await createCheckoutSession(uid, selectedPlan, isMonthly);
 
-    const stripe = await getStripe();
-    stripe?.redirectToCheckout({ sessionId });
+    console.log("Redirecting to checkout");
 
-    await refreshUserToken();
-  } catch (error) {}
+    const stripe = await getStripe();
+    stripe?.redirectToCheckout({
+      sessionId,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }

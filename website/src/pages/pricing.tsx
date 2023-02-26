@@ -1,17 +1,8 @@
 // Create a default react page
 import Head from "next/head";
-import { useState } from "react";
 import PricingPlans from "@/components/pricing-plans";
-import { useRouter } from "next/router";
 
 export default function Pricing() {
-  const [isAnnual, setIsAnnual] = useState(false);
-  const router = useRouter();
-
-  const toggle = () => {
-    setIsAnnual(!isAnnual);
-  };
-
   return (
     <>
       <Head>
@@ -37,24 +28,4 @@ export default function Pricing() {
       </div>
     </>
   );
-}
-
-import { GetServerSidePropsContext } from "next";
-import { getIdToken, getUser } from "@/helpers/user";
-import { handleError } from "@/helpers/error";
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  try {
-    const token = await getIdToken({ context });
-
-    const user = await getUser({ uid: token?.uid });
-
-    return {
-      props: {
-        user: JSON.parse(JSON.stringify(user)),
-      },
-    };
-  } catch (error) {
-    return handleError(error);
-  }
 }

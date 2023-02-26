@@ -2,26 +2,23 @@ import React from "react";
 import Head from "next/head";
 import { isPaidUser } from "@/helpers/stripe";
 
-export default function PremiumPage({ uid }: { uid: string }) {
+export default function VerifyCheckoutPage() {
   return (
     <>
       <Head>
-        <title>Choose Plan - Shortzoo</title>
+        <title>Verify Payment - Shortzoo</title>
         <meta
           name="description"
           content="Choose a subscription plan to gain access to generate subtitles for your videos."
         />
       </Head>
-      <div className="relative grow bg-gradient-to-b from-slate-50 to-slate-200 px-6 py-5 sm:py-9 md:px-8 lg:px-20">
-        <h1 className="text-style-title">Check out</h1>
+      <div className="flex grow flex-col items-center bg-gradient-to-b from-slate-200 to-slate-400 px-6 py-5 sm:py-9 md:px-8 lg:px-20">
+        <h1 className="text-style-title">Verifying</h1>
+        <h2 className="text-style-subtitle">
+          Please wait while we verify your payment...
+        </h2>
 
-        <h3 className="text-style-subheader">
-          Save <span className="text-teal-500">25%</span> by paying annually.{" "}
-        </h3>
-
-        <div className="flex flex-col items-center">
-          <PricingPlans uid={uid} />
-        </div>
+        <div className="loader mt-16 h-56 w-56" />
       </div>
     </>
   );
@@ -30,7 +27,7 @@ export default function PremiumPage({ uid }: { uid: string }) {
 import { GetServerSidePropsContext } from "next";
 import { getIdToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import PricingPlans from "@/components/pricing-plans";
+import { refreshIdToken } from "@/helpers/auth";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -55,6 +52,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
 
     const user = await getUser({ uid: token.uid });
+
+    // Check if user has already verified their payment
+    refreshIdToken();
 
     return {
       props: {
