@@ -78,9 +78,10 @@ export const logOut = async () => {
 
 export const refreshIdToken = () => {
   const user = auth.currentUser;
+  console.log("refreshing token");
+
   if (!user) return null;
 
-  console.log("refreshing token");
   return user.getIdToken(true);
 };
 
