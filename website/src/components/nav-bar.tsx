@@ -47,7 +47,7 @@ function Navbar({ user }: { user: User }) {
               text="Dashboard"
               size="small"
               color="bg-slate-500"
-              style="hidden sm:block text-slate-700"
+              style="hidden sm:block"
               hover="hover:bg-slate-600"
             />
           </Link>
@@ -88,7 +88,7 @@ function Navbar({ user }: { user: User }) {
             text="Sign up"
             size="small"
             color="bg-slate-500"
-            style="hidden sm:block text-slate-700"
+            style="hidden sm:block"
             hover="hover:bg-slate-600"
           />
 
