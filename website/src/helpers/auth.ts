@@ -57,7 +57,6 @@ export const authGoogle = async () => {
     const provider = new GoogleAuthProvider();
     const userCredentials = await signInWithPopup(auth, provider);
 
-    console.log("userCredentials", userCredentials);
     const userExists = (
       await getDoc(doc(db, "users", userCredentials.user.uid))
     ).exists();

@@ -1,9 +1,8 @@
-import { auth, db } from "@/config/firebase";
+import { db } from "@/config/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { firebaseAdmin } from "@/config/firebase-admin";
 import { GetServerSidePropsContext } from "next";
 import nookies from "nookies";
-import { setCookies } from "./auth";
 
 export function getUser({ uid }: { uid: string | undefined }) {
   if (!uid) return null;

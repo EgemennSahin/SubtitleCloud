@@ -60,7 +60,7 @@ export function PlanBox({
     >
       <div
         className={
-          "relative flex flex-col rounded-lg px-12 pt-4 pb-8 text-center " +
+          "relative flex flex-col rounded-lg px-6 pt-4 pb-8 text-center sm:px-12 " +
           bgColor
         }
       >
@@ -81,7 +81,7 @@ export function PlanBox({
         <h3 className={"mt-3 text-xl font-bold " + priceColor}>{price}</h3>
         <div
           className={
-            "mt-5 space-y-3 text-start text-2xl font-medium md:text-lg " +
+            "mt-5 space-y-3 text-start text-lg font-medium sm:text-xl " +
             textColor
           }
         >
@@ -106,7 +106,7 @@ export default function PricingPlans({ uid }: { uid?: string }) {
         textFalse={"Annual"}
       />
 
-      <div className="mt-3 flex flex-col justify-between gap-8 sm:flex-row">
+      <div className="mt-3 flex flex-col justify-between gap-8 lg:flex-row">
         <PlanBox
           title="Premium"
           price={isMonthly ? "26.99/year" : "2.99/month"}
