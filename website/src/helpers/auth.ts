@@ -76,11 +76,12 @@ export const logOut = async () => {
   await signOut(auth);
 };
 
-export const refreshIdToken = async () => {
+export const refreshIdToken = () => {
   const user = auth.currentUser;
   if (!user) return null;
 
-  return await user.getIdToken(true);
+  console.log("refreshing token");
+  return user.getIdToken(true);
 };
 
 export const setCookies = async (user: User | null) => {
