@@ -1,163 +1,183 @@
 import { useRouter } from "next/router";
-import TextButton from "./text-button";
 import Image from "next/image";
+import { useState } from "react";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import ToggleButton from "./toggle-button";
+import TextButton from "./text-button";
+import { handleCheckout } from "@/helpers/stripe";
 
-export default function PricingPlans({
-  isAnnual,
-  toggle,
+export function PlanBox({
+  title,
+  price,
+  features,
+  selected,
   onClick,
+  style,
 }: {
-  isAnnual: boolean;
-  toggle: () => void;
-  onClick: () => void;
+  title: string;
+  price: string;
+  features: any[];
+  selected: boolean;
+  onClick: any;
+  style?: "dark" | "light";
 }) {
-  const router = useRouter();
+  let titleColor =
+    "bg-gradient-to-r from-slate-50 to-slate-200 bg-clip-text text-transparent";
+  let priceColor = "text-slate-200";
+  let textColor = "text-slate-100";
+  let bgColor = "bg-slate-800";
+
+  switch (style) {
+    case "dark":
+      titleColor =
+        "bg-gradient-to-r from-slate-50 to-slate-200 bg-clip-text text-transparent";
+      priceColor = "text-slate-300";
+      textColor = "text-slate-200";
+      bgColor = "bg-gradient-to-b from-slate-700 to-slate-900";
+      break;
+    case "light":
+      titleColor =
+        "bg-gradient-to-r from-slate-500 to-slate-900 bg-clip-text text-transparent";
+      priceColor = "text-slate-500";
+      textColor = "text-slate-700";
+      bgColor = "bg-gradient-to-b from-slate-50 to-slate-200";
+      break;
+    default:
+      titleColor =
+        "bg-gradient-to-r from-slate-500 to-slate-900 bg-clip-text text-transparent";
+      priceColor = "text-slate-500";
+      textColor = "text-slate-700";
+      bgColor = "bg-gradient-to-b from-slate-50 to-slate-200";
+  }
 
   return (
-    <>
+    <div
+      onClick={() => onClick()}
+      className={
+        "flex cursor-pointer rounded-xl bg-gradient-to-br from-slate-300 via-slate-400 to-blue-400 p-1 drop-shadow-xl duration-200 hover:opacity-100 " +
+        (selected ? "opacity-100 shadow-lg" : "opacity-80 shadow")
+      }
+    >
       <div
-        className="mb-8 flex items-center justify-center space-x-2"
-        onClick={toggle}
+        className={
+          "relative flex flex-col rounded-lg px-12 pt-4 pb-8 text-center " +
+          bgColor
+        }
       >
-        <p
-          className={`text-md font-medium  ${
-            isAnnual ? "text-slate-400" : "text-slate-600"
-          }`}
+        {selected && (
+          <div className="absolute top-2 left-2 drop-shadow-lg">
+            <CheckCircleIcon className="h-16 w-16 text-teal-500 " />
+          </div>
+        )}
+        <h2
+          className={
+            "text-3xl font-semibold tracking-tight text-transparent " +
+            titleColor
+          }
         >
-          Monthly
-        </p>
+          {title}
+        </h2>
+
+        <h3 className={"mt-3 text-xl font-bold " + priceColor}>{price}</h3>
         <div
-          className={`inline-flex h-7 w-12 flex-shrink-0 rounded-full bg-slate-400 transition-colors duration-200 ease-in ${
-            isAnnual ? "bg-slate-600" : ""
-          }`}
+          className={
+            "mt-5 space-y-3 text-start text-2xl font-medium md:text-lg " +
+            textColor
+          }
         >
-          <span className="sr-only">Use setting</span>
-          <span
-            aria-hidden="true"
-            className={`mx-1 inline-block h-5 w-5 transform self-center rounded-full bg-slate-100 shadow ring-0 transition duration-200 ease-in-out ${
-              isAnnual ? "translate-x-5 bg-slate-100" : ""
-            }`}
-          />
+          {features}
         </div>
-        <p
-          className={`text-md font-medium  ${
-            isAnnual ? "text-slate-600" : "text-slate-400"
-          }`}
-        >
-          Annual{" "}
-          <span className="font-bold text-teal-500">(3 months free)</span>
-        </p>
       </div>
+    </div>
+  );
+}
 
-      <div className="flex-flex-col">
-        <div className="flex flex-col justify-center gap-6 md:flex-row">
-          <div className="flex w-full rounded-xl bg-gradient-to-br from-slate-300 via-slate-300 to-blue-400 p-1 shadow-2xl lg:w-1/3">
-            <div className="flex w-full flex-col rounded-lg bg-slate-100 px-8 pt-4 pb-6">
-              <h2 className="bg-gradient-to-r from-teal-400 to-blue-600 bg-clip-text text-center text-3xl font-semibold tracking-tight text-transparent">
-                Premium
-              </h2>
+export default function PricingPlans({ uid }: { uid?: string }) {
+  const router = useRouter();
+  const [isMonthly, setIsMonthly] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("premium");
 
-              <h3 className="mt-3 text-center text-xl font-bold text-slate-600">
-                {isAnnual ? "$26.99" : "$2.99"}
-              </h3>
-              <div className="mx-8 mt-4 grid grid-cols-2 gap-y-4 text-2xl md:text-lg">
-                <p className="text-slate-700">Videos:</p>
-                <p className="text-slate-700">30</p>
-                <p className="text-slate-700">Length:</p>
-                <p className="text-slate-700">3 minutes</p>
-                <p className="text-slate-700">Publish:</p>
-                <div className="flex gap-2">
+  return (
+    <div className="flex flex-col">
+      <ToggleButton
+        state={isMonthly}
+        setState={setIsMonthly}
+        textTrue={"Monthly"}
+        textFalse={"Annual"}
+      />
+
+      <div className="mt-3 flex flex-col justify-between gap-8 sm:flex-row">
+        <PlanBox
+          title={"Premium"}
+          price={isMonthly ? "26.99/year" : "2.99/month"}
+          features={[
+            <p>20 Videos per month</p>,
+            <p>Video duration up to 3 minutes</p>,
+            <div className="flex flex-nowrap items-center gap-2">
+              <p className="whitespace-nowrap">Automatically publish to</p>
+              {["youtube", "instagram", "tiktok"].map((platform) => (
+                <div className="w-6 drop-shadow">
                   <Image
-                    src="/logos/youtube.svg"
-                    alt="Youtube"
-                    width="0"
-                    height="0"
-                    sizes="100vw"
-                    className="h-6 w-6"
-                  />
-                  <Image
-                    src="/logos/instagram.svg"
-                    alt="Instagram"
-                    width="0"
-                    height="0"
-                    sizes="100vw"
-                    className="h-6 w-6"
-                  />
-                  <Image
-                    src="/logos/tiktok.svg"
-                    alt="Tiktok"
+                    src={`/logos/${platform}.svg`}
+                    alt={platform}
                     width="0"
                     height="0"
                     sizes="100vw"
                     className="h-6 w-6"
                   />
                 </div>
-              </div>
+              ))}
+            </div>,
+          ]}
+          selected={selectedPlan === "premium"}
+          onClick={() => setSelectedPlan("premium")}
+          style="light"
+        />
 
-              <TextButton
-                size="small"
-                text="Subscribe"
-                style="mt-8"
-                onClick={onClick}
-              />
-            </div>
-          </div>
-          <div className="flex w-full rounded-xl bg-slate-400 p-1 shadow-2xl lg:w-1/3">
-            <div className="flex w-full flex-col rounded-lg bg-gradient-to-b from-slate-600 via-slate-800 to-slate-900 px-8 pt-4 pb-6">
-              <h2 className="bg-gradient-to-r from-white to-slate-200 bg-clip-text text-center text-3xl font-semibold tracking-tight text-transparent">
-                Business
-              </h2>
-              <h3 className="mt-3 text-center text-xl font-bold text-slate-200">
-                Customized for you
-              </h3>
-              <div className="mx-8 mt-4 grid grid-cols-2 gap-y-4 text-2xl md:text-lg">
-                <p className="text-slate-200">Videos:</p>
-                <p className="text-slate-200">100/$4.99</p>
-                <p className="text-slate-200">Length:</p>
-                <p className="text-slate-200">No limit</p>
-                <p className="text-slate-200">Publish:</p>
-                <div className="flex gap-2">
+        <PlanBox
+          title={"Business"}
+          price="Custom Plan"
+          features={[
+            <p>Unlimited videos</p>,
+            <p>Unlimited video duration</p>,
+            <div className="flex flex-nowrap items-center gap-2">
+              <p className="whitespace-nowrap">Automatically publish to</p>
+              {["youtube", "instagram", "tiktok"].map((platform) => (
+                <div className="w-6 drop-shadow">
                   <Image
-                    src="/logos/youtube.svg"
-                    alt="Youtube"
-                    width="0"
-                    height="0"
-                    sizes="100vw"
-                    className="h-6 w-6"
-                  />
-                  <Image
-                    src="/logos/instagram.svg"
-                    alt="Instagram"
-                    width="0"
-                    height="0"
-                    sizes="100vw"
-                    className="h-6 w-6"
-                  />
-                  <Image
-                    src="/logos/tiktok.svg"
-                    alt="Tiktok"
+                    src={`/logos/${platform}.svg`}
+                    alt={platform}
                     width="0"
                     height="0"
                     sizes="100vw"
                     className="h-6 w-6"
                   />
                 </div>
-              </div>
-
-              <TextButton
-                size="small"
-                text="Contact us"
-                color="bg-amber-600"
-                hover="hover:bg-amber-700"
-                style="mt-8"
-                onClick={() => {
-                  router.push("/signup");
-                }}
-              />
-            </div>
-          </div>
-        </div>
+              ))}
+            </div>,
+          ]}
+          selected={selectedPlan === "business"}
+          onClick={() => setSelectedPlan("business")}
+          style="dark"
+        />
       </div>
-    </>
+      <TextButton
+        size="small"
+        text={selectedPlan == "premium" ? "Checkout" : "Customize"}
+        style="mt-8"
+        onClick={async () => {
+          if (!uid) {
+            router.push("/signup");
+            return;
+          }
+
+          await handleCheckout({
+            uid,
+            selectedPlan,
+            isMonthly,
+          });
+        }}
+      />
+    </div>
   );
 }

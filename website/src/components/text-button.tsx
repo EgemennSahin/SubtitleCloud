@@ -10,7 +10,7 @@ interface TextButtonProps {
   style?: string;
 }
 
-function TextButton({
+export default function TextButton({
   onClick,
   text,
   disabled,
@@ -45,13 +45,13 @@ function TextButton({
         disabled
           ? "cursor-not-allowed bg-slate-400 text-slate-300"
           : color
-          ? "text-white drop-shadow-xl duration-200" +
+          ? "text-white shadow-lg hover:drop-shadow-lg" +
             " " +
             color +
             " " +
             hover!
-          : "bg-gradient-to-r from-teal-400 to-blue-600 text-white drop-shadow-xl duration-100 hover:scale-105 hover:shadow-xl"
-      } rounded-xl text-center transition ease-in-out ${padding} ${fontSize} font-bold ${style}`}
+          : "bg-gradient-to-r from-teal-400 to-blue-600 text-white shadow-lg hover:drop-shadow-lg"
+      } rounded-xl text-center transition duration-150 ease-in-out ${padding} ${fontSize} font-bold ${style}`}
       onClick={onClick}
       disabled={disabled || false}
     >
@@ -59,5 +59,3 @@ function TextButton({
     </button>
   );
 }
-
-export default TextButton;

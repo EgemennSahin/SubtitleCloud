@@ -1,4 +1,5 @@
 import { db } from "@/config/firebase";
+import getStripe from "@/config/stripe";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import {
   collection,
@@ -6,12 +7,14 @@ import {
   DocumentData,
   onSnapshot,
 } from "firebase/firestore";
+import { refreshUserToken } from "./auth";
 
 export async function createCheckoutSession(
   uid: string,
   plan: string,
-  annually: boolean
+  isMonthly: boolean
 ) {
+  console.log("uid: ", uid);
   // Create a new checkout session in the subcollection inside the user document
   const checkoutSessionCollectionRef = collection(
     db,
@@ -19,6 +22,8 @@ export async function createCheckoutSession(
     uid,
     "checkout_sessions"
   );
+
+  console.log("Test");
 
   // Plan = "premium" or "business"
   // Term = "monthly" or "annually"
@@ -33,24 +38,24 @@ export async function createCheckoutSession(
 
   switch (plan) {
     case "premium":
-      if (annually) {
-        priceId = premium_annually;
-      } else {
+      if (isMonthly) {
         priceId = premium_monthly;
+      } else {
+        priceId = premium_annually;
       }
       break;
     case "business_100":
-      if (annually) {
-        priceId = business_100_annually;
-      } else {
+      if (isMonthly) {
         priceId = business_100_monthly;
+      } else {
+        priceId = business_100_annually;
       }
       break;
     case "business_300":
-      if (annually) {
-        priceId = business_300_annually;
-      } else {
+      if (isMonthly) {
         priceId = business_300_monthly;
+      } else {
+        priceId = business_300_annually;
       }
       break;
     default:
@@ -85,4 +90,23 @@ export function isPaidUser({ token }: { token: DecodedIdToken }) {
     token.stripeRole == "business100" ||
     token.stripeRole == "business300"
   );
+}
+
+export async function handleCheckout({
+  uid,
+  selectedPlan,
+  isMonthly,
+}: {
+  uid: string;
+  selectedPlan: string;
+  isMonthly: boolean;
+}) {
+  try {
+    const sessionId = await createCheckoutSession(uid, selectedPlan, isMonthly);
+
+    const stripe = await getStripe();
+    stripe?.redirectToCheckout({ sessionId });
+
+    await refreshUserToken();
+  } catch (error) {}
 }

@@ -77,6 +77,13 @@ export const logOut = async () => {
   await signOut(auth);
 };
 
+export const refreshUserToken = async () => {
+  const user = auth.currentUser;
+  if (user) {
+    await user.getIdToken(true);
+  }
+};
+
 export const setCookies = async (user: User | null) => {
   const tokenName = "firebasetoken";
   if (!user) {

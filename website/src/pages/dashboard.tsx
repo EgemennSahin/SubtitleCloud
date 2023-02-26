@@ -4,9 +4,6 @@ import TextButton from "@/components/text-button";
 import router from "next/router";
 
 export default function DashboardPage({ ...props }) {
-  const { user } = props;
-
-  console.log(user);
   return (
     <>
       <Head>

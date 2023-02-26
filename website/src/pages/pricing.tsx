@@ -29,11 +29,13 @@ export default function Pricing() {
           Our plans are designed to fit your needs and budget.
         </h2>
 
-        <PricingPlans
-          isAnnual={isAnnual}
-          toggle={toggle}
-          onClick={() => router.push("/premium")}
-        />
+        <h3 className="mb-8 bg-gradient-to-r from-slate-400 to-slate-600 bg-clip-text pr-1 text-center text-2xl font-semibold tracking-tight text-transparent drop-shadow-xl sm:mb-4">
+          Save <span className="text-teal-500">25%</span> by paying annually.{" "}
+        </h3>
+
+        <div className="flex flex-col items-center">
+          <PricingPlans />
+        </div>
       </div>
     </>
   );
@@ -50,7 +52,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const user = await getUser({ uid: token?.uid });
 
     return {
-      props: { user: JSON.parse(JSON.stringify(user)) },
+      props: {
+        user: JSON.parse(JSON.stringify(user)),
+      },
     };
   } catch (error) {
     return handleError(error);
