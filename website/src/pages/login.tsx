@@ -21,7 +21,7 @@ export default function LoginPage() {
       </Head>
       <div className="my-8 flex max-w-xl grow flex-col self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
         <div className="drop-shadow">
-          <h2 className="mb-6 text-center text-3xl font-bold text-slate-800">
+          <h2 className="text-style-subtitle">
             <span className="hidden sm:block">
               Log in to your Shortzoo account
             </span>

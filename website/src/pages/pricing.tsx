@@ -22,14 +22,12 @@ export default function Pricing() {
         />
       </Head>
       <div className="relative grow bg-gradient-to-b from-slate-50 to-slate-200 px-6 py-5 sm:py-9 md:px-8 lg:px-20">
-        <h1 className="mb-3 bg-gradient-to-r from-slate-600 to-slate-800 bg-clip-text pr-1 text-center text-6xl font-bold leading-tight tracking-tighter text-transparent ">
-          Pricing
-        </h1>
-        <h2 className="mb-8 bg-gradient-to-r from-slate-500 to-slate-700 bg-clip-text pr-1 text-center text-3xl font-semibold tracking-tight text-transparent sm:mb-4">
+        <h1 className="text-style-title"> Pricing</h1>
+        <h2 className="text-style-subtitle">
           Our plans are designed to fit your needs and budget.
         </h2>
 
-        <h3 className="mb-8 bg-gradient-to-r from-slate-400 to-slate-600 bg-clip-text pr-1 text-center text-2xl font-semibold tracking-tight text-transparent drop-shadow-xl sm:mb-4">
+        <h3 className="text-style-subheader">
           Save <span className="text-teal-500">25%</span> by paying annually.{" "}
         </h3>
 

@@ -15,9 +15,7 @@ export default function DashboardPage({ ...props }) {
       </Head>
 
       <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-50 to-slate-200 px-4 py-5 sm:py-9">
-        <h1 className="mb-3 bg-gradient-to-r from-slate-600 to-slate-800 bg-clip-text pr-1 text-center text-6xl font-bold leading-tight tracking-tighter text-transparent ">
-          Dashboard
-        </h1>
+        <h1 className="text-style-title"> Dashboard</h1>
 
         <div className="flex flex-col gap-4 sm:flex-row">
           <TextButton
