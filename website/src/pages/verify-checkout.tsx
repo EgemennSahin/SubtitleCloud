@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
 import { isPaidUser } from "@/helpers/stripe";
+import { auth } from "@/config/firebase";
 
 export default function VerifyCheckoutPage() {
+  // Refresh the token
+
+  useEffect(() => {
+    async function verify() {
+      await auth.currentUser?.getIdToken(true);
+    }
+    verify();
+  }, [auth.currentUser]);
+
   return (
     <>
       <Head>
@@ -27,7 +37,6 @@ export default function VerifyCheckoutPage() {
 import { GetServerSidePropsContext } from "next";
 import { getIdToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import { refreshIdToken } from "@/helpers/auth";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -53,12 +62,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     const user = await getUser({ uid: token.uid });
 
-    // Check if user has already verified their payment
-    await refreshIdToken();
-
-    return { 
+    return {
       props: {
-        uid: token.uid,
         user: JSON.parse(JSON.stringify(user)),
       },
     };

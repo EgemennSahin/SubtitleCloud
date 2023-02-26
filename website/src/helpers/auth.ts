@@ -76,21 +76,12 @@ export const logOut = async () => {
   await signOut(auth);
 };
 
-export const refreshIdToken = () => {
-  const user = auth.currentUser;
-  console.log("refreshing token");
-
-  if (!user) return null;
-
-  return user.getIdToken(true);
-};
-
-export const setCookies = async (user: User | null) => {
+export const setCookies = async (user: User | null, force?: boolean) => {
   const tokenName = "firebasetoken";
   if (!user) {
     nookies.set(undefined, tokenName, "", { path: "/" });
   } else {
-    const token = await user.getIdToken();
+    const token = await user.getIdToken(force);
     nookies.set(undefined, tokenName, token, { path: "/" });
   }
   return;

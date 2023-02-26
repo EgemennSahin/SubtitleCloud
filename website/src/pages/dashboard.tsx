@@ -4,6 +4,7 @@ import TextButton from "@/components/text-button";
 import router from "next/router";
 
 export default function DashboardPage({ ...props }) {
+
   return (
     <>
       <Head>
@@ -45,6 +46,7 @@ import { GetServerSidePropsContext } from "next";
 import { getIdToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
+import { auth } from "@/config/firebase";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
