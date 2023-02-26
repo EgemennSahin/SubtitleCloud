@@ -108,15 +108,18 @@ export default function PricingPlans({ uid }: { uid?: string }) {
 
       <div className="mt-3 flex flex-col justify-between gap-8 sm:flex-row">
         <PlanBox
-          title={"Premium"}
+          title="Premium"
           price={isMonthly ? "26.99/year" : "2.99/month"}
           features={[
-            <p>20 Videos per month</p>,
-            <p>Video duration up to 3 minutes</p>,
-            <div className="flex flex-nowrap items-center gap-2">
+            <p key="videos">20 Videos per month</p>,
+            <p key="duration">Video duration up to 3 minutes</p>,
+            <div
+              key="publishing"
+              className="flex flex-nowrap items-center gap-2"
+            >
               <p className="whitespace-nowrap">Automatically publish to</p>
               {["youtube", "instagram", "tiktok"].map((platform) => (
-                <div className="w-6 drop-shadow">
+                <div key="logo" className="w-6 drop-shadow">
                   <Image
                     src={`/logos/${platform}.svg`}
                     alt={platform}
@@ -135,15 +138,18 @@ export default function PricingPlans({ uid }: { uid?: string }) {
         />
 
         <PlanBox
-          title={"Business"}
+          title="Business"
           price="Custom Plan"
           features={[
-            <p>Unlimited videos</p>,
-            <p>Unlimited video duration</p>,
-            <div className="flex flex-nowrap items-center gap-2">
+            <p key="videos">Unlimited videos</p>,
+            <p key="duration">Unlimited video duration</p>,
+            <div
+              key="publishing"
+              className="flex flex-nowrap items-center gap-2"
+            >
               <p className="whitespace-nowrap">Automatically publish to</p>
               {["youtube", "instagram", "tiktok"].map((platform) => (
-                <div className="w-6 drop-shadow">
+                <div key="logo" className="w-6 drop-shadow">
                   <Image
                     src={`/logos/${platform}.svg`}
                     alt={platform}
