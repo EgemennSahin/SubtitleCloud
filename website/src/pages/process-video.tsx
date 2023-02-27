@@ -88,8 +88,6 @@ export default function ProcessVideoPage({ uid }: { uid: string }) {
   // Redirect to video page if video is processed
   useEffect(() => {
     if (processedVideo != null) {
-      
-
       router.push({
         pathname: `/content/${uploadedVideo}`,
         query: { video_url: processedVideo },

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import { handleUpload } from "@/helpers/processing";
 
-export default function uploadVideo({ uid }: { uid: string }) {
+export default function UploadVideo({ uid }: { uid: string }) {
   const router = useRouter();
 
   const [file, setFile] = React.useState<File | null>(null);
@@ -36,12 +36,12 @@ export default function uploadVideo({ uid }: { uid: string }) {
             <TextButton
               size="medium"
               onClick={async () => {
-                const file_id = await handleUpload(file, uid, "main");
+                const video_id = await handleUpload(file, uid, "main");
 
                 // Push to processing page with file id
                 router.push({
                   pathname: "/process-video",
-                  query: { file_id },
+                  query: { video_id },
                 });
               }}
               text={"Upload"}
