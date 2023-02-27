@@ -7,10 +7,16 @@ import { Turnstile } from "@marsidev/react-turnstile";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { handleUpload } from "@/helpers/processing";
+import Spinner from "@/components/spinner";
 
-export default function ProcessVideoPage({ uid }: { uid: string }) {
+export default function ProcessVideoPage({
+  uid,
+  video_url,
+}: {
+  uid: string;
+  video_url: string;
+}) {
   const router = useRouter();
-  const { video_id } = router.query;
 
   const [file, setFile] = React.useState<File | null>(null);
   const [uploading, setUploading] = React.useState(false);
@@ -112,14 +118,14 @@ export default function ProcessVideoPage({ uid }: { uid: string }) {
               Your video is being processed.
             </h2>
 
-            <div className="loader mb-16 h-56 w-56" />
+            <Spinner size="large" />
 
-            <h3 className="text-md linear-wipe mb-8 px-4 text-center sm:hidden ">
+            <h3 className="text-md linear-wipe my-8 px-4 text-center sm:hidden ">
               This may take a few minutes. Please do not close the window or
               navigate away from this page.
             </h3>
 
-            <h3 className="text-md linear-wipe mb-8 hidden px-4 text-center sm:block ">
+            <h3 className="text-md linear-wipe my-8 hidden px-4 text-center sm:block ">
               This may take a few minutes.
             </h3>
           </div>
@@ -128,6 +134,8 @@ export default function ProcessVideoPage({ uid }: { uid: string }) {
             <h2 className="mb-8 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text pr-1 text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
               Process your video
             </h2>
+
+            <VideoPlayer src={video_url} />
 
             <UploadButton
               size="large"
@@ -183,6 +191,7 @@ import { GetServerSidePropsContext } from "next";
 import { getIdToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
+import { VideoPlayer } from "@/components/video-player";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -208,8 +217,35 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     const user = await getUser({ uid: token.uid });
 
+    const { video_id } = context.query;
+
+    if (!video_id) {
+      return {
+        redirect: {
+          destination: "/upload-video",
+          permanent: false,
+        },
+      };
+    }
+
+    // Get the video url
+    const video_url_response = await fetch("/api/get-video", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        uid: token.uid,
+        folder: "main",
+        video_id: video_id,
+      }),
+    });
+
+    const url = await video_url_response.json();
+
     return {
       props: {
+        video_url: url.url,
         uid: token.uid,
         user: JSON.parse(JSON.stringify(user)),
       },
