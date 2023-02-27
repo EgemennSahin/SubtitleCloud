@@ -69,8 +69,8 @@ export default function LandingPage() {
           </ul>
 
           <h3 className="text-style-subheader mt-10">
-            "Captioning manually is like solving a puzzle in the dark - you know
-            what it should look like, but can't see the pieces"
+            &quot;Captioning manually is like solving a puzzle in the dark - you
+            know what it should look like, but can&apos;t see the pieces&quot;
           </h3>
         </div>
         <div className="flex flex-col items-center justify-start">
