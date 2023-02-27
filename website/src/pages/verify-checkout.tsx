@@ -25,7 +25,7 @@ export default function VerifyCheckoutPage() {
     });
 
     return () => unsubscribe();
-  }, []);
+  });
 
   return (
     <>

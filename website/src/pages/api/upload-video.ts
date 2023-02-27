@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Storage } from "@google-cloud/storage";
 import { firebaseAdmin } from "@/config/firebase-admin";
 import { uuidv4 } from "@firebase/util";
 
@@ -7,7 +6,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const MAX_FILE_SIZE_BYTES = 100 * 1024 * 1024; // 100 MB
   const { uid, type } = req.body;
 
   let contentType = "";

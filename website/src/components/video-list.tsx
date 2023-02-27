@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { storageUploads } from "@/config/firebase";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
 import { VideoPlayer } from "./video-player";
+import { premiumStorage } from "@/config/firebase";
 
 export default function VideoList({ uid }: { uid: string }) {
   const [videos, setVideos] = useState<Array<string>>([]);
-  const videoRef = ref(storageUploads, `videos/${uid}/outputs`);
+  const videoRef = ref(premiumStorage, `videos/${uid}/outputs`);
 
   useEffect(() => {
     listAll(videoRef)
