@@ -1,62 +1,41 @@
-import { premiumStorage, tempStorage } from "@/config/firebase";
-import {
-  ref,
-  uploadBytesResumable,
-  UploadTaskSnapshot,
-  StorageError,
-  getMetadata,
-} from "firebase/storage";
-import { uuidv4 } from "@firebase/util";
+import { premiumStorage } from "@/config/firebase";
+import { ref, getMetadata } from "firebase/storage";
 
-export async function handleFileUpload(
-  file: File,
+export async function handleUpload(
+  file: File | null,
   uid: string,
-  type: "main" | "side" | "audio"
+  folder: "main" | "side" | "audio"
 ) {
   if (!file) {
+    console.log("No file selected");
     return;
   }
 
-  if (type == "audio") {
-    // Check if file is less than 10MB
-    if (file.size > 1024 * 1024 * 10) {
-      return;
-    }
+  try {
+    const type = file.type;
+    // Get the signed url from the server
+    const response = await fetch("/api/upload-video", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ uid, type, folder }),
+    });
+
+    const { url } = await response.json();
+
+    // Upload to the signed url
+    await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": file.type,
+        "Content-Length": file.size.toString(),
+      },
+      body: file,
+    });
+  } catch (error: any) {
+    console.log("Error uploading video: ", error.message);
   }
-
-  const video = document.createElement("video");
-  video.preload = "metadata";
-  video.src = URL.createObjectURL(file);
-
-  video.onloadedmetadata = function () {
-    window.URL.revokeObjectURL(video.src);
-    if (video.duration > 180) {
-      return;
-    }
-
-    // Create a unique ID for the video
-    const videoId = uuidv4();
-    const bucketPath = "uploads/" + uid + "/" + type + "/" + videoId;
-    const storageRef = ref(premiumStorage, bucketPath);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot: UploadTaskSnapshot) => {
-        const progress = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        console.log("Upload progress: " + progress + "%");
-      },
-      (error: StorageError) => {
-        console.log("Error uploading file: " + error.message);
-      },
-      () => {
-        console.log("Upload complete");
-        return bucketPath;
-      }
-    );
-  };
 }
 
 export async function handleVideoProcessing(

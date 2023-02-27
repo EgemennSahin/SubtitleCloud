@@ -39,40 +39,6 @@ const ProcessVideo = ({ uid }: { uid: string }) => {
   }, [isMobile]);
 
   // Upload video to google cloud storage bucket using api
-  const handleUploadTest = async () => {
-    if (!file) {
-      console.log("No file selected");
-      return;
-    }
-
-    console.log("Starting video upload...");
-
-    try {
-      const response = await fetch("/api/upload-video", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ uid, type: "main" }),
-      });
-
-      const { url } = await response.json();
-
-      console.log(url);
-
-      await fetch(url, {
-        method: "PUT",
-        headers: {
-          "Content-Type": file.type,
-          "Content-Length": file.size.toString(),
-        },
-        body: file,
-      });
-    } catch (error: any) {
-      console.log("Error uploading video: ", error.message);
-      setUploading(false);
-    }
-  };
 
   // Process video if it is uploaded and token is received
   useEffect(() => {
@@ -282,7 +248,7 @@ const ProcessVideo = ({ uid }: { uid: string }) => {
                     }
                   }
 
-                  await handleUploadTest();
+                  await handleUpload(file, uid, "main");
                 }}
                 text={"Submit"}
                 disabled={!file || processingVideo || uploading}
@@ -322,6 +288,7 @@ import { GetServerSidePropsContext } from "next";
 import { getIdToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
+import { handleUpload } from "@/helpers/processing";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

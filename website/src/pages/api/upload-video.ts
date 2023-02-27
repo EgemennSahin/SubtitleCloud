@@ -6,17 +6,21 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { uid, type } = req.body;
+  const { uid, type, folder } = req.body;
 
-  let contentType = "";
   let maxContentLength = 0;
-  switch (type) {
+  switch (folder) {
     case "main" || "side":
-      contentType = "video/mp4";
+      // Check if type starts with "video"
+      if (!type.startsWith("video")) {
+        return res.status(400).json({ message: "Invalid file type" });
+      }
       maxContentLength = 100 * 1024 * 1024; // 100 MB
       break;
     case "audio":
-      contentType = "audio/mpeg";
+      if (!type.startsWith("audio")) {
+        return res.status(400).json({ message: "Invalid file type" });
+      }
       maxContentLength = 10 * 1024 * 1024; // 10 MB
       break;
     default:
@@ -25,12 +29,12 @@ export default async function handler(
 
   // Create a unique id for the video
   const videoId = uuidv4();
-  const filename = `${uid}/${type}/${videoId}`;
+  const filename = `${uid}/${folder}/${videoId}`;
   const options = {
     version: "v4" as const,
     action: "write" as const,
     expires: Date.now() + 15 * 60 * 1000, // 15 minutes
-    contentType: contentType,
+    contentType: type,
     contentLength: maxContentLength,
   };
 
