@@ -14,7 +14,7 @@ function Navbar({ user }: { user: User }) {
       <div className="flex flex-shrink-0 items-center text-white">
         <Link className="flex items-center" href="/">
           <Image
-            src="/logo.svg"
+            src="/shortzoo-logo/logo.svg"
             alt="Shortzoo Logo"
             width="0"
             height="0"
