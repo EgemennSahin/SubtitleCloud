@@ -2,7 +2,7 @@
 import Head from "next/head";
 import PricingPlans from "@/components/pricing-plans";
 
-export default function Pricing() {
+export default function PricingPage() {
   return (
     <>
       <Head>

@@ -1,4 +1,4 @@
-import { auth, db } from "@/config/firebase";
+import { db } from "@/config/firebase";
 import getStripe from "@/config/stripe";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import {

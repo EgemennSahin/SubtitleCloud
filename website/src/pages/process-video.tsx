@@ -1,20 +1,17 @@
-import FileInput from "@/components/file-input";
+import UploadButton from "@/components/upload-button";
 import React, { useEffect } from "react";
 import TextButton from "@/components/text-button";
-import {
-  getMetadata,
-  ref,
-  StorageError,
-  uploadBytesResumable,
-  UploadTaskSnapshot,
-} from "firebase/storage";
+import { getMetadata, ref } from "firebase/storage";
 import { tempStorage } from "@/config/firebase";
-import { uuidv4 } from "@firebase/util";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { handleUpload } from "@/helpers/processing";
 
-const ProcessVideo = ({ uid }: { uid: string }) => {
+export default function ProcessVideoPage({ uid }: { uid: string }) {
+  const router = useRouter();
+  const { video_id } = router.query;
+
   const [file, setFile] = React.useState<File | null>(null);
   const [uploading, setUploading] = React.useState(false);
   const [uploadedVideo, setUploadedVideo] = React.useState<string | null>();
@@ -23,22 +20,6 @@ const ProcessVideo = ({ uid }: { uid: string }) => {
 
   const [token, setToken] = React.useState<string | null>();
   const [gettingToken, setGettingToken] = React.useState(false);
-  const router = useRouter();
-  const [notificationPermission, setNotificationPermission] =
-    React.useState(false);
-  const [isMobile, setIsMobile] = React.useState(false);
-
-  // Set notification permission to true if user has granted permission
-  useEffect(() => {
-    setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
-    if (!isMobile && "Notification" in window) {
-      if (Notification.permission === "granted") {
-        setNotificationPermission(true);
-      }
-    }
-  }, [isMobile]);
-
-  // Upload video to google cloud storage bucket using api
 
   // Process video if it is uploaded and token is received
   useEffect(() => {
@@ -107,71 +88,14 @@ const ProcessVideo = ({ uid }: { uid: string }) => {
   // Redirect to video page if video is processed
   useEffect(() => {
     if (processedVideo != null) {
-      console.log("Redirecting to video page: ", processedVideo);
-
-      if (!isMobile && "Notification" in window && notificationPermission) {
-        // Show notification
-        const notification = new Notification("Process finished!", {
-          body: "Your video has been processed.",
-        });
-
-        notification.onclick = () => {
-          window.focus();
-        };
-      }
+      
 
       router.push({
         pathname: `/content/${uploadedVideo}`,
         query: { video_url: processedVideo },
       });
     }
-  }, [processedVideo, isMobile, notificationPermission, router, uploadedVideo]);
-
-  async function handleFileUpload() {
-    if (!file) {
-      console.log("No file selected");
-      return;
-    } else {
-      setUploading(true);
-
-      const video = document.createElement("video");
-      video.preload = "metadata";
-      video.src = URL.createObjectURL(file);
-
-      video.onloadedmetadata = function () {
-        window.URL.revokeObjectURL(video.src);
-        if (video.duration > 60) {
-          return;
-        }
-        setGettingToken(true);
-
-        const uid = uuidv4();
-        const storageRef = ref(tempStorage, "uploads/" + uid);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-
-        uploadTask.on(
-          "state_changed",
-          (snapshot: UploadTaskSnapshot) => {
-            const progress = Math.round(
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            );
-            console.log("Upload progress: " + progress + "%");
-          },
-          (error: StorageError) => {
-            console.log("Error uploading file: " + error.message);
-            setUploading(false);
-          },
-          () => {
-            console.log("Upload complete");
-            setUploadedVideo(uid);
-            setProcessingVideo(true);
-            setUploading(false);
-            return;
-          }
-        );
-      };
-    }
-  }
+  }, [processedVideo, router, uploadedVideo]);
 
   return (
     <>
@@ -200,31 +124,16 @@ const ProcessVideo = ({ uid }: { uid: string }) => {
             <h3 className="text-md linear-wipe mb-8 hidden px-4 text-center sm:block ">
               This may take a few minutes.
             </h3>
-
-            {!notificationPermission && (
-              <TextButton
-                size="small"
-                onClick={async () => {
-                  const permission = await Notification.requestPermission();
-
-                  if (permission === "granted") {
-                    setNotificationPermission(true);
-                  }
-                }}
-                color="bg-teal-500"
-                hover="hover:bg-teal-600"
-                text="Notify me when finished"
-              />
-            )}
           </div>
         ) : (
           <div className="flex flex-col items-center">
             <h2 className="mb-8 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text pr-1 text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
-              Upload your video
+              Process your video
             </h2>
 
-            <FileInput
-              onFile={(file: File) => {
+            <UploadButton
+              size="large"
+              setFile={(file: File) => {
                 setFile(file);
               }}
               disabled={processingVideo || uploading}
@@ -238,16 +147,6 @@ const ProcessVideo = ({ uid }: { uid: string }) => {
               <TextButton
                 size="medium"
                 onClick={async () => {
-                  // Notify user
-                  const isMobile = /iPhone|iPad|iPod|Android/i.test(
-                    navigator.userAgent
-                  );
-                  if (!isMobile && "Notification" in window) {
-                    if (Notification.permission !== "granted") {
-                      Notification.requestPermission();
-                    }
-                  }
-
                   await handleUpload(file, uid, "main");
                 }}
                 text={"Submit"}
@@ -280,15 +179,12 @@ const ProcessVideo = ({ uid }: { uid: string }) => {
       </div>
     </>
   );
-};
-
-export default ProcessVideo;
+}
 
 import { GetServerSidePropsContext } from "next";
 import { getIdToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
-import { handleUpload } from "@/helpers/processing";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

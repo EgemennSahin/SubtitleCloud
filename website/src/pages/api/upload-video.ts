@@ -27,9 +27,9 @@ export default async function handler(
       return res.status(400).json({ message: "Invalid file type" });
   }
 
-  // Create a unique id for the video
-  const videoId = uuidv4();
-  const filename = `${uid}/${folder}/${videoId}`;
+  // Create a unique id for the file
+  const file_id = uuidv4();
+  const filename = `${uid}/${folder}/${file_id}`;
   const options = {
     version: "v4" as const,
     action: "write" as const,
@@ -45,7 +45,7 @@ export default async function handler(
       .file(filename)
       .getSignedUrl(options);
 
-    res.status(200).json({ url });
+    res.status(200).json({ url, file_id });
   } catch (err) {
     console.error(err);
 

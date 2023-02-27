@@ -22,7 +22,7 @@ export async function handleUpload(
       body: JSON.stringify({ uid, type, folder }),
     });
 
-    const { url } = await response.json();
+    const { url, file_id } = await response.json();
 
     // Upload to the signed url
     await fetch(url, {
@@ -33,8 +33,12 @@ export async function handleUpload(
       },
       body: file,
     });
+
+    return file_id;
   } catch (error: any) {
     console.log("Error uploading video: ", error.message);
+
+    return null;
   }
 }
 

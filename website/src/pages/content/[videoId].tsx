@@ -4,8 +4,7 @@ import router from "next/router";
 import { VideoPlayer } from "@/components/video-player";
 import Head from "next/head";
 
-const GeneratedVideo = () => {
-  // Get the video ID from the URL
+export default function GeneratedVideoPage() {
   const { video_url } = router.query;
   const [isLinkCopied, setIsLinkCopied] = useState(false);
 
@@ -56,9 +55,7 @@ const GeneratedVideo = () => {
       </div>
     </>
   );
-};
-
-export default GeneratedVideo;
+}
 
 import { GetServerSidePropsContext } from "next";
 import { getIdToken, getUser } from "@/helpers/user";
