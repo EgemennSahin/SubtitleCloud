@@ -21,8 +21,8 @@ export default function TextButton({
 }: TextButtonProps) {
   // Set font color and padding based on size
 
-  let padding = "px-4 py-3";
-  let fontSize = "text-xl";
+  let padding = "";
+  let fontSize = "";
 
   switch (size) {
     case "small":
@@ -37,6 +37,9 @@ export default function TextButton({
       padding = "px-20 py-10";
       fontSize = "text-5xl";
       break;
+    default:
+      padding = "px-4 py-3";
+      fontSize = "text-xl";
   }
 
   return (

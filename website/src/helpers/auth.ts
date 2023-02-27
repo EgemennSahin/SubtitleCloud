@@ -79,10 +79,10 @@ export const logOut = async () => {
 export const setCookies = async (user: User | null, force?: boolean) => {
   const tokenName = "firebasetoken";
   if (!user) {
-    nookies.set(undefined, tokenName, "", { path: "/" });
+    nookies.destroy(undefined, "firebasetoken", { path: "/" });
   } else {
     const token = await user.getIdToken(force);
-    nookies.set(undefined, tokenName, token, { path: "/" });
+    nookies.set(undefined, tokenName, token, { maxAge: 3600, path: "/" });
   }
   return;
 };

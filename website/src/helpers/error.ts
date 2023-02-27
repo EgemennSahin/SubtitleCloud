@@ -6,7 +6,7 @@ export async function handleError(error: any) {
 
   if (error.code === "auth/id-token-expired") {
     // Get new token
-    await setCookies(auth.currentUser);
+    await setCookies(null, true);
   }
 
   return {

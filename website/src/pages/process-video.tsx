@@ -14,7 +14,7 @@ import { Turnstile } from "@marsidev/react-turnstile";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
-const ProcessVideo = () => {
+const ProcessVideo = ({ uid }: { uid: string }) => {
   const [file, setFile] = React.useState<File | null>(null);
   const [uploading, setUploading] = React.useState(false);
   const [uploadedVideo, setUploadedVideo] = React.useState<string | null>();
@@ -37,6 +37,42 @@ const ProcessVideo = () => {
       }
     }
   }, [isMobile]);
+
+  // Upload video to google cloud storage bucket using api
+  const handleUploadTest = async () => {
+    if (!file) {
+      console.log("No file selected");
+      return;
+    }
+
+    console.log("Starting video upload...");
+
+    try {
+      const response = await fetch("/api/upload-video", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ uid, type: "main" }),
+      });
+
+      const { url } = await response.json();
+
+      console.log(url);
+
+      await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": file.type,
+          "Content-Length": file.size.toString(),
+        },
+        body: file,
+      });
+    } catch (error: any) {
+      console.log("Error uploading video: ", error.message);
+      setUploading(false);
+    }
+  };
 
   // Process video if it is uploaded and token is received
   useEffect(() => {
@@ -246,7 +282,7 @@ const ProcessVideo = () => {
                     }
                   }
 
-                  await handleFileUpload();
+                  await handleUploadTest();
                 }}
                 text={"Submit"}
                 disabled={!file || processingVideo || uploading}
@@ -312,7 +348,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const user = await getUser({ uid: token.uid });
 
     return {
-      props: { user: JSON.parse(JSON.stringify(user)) },
+      props: {
+        uid: token.uid,
+        user: JSON.parse(JSON.stringify(user)),
+      },
     };
   } catch (error) {
     return handleError(error);

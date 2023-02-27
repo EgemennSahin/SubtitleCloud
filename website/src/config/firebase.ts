@@ -15,14 +15,9 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const storageUploads = getStorage(
-  app,
-  "gs://captioning-693de.appspot.com"
-);
-export const storageOutputs = getStorage(
-  app,
-  "gs://subtitle-cloud-generated-output"
-);
+
+export const premiumStorage = getStorage(app, "gs://shortzoo-premium");
+
 export const tempStorage = getStorage(app, "gs://short-zoo-temp-videos");
 
 export const db = getFirestore(app);
