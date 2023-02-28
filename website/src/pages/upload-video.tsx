@@ -37,18 +37,22 @@ export default function UploadVideo({ uid }: { uid: string }) {
             <TextButton
               size="medium"
               onClick={async () => {
-                try {
-                  setPressed(true);
-                  const video_id = await handleUpload(file, uid, "main");
+                setPressed(true);
+                const video_id = await handleUpload(file, uid, "main");
 
-                  // Push to processing page with file id
-                  router.push({
-                    pathname: "/process-video",
-                    query: { video_id },
-                  });
-                } catch {
+                console.log("Video_id: ", video_id);
+
+                if (!video_id) {
+                  setFile(null);
                   setPressed(false);
+                  return;
                 }
+
+                // Push to processing page with file id
+                router.push({
+                  pathname: "/process-video",
+                  query: { video_id },
+                });
               }}
               text={"Upload"}
               disabled={!file || pressed}
