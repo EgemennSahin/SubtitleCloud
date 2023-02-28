@@ -21,8 +21,9 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 gap-12 px-3 pt-1 lg:grid-cols-2 lg:gap-4 lg:px-16 lg:pt-8">
           <div className=" flex flex-col justify-start">
             <h1 className="text-style-title text-center lg:text-left">
-              Caption Video
+              Caption <span className="hidden sm:inline">Your</span> Video
             </h1>
+
             <h2 className="text-style-subtitle text-center lg:text-left">
               Enhance your short video with accurate subtitles
               <br />
@@ -79,10 +80,6 @@ export default function LandingPage() {
             />
           </div>
         </div>
-        <h3 className="text-style-subheader mt-10 text-center">
-          &quot;Captioning manually is like solving a puzzle in the dark - you
-          know what it should look like, but can&apos;t see the pieces&quot;
-        </h3>
       </div>
     </>
   );
