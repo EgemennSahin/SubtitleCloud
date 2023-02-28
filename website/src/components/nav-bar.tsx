@@ -32,7 +32,7 @@ function Navbar({ user }: { user: User }) {
 
         {!user && (
           <a
-            className="transition-textcolor mx-1 cursor-pointer p-3 text-xl font-bold tracking-wide text-slate-500 hover:text-slate-900"
+            className="transition-textcolor mx-5 cursor-pointer p-3 text-xl font-bold tracking-wide text-slate-700 hover:text-slate-900"
             onClick={() => router.push("/pricing")}
           >
             Pricing

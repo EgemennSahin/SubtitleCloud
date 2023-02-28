@@ -229,19 +229,24 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
 
     // Get the video url
-    const video_url_response = await fetch("/api/get-video", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        uid: token.uid,
-        folder: "main",
-        video_id: video_id,
-      }),
-    });
+    const video_url_response = await fetch(
+      "https://www.shortzoo.com/api/get-video",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: token.uid,
+          folder: "main",
+          video_id: video_id,
+        }),
+      }
+    );
 
     const url = await video_url_response.json();
+
+    console.log(url);
 
     return {
       props: {

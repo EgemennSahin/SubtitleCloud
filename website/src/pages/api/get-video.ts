@@ -5,7 +5,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { uid, folder, video_id } = req.query;
+  const { uid, folder, video_id } = req.body;
+
+  console.log("uid: ", uid);
+  console.log("folder: ", folder);
+  console.log("video_id: ", video_id);
 
   try {
     const file = firebaseAdmin
@@ -25,7 +29,7 @@ export default async function handler(
 
     res.status(200).json({ url: signedUrl });
   } catch (error) {
-    console.error(error);
+    console.error("Error retrieving file: ", error);
     res.status(500).send(`Error retrieving file ${video_id}: ${error}`);
   }
 }

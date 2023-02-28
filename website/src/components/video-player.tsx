@@ -13,7 +13,7 @@ export const VideoPlayer = ({ src }: { src: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [sliderValue, setSliderValue] = useState(0);
+  const [gradientPosition, setGradientPosition] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
 

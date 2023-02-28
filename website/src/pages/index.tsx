@@ -33,7 +33,7 @@ export default function LandingPage() {
               <TextButton
                 size="medium"
                 onClick={() => router.push("/process-video")}
-                text={"Get started"}
+                text={"Subscribe now"}
               />
             </div>
 
@@ -72,7 +72,7 @@ export default function LandingPage() {
           </div>
           <div className="mb-6 flex flex-col items-center justify-start">
             <Image
-              src="/images/landing-page.svg"
+              src="/images/landing-page.png"
               width={500}
               height={500}
               alt={"Landing page image"}
