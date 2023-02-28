@@ -5,13 +5,10 @@ import { isPaidUser } from "@/helpers/stripe";
 export default function PremiumPage({ uid }: { uid: string }) {
   return (
     <>
-      <Head>
-        <title>Choose Plan - Shortzoo</title>
-        <meta
-          name="description"
-          content="Choose a subscription plan to gain access to generate subtitles for your videos."
-        />
-      </Head>
+      <Seo
+        title="Choose Plan"
+        description="Choose a subscription plan to gain access to generate subtitles for your videos."
+      />
       <div className="relative grow bg-gradient-to-b from-slate-50 to-slate-200 px-6 py-5 sm:py-9 md:px-8 lg:px-20">
         <h1 className="text-style-title">Check out</h1>
 
@@ -31,6 +28,7 @@ import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import PricingPlans from "@/components/pricing-plans";
+import Seo from "@/components/seo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

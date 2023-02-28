@@ -101,14 +101,10 @@ export default function ProcessVideoPage({
 
   return (
     <>
-      <Head>
-        <title>Process Video - Shortzoo</title>
-        <meta
-          name="description"
-          content="Upload your video to be processed in our cloud servers. Be notified when your video is ready. Quickly and securely process your video files."
-        />
-      </Head>
-
+      <Seo
+        title="Process Video"
+        description="Upload your video to be processed in our cloud servers. Be notified when your video is ready. Quickly and securely process your video files."
+      />
       <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-200 to-slate-400 py-5 sm:py-9">
         {processingVideo ? (
           <div className="flex h-fit w-fit flex-col items-center justify-start px-5">
@@ -188,6 +184,7 @@ import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
 import { VideoPlayer } from "@/components/video-player";
+import Seo from "@/components/seo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

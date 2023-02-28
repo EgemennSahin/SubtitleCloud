@@ -19,13 +19,10 @@ export default function OnboardingPage({ user }: { user: User }) {
 
   return (
     <>
-      <Head>
-        <title>Verify Email - Shortzoo</title>
-        <meta
-          name="description"
-          content="Verify your email to gain access to generate subtitles for your videos."
-        />
-      </Head>
+      <Seo
+        title="Verify Email"
+        description="Verify your email to gain access to generate subtitles for your videos."
+      />
       <div className="my-8 max-w-xl grow self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
         <div className="flex flex-col items-center drop-shadow">
           <h2 className="mb-6 text-center text-3xl font-bold text-slate-800">
@@ -59,6 +56,7 @@ export default function OnboardingPage({ user }: { user: User }) {
 import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
+import Seo from "@/components/seo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

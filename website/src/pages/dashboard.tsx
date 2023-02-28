@@ -6,13 +6,10 @@ import router from "next/router";
 export default function DashboardPage({ ...props }) {
   return (
     <>
-      <Head>
-        <title>Dashboard - Shortzoo</title>
-        <meta
-          name="description"
-          content="Access your generated videos on our short video subtitling solution. Generate subtitles for your videos in a few minutes."
-        />
-      </Head>
+      <Seo
+        title="Dashboard"
+        description="Access your generated videos on our short video subtitling solution. Generate subtitles for your videos in a few minutes."
+      />
 
       <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-50 to-slate-200 px-4 py-5 sm:py-9">
         <h1 className="text-style-title"> Dashboard</h1>
@@ -46,6 +43,7 @@ import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
 import { auth } from "@/config/firebase";
+import Seo from "@/components/seo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

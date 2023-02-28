@@ -5,13 +5,10 @@ import PricingPlans from "@/components/pricing-plans";
 export default function PricingPage() {
   return (
     <>
-      <Head>
-        <title>Pricing - Shortzoo</title>
-        <meta
-          name="description"
-          content="Discover our pricing plans and choose the one that fits your needs. Subscribe now and start enjoying our premium features."
-        />
-      </Head>
+      <Seo
+        title="Pricing"
+        description="Discover our pricing plans and choose the one that fits your needs. Subscribe now and start enjoying our premium features."
+      />
       <div className="relative grow bg-gradient-to-b from-slate-50 to-slate-200 px-6 py-5 sm:py-9 md:px-8 lg:px-20">
         <h1 className="text-style-title"> Pricing</h1>
         <h2 className="text-style-subtitle">
@@ -33,6 +30,7 @@ export default function PricingPage() {
 import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
+import Seo from "@/components/seo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

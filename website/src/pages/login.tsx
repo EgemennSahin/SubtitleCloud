@@ -12,13 +12,10 @@ export default function LoginPage() {
 
   return (
     <>
-      <Head>
-        <title>Log In - Shortzoo</title>
-        <meta
-          name="description"
-          content="Sign in to our short video subtitling solution and gain access to your account."
-        />
-      </Head>
+      <Seo
+        title="Log In"
+        description="Sign in to our short video subtitling solution and gain access to your account."
+      />
       <div className="my-8 flex max-w-xl grow flex-col self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
         <div className="drop-shadow">
           <h2 className="text-style-subtitle">
@@ -109,6 +106,7 @@ export default function LoginPage() {
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
+import Seo from "@/components/seo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

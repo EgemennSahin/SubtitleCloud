@@ -5,18 +5,12 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
 
-export default function LandingPage() {
+export default function LandingPage({ user }: { user: any }) {
   const router = useRouter();
 
   return (
     <>
-      <Head>
-        <title>Shortzoo</title>
-        <meta
-          name="description"
-          content="Shortzoo is a short video subtitling platform that subtitles each word in your videos. Our platform is perfect for making your videos more engaging."
-        />
-      </Head>
+      <Seo description="Shortzoo is a short video subtitling platform that subtitles each word in your videos. Our platform is perfect for making your videos more engaging." />
       <div className="grow bg-gradient-to-b from-slate-50 to-slate-200">
         <div className="grid grid-cols-1 gap-12 px-3 pt-1 lg:grid-cols-2 lg:gap-4 lg:px-16 lg:pt-8">
           <div className=" flex flex-col justify-start">
@@ -25,16 +19,14 @@ export default function LandingPage() {
             </h1>
 
             <h2 className="text-style-subtitle text-center lg:text-left">
-              Enhance your short video with accurate subtitles
-              <br />
-              for each word
+              Enhance your short video with accurate subtitles for each word
             </h2>
 
             <div className="flex items-center justify-center p-4">
               <TextButton
                 size="medium"
                 onClick={() => router.push("/process-video")}
-                text={"Subscribe now"}
+                text={user ? "Continue" : "Subscribe now"}
               />
             </div>
 
@@ -88,6 +80,7 @@ export default function LandingPage() {
 import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
+import Seo from "@/components/seo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

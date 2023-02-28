@@ -13,13 +13,10 @@ export default function SignUpPage() {
 
   return (
     <>
-      <Head>
-        <title>Sign Up - Shortzoo</title>
-        <meta
-          name="description"
-          content="Sign up for our short video subtitling solution and start adding subtitles to your videos in minutes. Increase your reach and engagement with subtitles."
-        />
-      </Head>
+      <Seo
+        title="Sign Up"
+        description="Sign up for our short video subtitling solution and start adding subtitles to your videos in minutes. Increase your reach and engagement with subtitles."
+      />
       <div className="my-8 flex max-w-xl grow flex-col self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
         <div className="drop-shadow">
           <h2 className="text-style-subtitle">
@@ -135,6 +132,7 @@ export default function SignUpPage() {
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
+import Seo from "@/components/seo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

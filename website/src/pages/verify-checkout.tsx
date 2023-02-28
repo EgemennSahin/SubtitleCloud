@@ -29,13 +29,10 @@ export default function VerifyCheckoutPage() {
 
   return (
     <>
-      <Head>
-        <title>Verify Payment - Shortzoo</title>
-        <meta
-          name="description"
-          content="Choose a subscription plan to gain access to generate subtitles for your videos."
-        />
-      </Head>
+      <Seo
+        title="Verify Payment"
+        description="Choose a subscription plan to gain access to generate subtitles for your videos."
+      />
       <div className="flex grow flex-col items-center bg-gradient-to-b from-slate-200 to-slate-400 px-6 py-5 sm:py-9 md:px-8 lg:px-20">
         <h1 className="text-style-title">Verifying</h1>
         <h2 className="text-style-subtitle">
@@ -51,6 +48,7 @@ export default function VerifyCheckoutPage() {
 import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
+import Seo from "@/components/seo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

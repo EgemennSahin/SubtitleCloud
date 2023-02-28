@@ -82,6 +82,13 @@ export const setCookies = async (user: User | null, force?: boolean) => {
     nookies.destroy(undefined, "firebasetoken", { path: "/" });
   } else {
     const token = await user.getIdToken(force);
+
+    // Check if it is a different user than the one in the cookie
+    const currentToken = nookies.get(undefined, tokenName)["firebasetoken"];
+    if (currentToken === token) {
+      return;
+    }
+
     nookies.set(undefined, tokenName, token, { maxAge: 3600, path: "/" });
   }
   return;

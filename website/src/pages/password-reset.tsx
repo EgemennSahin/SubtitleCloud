@@ -27,13 +27,10 @@ export default function PasswordResetPage() {
 
   return (
     <>
-      <Head>
-        <title>Reset Password - Shortzoo</title>
-        <meta
-          name="description"
-          content="Reset your password and regain access to your account on our short video subtitling solution."
-        />
-      </Head>
+      <Seo
+        title="Reset Password"
+        description="Reset your password and regain access to your account on our short video subtitling solution."
+      />
       <div className="my-8 flex max-w-xl grow flex-col self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
         <div className="drop-shadow">
           <h2 className="mb-6 text-center text-3xl font-bold text-slate-800">
@@ -83,6 +80,7 @@ export default function PasswordResetPage() {
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
+import Seo from "@/components/seo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

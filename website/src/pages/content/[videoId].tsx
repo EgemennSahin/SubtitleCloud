@@ -27,13 +27,10 @@ export default function GeneratedVideoPage() {
 
   return (
     <>
-      <Head>
-        <title>Subtitled Video - Shortzoo</title>
-        <meta
-          name="description"
-          content="Subtitled video upload with download and share options."
-        />
-      </Head>
+      <Seo
+        title="Subtitled Video"
+        description="Subtitled video upload with download and share options."
+      />
       <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-400 to-slate-600 py-5 sm:py-9">
         <h2 className="mb-6 bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text px-4 text-center text-4xl font-bold leading-snug tracking-tighter text-transparent">
           Your video has been processed.
@@ -60,6 +57,7 @@ export default function GeneratedVideoPage() {
 import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
+import Seo from "@/components/seo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
