@@ -83,5 +83,5 @@
 }
 
 .text-style-subheader {
-  @apply mb-5 bg-gradient-to-r from-slate-500  to-slate-700 bg-clip-text pr-1 text-2xl font-semibold tracking-normal text-transparent drop-shadow-md;
+  @apply mb-5 bg-gradient-to-r from-slate-500 to-slate-700 bg-clip-text pr-1 text-2xl font-semibold tracking-normal text-transparent drop-shadow-md;
 }

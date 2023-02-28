@@ -9,6 +9,7 @@ export default function UploadVideo({ uid }: { uid: string }) {
   const router = useRouter();
 
   const [file, setFile] = React.useState<File | null>(null);
+  const [pressed, setPressed] = React.useState(false);
 
   return (
     <>
@@ -36,16 +37,21 @@ export default function UploadVideo({ uid }: { uid: string }) {
             <TextButton
               size="medium"
               onClick={async () => {
-                const video_id = await handleUpload(file, uid, "main");
+                try {
+                  setPressed(true);
+                  const video_id = await handleUpload(file, uid, "main");
 
-                // Push to processing page with file id
-                router.push({
-                  pathname: "/process-video",
-                  query: { video_id },
-                });
+                  // Push to processing page with file id
+                  router.push({
+                    pathname: "/process-video",
+                    query: { video_id },
+                  });
+                } catch {
+                  setPressed(false);
+                }
               }}
               text={"Upload"}
-              disabled={!file}
+              disabled={!file || pressed}
             />
           </div>
         </div>

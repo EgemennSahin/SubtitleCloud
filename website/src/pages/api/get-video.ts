@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Storage } from "@google-cloud/storage";
 import { firebaseAdmin } from "@/config/firebase-admin";
 
 export default async function handler(
