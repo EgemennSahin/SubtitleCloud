@@ -1,47 +1,6 @@
 import { premiumStorage } from "@/config/firebase";
 import { ref, getMetadata } from "firebase/storage";
 
-export async function handleUpload(
-  file: File | null,
-  uid: string,
-  folder: "main" | "side" | "audio"
-) {
-  if (!file) {
-    console.log("No file selected");
-    return;
-  }
-
-  try {
-    const type = file.type;
-    // Get the signed url from the server
-    const response = await fetch("/api/upload-video", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ uid, type, folder }),
-    });
-
-    const { url, file_id } = await response.json();
-
-    // Upload to the signed url
-    await fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-Type": file.type,
-        "Content-Length": file.size.toString(),
-      },
-      body: file,
-    });
-
-    return file_id;
-  } catch (error: any) {
-    console.log("Error uploading video: ", error.message);
-
-    return null;
-  }
-}
-
 export async function handleVideoProcessing(
   uploadedVideo: string,
   token: string

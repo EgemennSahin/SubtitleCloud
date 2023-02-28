@@ -58,12 +58,12 @@ export default function GeneratedVideoPage() {
 }
 
 import { GetServerSidePropsContext } from "next";
-import { getIdToken, getUser } from "@/helpers/user";
+import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
-    const token = await getIdToken({ context });
+    const token = await getToken({ context });
 
     const user = await getUser({ uid: token?.uid });
 

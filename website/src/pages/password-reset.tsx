@@ -81,12 +81,12 @@ export default function PasswordResetPage() {
 }
 
 import { GetServerSidePropsContext } from "next";
-import { getIdToken } from "@/helpers/user";
+import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
-    const token = await getIdToken({ context });
+    const token = await getToken({ context });
 
     if (token) {
       return {

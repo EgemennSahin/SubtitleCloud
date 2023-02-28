@@ -28,13 +28,13 @@ export default function PremiumPage({ uid }: { uid: string }) {
 }
 
 import { GetServerSidePropsContext } from "next";
-import { getIdToken, getUser } from "@/helpers/user";
+import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import PricingPlans from "@/components/pricing-plans";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
-    const token = await getIdToken({ context });
+    const token = await getToken({ context });
 
     if (!token) {
       return {

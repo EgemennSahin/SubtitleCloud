@@ -1,15 +1,19 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { firebaseAdmin } from "@/config/firebase-admin";
+import { parseCookies } from "nookies";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { uid, folder, video_id } = req.body;
+  const { folder, video_id } = req.body;
 
-  console.log("uid: ", uid);
-  console.log("folder: ", folder);
-  console.log("video_id: ", video_id);
+  const uid = parseCookies({ req })["firebasetoken"];
+
+  // Check if the user is authenticated
+  if (!uid) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 
   try {
     const file = firebaseAdmin

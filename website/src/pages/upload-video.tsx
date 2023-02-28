@@ -3,9 +3,9 @@ import React from "react";
 import TextButton from "@/components/text-button";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { handleUpload } from "@/helpers/processing";
+import { handleUpload } from "@/helpers/upload";
 
-export default function UploadVideo({ uid }: { uid: string }) {
+export default function UploadVideo() {
   const router = useRouter();
 
   const [file, setFile] = React.useState<File | null>(null);
@@ -38,7 +38,7 @@ export default function UploadVideo({ uid }: { uid: string }) {
               size="medium"
               onClick={async () => {
                 setPressed(true);
-                const video_id = await handleUpload(file, uid, "main");
+                const video_id = await handleUpload(file, "main");
 
                 if (!video_id) {
                   setFile(null);
@@ -63,13 +63,13 @@ export default function UploadVideo({ uid }: { uid: string }) {
 }
 
 import { GetServerSidePropsContext } from "next";
-import { getIdToken, getUser } from "@/helpers/user";
+import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
-    const token = await getIdToken({ context });
+    const token = await getToken({ context });
 
     if (!token) {
       return {

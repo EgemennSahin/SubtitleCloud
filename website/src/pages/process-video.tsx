@@ -6,20 +6,18 @@ import { tempStorage } from "@/config/firebase";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { handleUpload } from "@/helpers/processing";
 import Spinner from "@/components/spinner";
 
 export default function ProcessVideoPage({
-  uid,
+  video_id,
   video_url,
 }: {
-  uid: string;
+  video_id: string;
   video_url: string;
 }) {
   const router = useRouter();
 
   const [file, setFile] = React.useState<File | null>(null);
-  const [uploading, setUploading] = React.useState(false);
   const [uploadedVideo, setUploadedVideo] = React.useState<string | null>();
   const [processingVideo, setProcessingVideo] = React.useState(false);
   const [processedVideo, setProcessedVideo] = React.useState<string | null>();
@@ -112,7 +110,7 @@ export default function ProcessVideoPage({
       </Head>
 
       <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-200 to-slate-400 py-5 sm:py-9">
-        {processingVideo || uploading ? (
+        {processingVideo ? (
           <div className="flex h-fit w-fit flex-col items-center justify-start px-5">
             <h2 className="mb-8 bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text px-4 text-center text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
               Your video is being processed.
@@ -142,7 +140,7 @@ export default function ProcessVideoPage({
               setFile={(file: File) => {
                 setFile(file);
               }}
-              disabled={processingVideo || uploading}
+              disabled={processingVideo}
             />
 
             <h3 className="text-md mt-7 text-center text-xl font-normal tracking-wide text-slate-800">
@@ -152,11 +150,9 @@ export default function ProcessVideoPage({
             <div className="mt-6 flex items-center justify-center">
               <TextButton
                 size="medium"
-                onClick={async () => {
-                  await handleUpload(file, uid, "main");
-                }}
+                onClick={async () => {}}
                 text={"Submit"}
-                disabled={!file || processingVideo || uploading}
+                disabled={!file || processingVideo}
               />
             </div>
           </div>
@@ -188,14 +184,14 @@ export default function ProcessVideoPage({
 }
 
 import { GetServerSidePropsContext } from "next";
-import { getIdToken, getUser } from "@/helpers/user";
+import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
 import { VideoPlayer } from "@/components/video-player";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
-    const token = await getIdToken({ context });
+    const token = await getToken({ context });
 
     if (!token) {
       return {
@@ -237,7 +233,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          uid: token.uid,
           folder: "main",
           video_id: video_id,
         }),
@@ -246,11 +241,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     const url = await video_url_response.json();
 
-    console.log(url);
-
     return {
       props: {
         video_url: url.url,
+        video_id: video_id,
         uid: token.uid,
         user: JSON.parse(JSON.stringify(user)),
       },

@@ -1,12 +1,21 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { firebaseAdmin } from "@/config/firebase-admin";
 import { uuidv4 } from "@firebase/util";
+import { getToken } from "@/helpers/user";
+import { parseCookies } from "nookies";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { uid, type, folder } = req.body;
+  const { type, folder } = req.body;
+
+  const uid = parseCookies({ req })["firebasetoken"];
+
+  // Check if the user is authenticated
+  if (!uid) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 
   let maxContentLength = 0;
   switch (folder) {

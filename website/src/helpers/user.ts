@@ -10,11 +10,7 @@ export function getUser({ uid }: { uid: string | undefined }) {
   return getDoc(docRef);
 }
 
-export function getIdToken({
-  context,
-}: {
-  context: GetServerSidePropsContext;
-}) {
+export function getToken({ context }: { context: GetServerSidePropsContext }) {
   const tokenName = "firebasetoken";
   const cookies = nookies.get(context);
   if (!cookies[tokenName]) return null;
