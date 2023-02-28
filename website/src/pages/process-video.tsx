@@ -5,8 +5,9 @@ import { getMetadata, ref } from "firebase/storage";
 import { tempStorage } from "@/config/firebase";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useRouter } from "next/router";
-import Head from "next/head";
 import Spinner from "@/components/spinner";
+import { VideoPlayer } from "@/components/video-player";
+import Seo from "@/components/seo";
 
 export default function ProcessVideoPage({
   video_id,
@@ -183,8 +184,7 @@ import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
-import { VideoPlayer } from "@/components/video-player";
-import Seo from "@/components/seo";
+import { parseCookies } from "nookies";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -221,9 +221,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
+    const parsedCookies = parseCookies(context);
+
     // Get the video url
     const video_url_response = await fetch(
-      "https://www.shortzoo.com/api/get-video",
+      "http://localhost:3000/api/get-video",
       {
         method: "POST",
         headers: {
@@ -231,12 +233,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         },
         body: JSON.stringify({
           folder: "main",
+          id_token: parsedCookies["firebasetoken"],
           video_id: video_id,
         }),
       }
     );
 
     const url = await video_url_response.json();
+
+    console.log("Video url: ", url);
 
     return {
       props: {

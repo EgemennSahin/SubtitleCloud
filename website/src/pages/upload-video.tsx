@@ -2,8 +2,8 @@ import UploadButton from "@/components/upload-button";
 import React from "react";
 import TextButton from "@/components/text-button";
 import { useRouter } from "next/router";
-import Head from "next/head";
 import { handleUpload } from "@/helpers/upload";
+import Seo from "@/components/seo";
 
 export default function UploadVideo() {
   const router = useRouter();
@@ -63,7 +63,6 @@ import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
-import Seo from "@/components/seo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

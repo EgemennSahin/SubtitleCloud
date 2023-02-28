@@ -15,5 +15,9 @@ export function getToken({ context }: { context: GetServerSidePropsContext }) {
   const cookies = nookies.get(context);
   if (!cookies[tokenName]) return null;
 
-  return firebaseAdmin.auth().verifyIdToken(cookies[tokenName]);
+  return verifyToken(cookies[tokenName]);
+}
+
+export function verifyToken(token: string) {
+  return firebaseAdmin.auth().verifyIdToken(token);
 }

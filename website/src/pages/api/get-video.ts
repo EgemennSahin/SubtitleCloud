@@ -1,20 +1,27 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from "next";
 import { firebaseAdmin } from "@/config/firebase-admin";
-import { parseCookies } from "nookies";
+import { getToken, verifyToken } from "@/helpers/user";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { folder, video_id } = req.body;
+  const { folder, id_token, video_id } = req.body;
 
-  const uid = parseCookies({ req })["firebasetoken"];
+  const decodedToken = await verifyToken(id_token);
 
   // Check if the user is authenticated
-  if (!uid) {
+  if (!decodedToken) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
+  const uid = decodedToken.uid;
+
+  console.log("UID: ", uid);
   try {
     const file = firebaseAdmin
       .storage()
@@ -30,6 +37,8 @@ export default async function handler(
       action: "read",
       expires: Date.now() + 15 * 60 * 1000, // Link expires in 15 minutes
     });
+
+    console.log("Url: ", signedUrl);
 
     res.status(200).json({ url: signedUrl });
   } catch (error) {
