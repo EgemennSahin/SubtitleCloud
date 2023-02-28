@@ -37,11 +37,10 @@ export default function LandingPage() {
               />
             </div>
 
-            <ul className="mt-5 grid w-fit grid-cols-4 gap-4 self-center lg:grid-cols-2 lg:gap-7 lg:gap-x-12">
+            <ul className="mt-5 grid w-fit grid-cols-2 gap-4 self-center md:grid-cols-4 lg:grid-cols-2 lg:gap-x-16">
               <li className="flex shrink items-center space-x-1">
                 <ArrowUpCircleIcon className="h-9 w-9 shrink-0 text-teal-400" />
-
-                <h3 className="text-2xl font-semibold text-slate-600 drop-shadow">
+                <h3 className="text-xl font-semibold text-slate-600 drop-shadow sm:text-2xl">
                   Watch time
                 </h3>
               </li>
@@ -49,7 +48,7 @@ export default function LandingPage() {
               <li className="flex items-center space-x-1">
                 <ArrowUpCircleIcon className="h-9 w-9 shrink-0 text-teal-400" />
 
-                <h3 className="text-2xl font-semibold text-slate-600 drop-shadow">
+                <h3 className="text-xl font-semibold text-slate-600 drop-shadow sm:text-2xl">
                   Engagement
                 </h3>
               </li>
@@ -57,7 +56,7 @@ export default function LandingPage() {
               <li className="flex items-center space-x-1">
                 <ArrowUpCircleIcon className="h-9 w-9 shrink-0 text-teal-400" />
 
-                <h3 className="text-2xl font-semibold text-slate-600 drop-shadow">
+                <h3 className="text-xl font-semibold text-slate-600 drop-shadow sm:text-2xl">
                   Accessibility
                 </h3>
               </li>
@@ -65,7 +64,7 @@ export default function LandingPage() {
               <li className="flex items-center space-x-1">
                 <ArrowUpCircleIcon className="h-9 w-9 shrink-0 text-teal-400" />
 
-                <h3 className="text-2xl font-semibold text-slate-600 drop-shadow">
+                <h3 className="text-xl font-semibold text-slate-600 drop-shadow sm:text-2xl">
                   Quality
                 </h3>
               </li>
