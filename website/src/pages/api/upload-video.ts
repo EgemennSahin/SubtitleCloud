@@ -36,8 +36,9 @@ export default async function handler(
       return res.status(400).json({ message: "Invalid file type" });
   }
 
-  // Create a unique id for the file
-  const file_id = uuidv4();
+  // Create a unique id for the file and get the first 1000 characters
+  const file_id = uuidv4().slice(0, 1000);
+
   const filename = `${folder}/${uid}/${file_id}`;
   const options = {
     version: "v4" as const,
