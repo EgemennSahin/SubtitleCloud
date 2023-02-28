@@ -19,7 +19,7 @@ export default async function handler(
     const file = firebaseAdmin
       .storage()
       .bucket("shortzoo-premium")
-      .file(`${uid}/${folder}/${video_id}`);
+      .file(`${folder}/${uid}/${video_id}`);
     const [fileExists] = await file.exists();
 
     if (!fileExists) {

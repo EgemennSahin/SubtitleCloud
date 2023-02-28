@@ -38,7 +38,7 @@ export default async function handler(
 
   // Create a unique id for the file
   const file_id = uuidv4();
-  const filename = `${uid}/${folder}/${file_id}`;
+  const filename = `${folder}/${uid}/${file_id}`;
   const options = {
     version: "v4" as const,
     action: "write" as const,
