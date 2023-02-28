@@ -51,7 +51,7 @@ export default function UploadVideo({ uid }: { uid: string }) {
                 // Push to processing page with file id
                 router.push({
                   pathname: "/process-video",
-                  query: { video_id },
+                  query: { video_id: video_id },
                 });
               }}
               text={"Upload"}
