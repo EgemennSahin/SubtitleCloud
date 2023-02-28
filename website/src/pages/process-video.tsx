@@ -1,5 +1,5 @@
 import UploadButton from "@/components/upload-button";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TextButton from "@/components/text-button";
 import { getMetadata, ref } from "firebase/storage";
 import { tempStorage } from "@/config/firebase";
@@ -18,13 +18,25 @@ export default function ProcessVideoPage({
 }) {
   const router = useRouter();
 
-  const [file, setFile] = React.useState<File | null>(null);
-  const [uploadedVideo, setUploadedVideo] = React.useState<string | null>();
-  const [processingVideo, setProcessingVideo] = React.useState(false);
-  const [processedVideo, setProcessedVideo] = React.useState<string | null>();
+  const [file, setFile] = useState<File | null>(null);
+  const [uploadedVideo, setUploadedVideo] = useState<string | null>();
+  const [processingVideo, setProcessingVideo] = useState(false);
+  const [processedVideo, setProcessedVideo] = useState<string | null>();
 
-  const [token, setToken] = React.useState<string | null>();
-  const [gettingToken, setGettingToken] = React.useState(false);
+  const [token, setToken] = useState<string | null>();
+  const [gettingToken, setGettingToken] = useState(false);
+
+  const [selectedSecondaryVideo, setSelectedSecondaryVideo] =
+    useState<DropdownOption>();
+  const [selectedAudio, setSelectedAudio] = useState<DropdownOption>();
+
+  const handleSecondaryVideoSelect = (option: DropdownOption) => {
+    setSelectedSecondaryVideo(option);
+  };
+
+  const handleAudioSelect = (option: DropdownOption) => {
+    setSelectedAudio(option);
+  };
 
   // Process video if it is uploaded and token is received
   useEffect(() => {
@@ -132,13 +144,43 @@ export default function ProcessVideoPage({
 
             <VideoPlayer src={video_url} />
 
-            <UploadButton
-              size="large"
-              setFile={(file: File) => {
-                setFile(file);
-              }}
-              disabled={processingVideo}
-            />
+            <div className="flex flex-row items-center">
+              <DropdownMenu
+                options={[
+                  { label: "Video 1", id: "id1" },
+                  { label: "Video 2", id: "id2" },
+                ]}
+                onChange={handleSecondaryVideoSelect}
+                text="Select video"
+              />
+
+              <UploadButton
+                size="small"
+                setFile={(file: File) => {
+                  setFile(file);
+                }}
+                disabled={processingVideo}
+              />
+            </div>
+
+            <div className="flex flex-row items-center">
+              <DropdownMenu
+                options={[
+                  { label: "Audio 1", id: "id1" },
+                  { label: "Audio 2", id: "id2" },
+                ]}
+                onChange={handleAudioSelect}
+                text="Select audio"
+              />
+
+              <UploadButton
+                size="small"
+                setFile={(file: File) => {
+                  setFile(file);
+                }}
+                disabled={processingVideo}
+              />
+            </div>
 
             <h3 className="text-md mt-7 text-center text-xl font-normal tracking-wide text-slate-800">
               Video duration must be less than 3 minutes.
@@ -185,6 +227,7 @@ import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
 import { parseCookies } from "nookies";
+import DropdownMenu, { DropdownOption } from "@/components/dropdown-menu";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

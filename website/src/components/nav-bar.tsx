@@ -3,7 +3,7 @@ import { User } from "firebase/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Dropdown from "./dropdown-menu";
+import NavBarDropdown from "./nav-bar-dropdown";
 import TextButton from "./text-button";
 
 function Navbar({ user }: { user: User }) {
@@ -63,7 +63,7 @@ function Navbar({ user }: { user: User }) {
           </a>
 
           <div className="sm:hidden">
-            <Dropdown>
+            <NavBarDropdown>
               <Link href="/dashboard">
                 <button className="w-full px-4 py-4 text-left text-lg font-medium text-gray-700">
                   Dashboard
@@ -78,7 +78,7 @@ function Navbar({ user }: { user: User }) {
               >
                 Log out
               </button>
-            </Dropdown>
+            </NavBarDropdown>
           </div>
         </div>
       ) : (
@@ -100,7 +100,7 @@ function Navbar({ user }: { user: User }) {
           </a>
 
           <div className="sm:hidden">
-            <Dropdown>
+            <NavBarDropdown>
               <button
                 onClick={() => router.push("/signup")}
                 className="w-full px-4 py-4 text-left text-lg font-medium text-gray-700"
@@ -113,7 +113,7 @@ function Navbar({ user }: { user: User }) {
               >
                 Log in
               </button>
-            </Dropdown>
+            </NavBarDropdown>
           </div>
         </div>
       )}
