@@ -1,34 +1,53 @@
 import { premiumStorage } from "@/config/firebase";
 import { ref, getMetadata } from "firebase/storage";
 
-export async function handleVideoProcessing(uploadedVideo?: string) {
+export async function handleVideoProcessing(
+  uploadedVideo: string,
+  secondaryVideo: string,
+  uid: string,
+  token: string
+) {
+  if (!uploadedVideo || !token) {
+    return;
+  }
+
   console.log("Starting video processing...");
 
   // Check if video is uploaded to the google cloud storage bucket
-  // const videoRef = ref(premiumStorage, "uploads/" + uploadedVideo);
-  // const videoExists = await getMetadata(videoRef);
+  const videoRef = ref(premiumStorage, "uploads/" + uploadedVideo);
+  const videoExists = await getMetadata(videoRef);
 
-  // if (!videoExists) {
-  //   console.log("Error getting video");
-  //   return;
-  // }
+  if (!videoExists) {
+    console.log("Error getting video");
+    return;
+  }
 
   try {
-    // const response_video_processing = await fetch(
-    //   "https://public-process-api-gateway-6dipdkfs.uc.gateway.dev/subtitle?key=AIzaSyA8gNrXERBjLwY8MlAGNYawoQgfzbhdRYY",
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       video_id: uploadedVideo,
-    //       token: token,
-    //     }),
-    //   }
-    // );
+    // Get the subtitle from the video
+    const response_subtitle = await fetch(
+      "https://public-process-api-gateway-6dipdkfs.uc.gateway.dev/subtitle?key=AIzaSyA8gNrXERBjLwY8MlAGNYawoQgfzbhdRYY",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: uid,
+          video_id: uploadedVideo,
+          token: token,
+        }),
+      }
+    );
 
-    const response_video_processing = await fetch(
+    const subtitle = await response_subtitle.json();
+
+    const downloadUrl = subtitle.download_url;
+    const uploadUrl = subtitle.upload_url;
+
+    console.log("Subtitle download url: ", downloadUrl);
+    console.log("Subtitle upload url: ", uploadUrl);
+
+    const response_process = await fetch(
       "https://public-process-api-gateway-6dipdkfs.uc.gateway.dev/process?key=AIzaSyA8gNrXERBjLwY8MlAGNYawoQgfzbhdRYY",
       {
         method: "POST",
@@ -36,16 +55,16 @@ export async function handleVideoProcessing(uploadedVideo?: string) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          uid: "oeLFiArD1nMvoaTJw3p9qFwBVaE3",
+          uid: uid,
           video_data: {
-            video_id: "test2",
-            secondary_id: "game_video.mp4",
+            video_id: uploadedVideo,
+            secondary_id: secondaryVideo,
           },
         }),
       }
     );
 
-    const data = await response_video_processing.json();
+    const data = await response_process.json();
 
     return data.url;
   } catch (error: any) {

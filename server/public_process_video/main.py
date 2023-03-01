@@ -1,4 +1,4 @@
-from functions import main_function
+from audioProcessing import process_audio
 from google.cloud import storage
 import functions_framework
 from flask import json
@@ -32,22 +32,10 @@ def public_process_video(request):
 
         return ('', 204, headers)
         
-    # get ip address for logging purposes 
-    if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
-        ip_address = request.environ['REMOTE_ADDR']
-    elif request.environ.get('HTTP_X_FORWARDED_FOR'):
-        ip_address = request.environ['HTTP_X_FORWARDED_FOR']
-    else :
-        ip_address = "No_IP"
-        
-    
-    print(f"IP address: {ip_address}") # if behind a proxy
-
     secret_recaptcha_key = os.getenv('CLOUDFLARE_SECRET')
 
     # Get the video url from the request
     request_data = request.get_json()
-    print("Request: ", request_data)
     token = request_data.get('token')
 
     print("Verification started.")
@@ -67,19 +55,19 @@ def public_process_video(request):
     
     print("Verification finished.")
 
-    video_bucket_folder = "uploads/"
     video_id = request_data.get('video_id')
-    bucket_name = "short-zoo-temp-videos"
-    bucket = client.bucket(bucket_name)
+    uid = request_data.get('uid')
+    bucket = client.bucket("shortzoo-premium")
+    video_path = "main/" + uid + "/" + video_id
 
     # Checking if file exists on storgae
     print("Checking video in bucket")
-    blob = bucket.blob(video_bucket_folder + video_id)
+    blob = bucket.blob(video_path)
     if not blob.exists():
         print("Video: ", video_id, " doesn't exist in the bucket")
         return ('Video does not exist', 403)
 
-        # Download the models if everything has been verified
+    # Download the models if everything has been verified
     # Only download models if they haven't been downloaded
     non_downloaded_models = [key for key, value in models.items() if value is None]
 
@@ -94,34 +82,38 @@ def public_process_video(request):
 
     # Download the file
     print("Downloading the video")
-    file_tmp_path = "/tmp/raw_" + video_id
+    file_tmp_path = "/tmp/raw_" + uid + "_" + video_id
     blob.download_to_filename(file_tmp_path)
 
-    # Delete the raw video
-    blob.delete()
-
     # This is where the output will be saved
-    output_name = "/tmp/edited_" + video_id
+    output_name = "/tmp/sub_" + uid + "_" + video_id
 
     # Run the main function
     print("Starting the editing process")
-    output_file = main_function(
-        main_video=file_tmp_path,
-        models=models,
-        output_name=output_name)
-
-    output_file_name = "created/" + ip_address + "/" + video_id
+    output_file = process_audio(
+        file_tmp_path,
+        models,
+        output_name)
+    
+    
+    subtitle_path = "subtitle/" + uid + "/" + video_id
 
     # Upload the created video
-    new_blob = bucket.blob(output_file_name)
-    new_blob.upload_from_filename(output_file, content_type='video/mp4')
+    new_blob = bucket.blob(subtitle_path)
+    new_blob.upload_from_filename(output_file, content_type='text/plain')
 
-    # Generate a signed URL
-    url = new_blob.generate_signed_url(
+    # Generate a signed URL to download
+    download_url = new_blob.generate_signed_url(
         version="v4",
-        # This URL is valid for 7 days
-        expiration=timedelta(days=7),
-        method='GET'      # This URL will allow GET requests
+        expiration=timedelta(days=1),
+        method='GET'
+    )
+
+    # Generate a signed URL to upload
+    upload_url = new_blob.generate_signed_url(
+        version="v4",
+        expiration=timedelta(days=1),
+        method='PUT'
     )
 
     # Set CORS headers for the main request
@@ -131,7 +123,7 @@ def public_process_video(request):
     }
 
     # Return the edited video's url
-    response_body = {'url': url}
+    response_body = {'download_url': download_url, 'upload_url': upload_url}
     response = json.dumps(response_body)
 
     return (response, 200, headers)
