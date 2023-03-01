@@ -271,7 +271,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     // Get the video url
     const video_url_response = await fetch(
-      "http://localhost:3000/api/get-video",
+      "https://www.shortzoo.com/api/get-video",
       {
         method: "POST",
         headers: {

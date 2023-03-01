@@ -68,7 +68,7 @@ export async function handleUpload(
   try {
     const type = file.type;
     // Get the signed url from the server
-    const response = await fetch("https://www.shortzoo.com/api/upload-video", {
+    const response = await fetch("/api/upload-video", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
