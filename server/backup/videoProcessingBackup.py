@@ -32,7 +32,7 @@ def trimCropVids(main_mp4_filename, game_mp4_filename, output_mp4_filename):
     mainVid = (
         input_main_vid
         .filter('crop', m, m)
-        .output(output_main_vid)
+        .output(output_main_vid, preset="ultrafast")
         .overwrite_output()
         .run()
     )
@@ -41,7 +41,7 @@ def trimCropVids(main_mp4_filename, game_mp4_filename, output_mp4_filename):
         input_game_vid
         .trim(duration=duration)
         .filter('crop', m, m)
-        .output(output_game_vid)
+        .output(output_game_vid, preset="ultrafast")
         .overwrite_output()
         .run()
     )
@@ -80,7 +80,7 @@ def combineVids(top_mp4_filename, bottom_mp4_filename, output_mp4_filename, padd
     (
         ffmpeg.input(top_mp4_filename)
         .filter('vstack')
-        .output(output_mp4_filename)
+        .output(output_mp4_filename, vsync=2, preset="ultrafast")
         .global_args('-i', bottom_mp4_filename)
         .run()
     )
@@ -102,19 +102,19 @@ def add_audio_subtitles(mp4_filename, mp3_filename, srt_filename, output_mp4_fil
         (
             ffmpeg.concat(input_video, input_audio, v=1, a=1)
             .filter("subtitles", srt_filename, fontsdir="fonts", force_style=style)
-            .output(output_mp4_filename, preset="veryfast")
+            .output(output_mp4_filename, preset="ultrafast")
             .run()
         )
     except ffmpeg.Error as e:
-        print('stdout:', e.stdout.decode('utf8'))
-        print('stderr:', e.stderr.decode('utf8'))
+        print('stdout:', e.stdout)
+        print('stderr:', e.stderr)
         raise e
 
     return output_mp4_filename
 
 
 # Main Function
-def videoProcessing(main_video, game_video, mp3_filename, subtitle_filename, output_name):
+def process_video(main_video, game_video, mp3_filename, subtitle_filename, output_name):
     if (game_video != "none"):
         print("Trimming gameplay and cropping videos.")
         cropped_main_video, cropped_game_video = trimCropVids(
@@ -124,24 +124,14 @@ def videoProcessing(main_video, game_video, mp3_filename, subtitle_filename, out
         comb_video = combineVids(
             cropped_main_video, cropped_game_video, output_name + '_combined.mp4', padding=False)
 
-        # Delete cropped videos
-        os.remove(cropped_main_video)
-        os.remove(cropped_game_video)
-
         print("Adding subtitles to the video.")
         final_video = add_audio_subtitles(
             comb_video, mp3_filename, subtitle_filename, output_name + '.mp4')
-
-        # Delete subtitles, mp3 and combined video
-        os.remove(comb_video)
 
     else:
         print("Adding subtitles to the video.")
         final_video = add_audio_subtitles(
             main_video, mp3_filename, subtitle_filename, output_name + '.mp4')
-
-    os.remove(subtitle_filename)
-    os.remove(mp3_filename)
 
     return final_video
 

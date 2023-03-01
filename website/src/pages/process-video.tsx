@@ -189,9 +189,11 @@ export default function ProcessVideoPage({
             <div className="mt-6 flex items-center justify-center">
               <TextButton
                 size="medium"
-                onClick={async () => {}}
+                onClick={async () => {
+                  handleVideoProcessing();
+                }}
                 text={"Submit"}
-                disabled={!file || processingVideo}
+                disabled={(false && !file) || processingVideo}
               />
             </div>
           </div>
@@ -228,6 +230,7 @@ import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
 import { parseCookies } from "nookies";
 import DropdownMenu, { DropdownOption } from "@/components/dropdown-menu";
+import { handleVideoProcessing } from "@/helpers/processing";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
