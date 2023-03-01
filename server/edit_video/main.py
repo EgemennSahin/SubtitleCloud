@@ -5,15 +5,17 @@ from flask import json
 from datetime import timedelta
 
 # Download the models from the bucket
-client = storage.Client()
+client = storage.Client.from_service_account_json('public-process-account-key.json')
 bucket = client.bucket("shortzoo-premium")
 
 '''
 Request format:
 {
     uid: "uid",
-    video_id: "video_id",
-    secondary_video_id: "secondary_video_id",
+    video_data: {
+        video_id: "video_id",
+        secondary_video_id: "secondary_video_id",
+    }
 }
 
 Response format:
@@ -50,18 +52,21 @@ def edit_video(request):
     for key in data:
         # Get the data from the request
         id = video_data.get(key)
-        if (key == "secondary_id" & id == ""):
+        if ((key == "secondary_id") & (id == "")):
             data[key] = ""
             continue
 
         # Get the bucket paths for the files 
         path = ""
         if (key == "video_id"):
-            path = "main/" + uid + "/" + id
+            path = "main/" + uid + "/" + vid
+            temp_path = "/tmp/" + uid + "_" + vid
         elif (key == "subtitle_id"):
-            path = "subtitle/" + uid + "/" + id
+            path = "subtitle/" + uid + "/" + vid
+            temp_path = "/tmp/" + uid + "_sub_" + vid
         elif (key == "secondary_id"):
             path = "secondary/" + uid + "/" + id
+            temp_path = "/tmp/" + uid + "_secondary_" + id
         else:
             print("Invalid key")
             return ('Invalid key', 403)
@@ -73,7 +78,6 @@ def edit_video(request):
             return ('File does not exist', 403)
         
         # Download the file into a temporary location
-        temp_path = "/tmp/" + key + "_" + id
         blob.download_to_filename(temp_path)
         
         # Save the data

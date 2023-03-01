@@ -100,6 +100,6 @@ def process_video(main_video, game_video, subtitle_filename, output_name):
         os.remove(crop_game)
 
     print("Adding subtitles to the video.")
-    add_audio_subtitles(main_video, mp3_filename, subtitle_filename, output_name)
+    final = add_audio_subtitles(main_video, mp3_filename, subtitle_filename, output_name)
 
-    return main_video
+    return final
