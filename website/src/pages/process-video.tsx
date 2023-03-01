@@ -190,7 +190,12 @@ export default function ProcessVideoPage({
               <TextButton
                 size="medium"
                 onClick={async () => {
-                  handleVideoProcessing();
+                  handleVideoProcessing(
+                    video_id,
+                    selectedSecondaryVideo?.id!,
+                    "uid",
+                    token!
+                  );
                 }}
                 text={"Submit"}
                 disabled={(false && !file) || processingVideo}
