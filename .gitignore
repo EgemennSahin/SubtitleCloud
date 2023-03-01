@@ -4,6 +4,7 @@ __pycache__
 assets
 .prettierignore
 .vscode
+.python-version
 
 server/localFunctions
 server/backup
