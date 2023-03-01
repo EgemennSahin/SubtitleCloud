@@ -21,15 +21,12 @@ export default function DashboardPage({ ...props }) {
             onClick={() => {
               router.push("/process-video");
             }}
-            hover="hover:bg-teal-600 transition-textcolor"
           />
           <TextButton
             size="medium"
             color="bg-teal-500"
             text="Videos"
-            onClick={() => {
-              router.push("/output-videos");
-            }}
+            onClick={() => {}}
             hover="hover:bg-teal-600 transition-textcolor"
           />
         </div>
@@ -66,10 +63,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    const user = await getUser({ uid: token.uid });
-
     return {
-      props: { user: JSON.parse(JSON.stringify(user)) },
+      props: {
+        uid: token.uid,
+      },
     };
   } catch (error) {
     return handleError(error);

@@ -86,12 +86,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    const user = await getUser({ uid: token.uid });
-
     return {
       props: {
         uid: token.uid,
-        user: JSON.parse(JSON.stringify(user)),
       },
     };
   } catch (error) {

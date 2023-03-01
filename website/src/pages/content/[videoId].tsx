@@ -63,10 +63,17 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const token = await getToken({ context });
 
-    const user = await getUser({ uid: token?.uid });
+    if (!token) {
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
 
     return {
-      props: { user: JSON.parse(JSON.stringify(user)) },
+      props: { uid: token.uid },
     };
   } catch (error) {
     return handleError(error);

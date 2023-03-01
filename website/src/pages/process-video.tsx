@@ -254,8 +254,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    const user = await getUser({ uid: token.uid });
-
     const { video_id } = context.query;
 
     if (!video_id) {
@@ -294,7 +292,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         video_url: url.url,
         video_id: video_id,
         uid: token.uid,
-        user: JSON.parse(JSON.stringify(user)),
       },
     };
   } catch (error) {

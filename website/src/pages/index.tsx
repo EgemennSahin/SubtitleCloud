@@ -92,10 +92,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    const user = await getUser({ uid: token?.uid });
-
     return {
-      props: { user: JSON.parse(JSON.stringify(user)) },
+      props: { uid: token.uid },
     };
   } catch (error) {
     return handleError(error);

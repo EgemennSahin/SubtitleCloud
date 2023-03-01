@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import NavBarDropdown from "./nav-bar-dropdown";
 import TextButton from "./text-button";
 
-function Navbar({ user }: { user: User }) {
+function Navbar({ uid }: { uid: string }) {
   const router = useRouter();
 
   return (
@@ -30,7 +30,7 @@ function Navbar({ user }: { user: User }) {
           </span>
         </Link>
 
-        {!user && (
+        {!uid && (
           <a
             className="transition-textcolor mx-5 cursor-pointer p-3 text-xl font-bold tracking-wide text-slate-700 hover:text-slate-900"
             onClick={() => router.push("/pricing")}
@@ -40,7 +40,7 @@ function Navbar({ user }: { user: User }) {
         )}
       </div>
 
-      {user ? (
+      {uid ? (
         <div className="flex items-center gap-4">
           <Link href="/dashboard">
             <TextButton
