@@ -82,8 +82,7 @@ export default function SignUpPage() {
               )}
             </div>
             <TextButton
-              color="bg-blue-400"
-              hover="hover:bg-blue-500"
+              color="primary"
               size="small"
               text="Sign up"
               onClick={async () => {
@@ -109,8 +108,7 @@ export default function SignUpPage() {
             </span>
 
             <TextButton
-              color="bg-red-400"
-              hover="hover:bg-red-500"
+              color="red"
               size="small"
               text="Sign up with Google"
               onClick={async () => {

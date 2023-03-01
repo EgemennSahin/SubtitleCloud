@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import TextButton from "@/components/text-button";
 import router from "next/router";
 import { VideoPlayer } from "@/components/video-player";
-import Head from "next/head";
 
 export default function GeneratedVideoPage() {
   const { video_url } = router.query;
@@ -40,14 +39,18 @@ export default function GeneratedVideoPage() {
         <div className="mt-4 flex gap-4">
           <TextButton
             size="small"
-            color="bg-teal-500"
-            hover="hover:bg-teal-600"
+            color="secondary"
             text={isLinkCopied ? "Link copied" : "Copy Link"}
             onClick={copyLinkToClipboard}
             disabled={isLinkCopied}
           />
 
-          <TextButton size="small" text="Download" onClick={downloadVideo} />
+          <TextButton
+            color="primary"
+            size="small"
+            text="Download"
+            onClick={downloadVideo}
+          />
         </div>
       </div>
     </>

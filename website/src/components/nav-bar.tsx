@@ -46,9 +46,8 @@ function Navbar({ uid }: { uid: string }) {
             <TextButton
               text="Dashboard"
               size="small"
-              color="bg-slate-500"
+              color="gray"
               style="hidden sm:block"
-              hover="hover:bg-slate-600"
             />
           </Link>
 
@@ -87,9 +86,8 @@ function Navbar({ uid }: { uid: string }) {
             onClick={() => router.push("/signup")}
             text="Sign up"
             size="small"
-            color="bg-slate-500"
+            color="gray"
             style="hidden sm:block"
-            hover="hover:bg-slate-600"
           />
 
           <a

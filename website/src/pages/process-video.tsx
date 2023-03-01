@@ -188,6 +188,7 @@ export default function ProcessVideoPage({
 
             <div className="mt-6 flex items-center justify-center">
               <TextButton
+                color="primary"
                 size="medium"
                 onClick={async () => {
                   handleVideoProcessing(

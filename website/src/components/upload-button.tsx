@@ -20,7 +20,7 @@ export default function UploadButton({
       className={` ${
         disabled
           ? "cursor-default opacity-50"
-          : "transition-textcolor cursor-pointer hover:opacity-80"
+          : "transition-textcolor cursor-pointer"
       }`}
     >
       {size === "small" ? (
@@ -29,7 +29,7 @@ export default function UploadButton({
         </div>
       ) : (
         <div
-          className="flex flex-col justify-center rounded-md bg-slate-600 p-8 text-center shadow-inner-lg"
+          className="transition-textcolor flex flex-col justify-center rounded-md bg-slate-600 p-8 text-center shadow-inner-lg hover:bg-slate-700"
           style={{
             boxSizing: "border-box",
             height: "15rem",

@@ -16,6 +16,7 @@ export default function DashboardPage({ ...props }) {
 
         <div className="flex flex-col gap-4 sm:flex-row">
           <TextButton
+            color="primary"
             size="medium"
             text="Subtitle"
             onClick={() => {
@@ -24,10 +25,9 @@ export default function DashboardPage({ ...props }) {
           />
           <TextButton
             size="medium"
-            color="bg-teal-500"
+            color="secondary"
             text="Videos"
             onClick={() => {}}
-            hover="hover:bg-teal-600 transition-textcolor"
           />
         </div>
       </div>

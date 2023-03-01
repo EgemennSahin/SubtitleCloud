@@ -1,11 +1,10 @@
 import React from "react";
-import { ArrowUpCircleIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
+import { ArrowUpCircleIcon } from "@heroicons/react/24/solid";
 import TextButton from "@/components/text-button";
 import { useRouter } from "next/router";
-import Head from "next/head";
 import Image from "next/image";
 
-export default function LandingPage({ user }: { user: any }) {
+export default function LandingPage({ uid }: { uid: string }) {
   const router = useRouter();
 
   return (
@@ -24,9 +23,10 @@ export default function LandingPage({ user }: { user: any }) {
 
             <div className="flex items-center justify-center p-4">
               <TextButton
+                color="primary"
                 size="medium"
                 onClick={() => router.push("/process-video")}
-                text={user ? "Continue" : "Subscribe now"}
+                text={uid ? "Continue" : "Subscribe now"}
               />
             </div>
 

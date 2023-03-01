@@ -58,8 +58,7 @@ export default function LoginPage() {
 
           <div className="flex flex-col">
             <TextButton
-              color="bg-blue-400"
-              hover="hover:bg-blue-500"
+              color="primary"
               size="small"
               text="Continue"
               onClick={async () => {
@@ -83,8 +82,7 @@ export default function LoginPage() {
             </span>
 
             <TextButton
-              color="bg-red-400"
-              hover="hover:bg-red-500"
+              color="red"
               size="small"
               text="Sign in with Google"
               onClick={async () => {
