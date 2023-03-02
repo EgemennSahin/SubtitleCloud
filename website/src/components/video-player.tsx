@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, MouseEvent } from "react";
 import { useRouter } from "next/router";
 import {
   PlayIcon,
@@ -73,12 +73,12 @@ export const VideoPlayer = ({
 
   // Gets the current time of the video in seconds
   function getCurrentTime(): number {
-    return videoRef.current ? videoRef.current.currentTime : 0;
+    return videoRef?.current ? videoRef.current.currentTime : 0;
   }
 
   // Gets the total duration of the video in seconds
   function getDuration(): number {
-    return videoRef.current ? videoRef.current.duration : 100;
+    return videoRef?.current ? videoRef.current.duration : 100;
   }
 
   function getWatchedPercentage(): number {
@@ -90,32 +90,54 @@ export const VideoPlayer = ({
     return percentage;
   }
 
-  let width = "w-64";
-  let barHeight = "h-1";
-  let iconSize = "h-6 w-6";
+  let width = "";
+  let barHeight = "";
+  let iconSize = "";
 
   switch (size) {
     case "small":
       width = "w-48";
-      barHeight = "h-1";
+      barHeight = "h-2";
       iconSize = "h-8 w-8";
       break;
     case "medium":
       width = "w-72";
-      barHeight = "h-2";
+      barHeight = "h-4";
       iconSize = "h-10 w-10";
       break;
     case "large":
       width = "w-96";
-      barHeight = "h-3";
+      barHeight = "h-6";
       iconSize = "h-14 w-14";
       break;
     default:
       width = "w-72";
-      barHeight = "h-2";
+      barHeight = "h-4";
       iconSize = "h-10 w-10";
       break;
   }
+
+  const handleSliderMouseDown = (e: MouseEvent) => {
+    console.log("Down", e);
+    const sliderBar = e.currentTarget as HTMLElement;
+    const boundingRect = sliderBar.getBoundingClientRect();
+    const sliderBarWidth = boundingRect.width;
+    const mouseX = e.clientX - boundingRect.left;
+    const percentage = (mouseX / sliderBarWidth) * 100;
+    console.log("Percentage:", percentage);
+    const video = videoRef.current;
+    if (video) {
+      const duration = video.duration;
+      const currentTime = (percentage / 100) * duration;
+      video.currentTime = currentTime;
+      setSliderValue(percentage);
+      setIsDragging(true);
+    }
+  };
+
+  const handleSliderMouseUp = () => {
+    setIsDragging(false);
+  };
 
   return (
     <div className="relative">
@@ -141,12 +163,16 @@ export const VideoPlayer = ({
       </button>
 
       <div className="absolute bottom-0 flex flex-col">
-        <div className={`${barHeight} ${width} bg-slate-300 outline-none`}>
+        <div
+          className={`${barHeight} ${width} cursor-pointer bg-slate-300 outline-none`}
+          onMouseDown={handleSliderMouseDown}
+          onMouseUp={handleSliderMouseUp}
+        >
           <div
             className={`${barHeight} bg-gradient-to-r from-teal-400 to-blue-400`}
             style={{
-              width: `${getWatchedPercentage()}%`,
-              transition: "width 1s linear",
+              width: `${isFinished ? 100 : getWatchedPercentage()}%`,
+              transition: isDragging ? "none" : "width 1s linear",
             }}
           />
         </div>
