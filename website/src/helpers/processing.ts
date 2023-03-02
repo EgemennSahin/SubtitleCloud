@@ -30,7 +30,7 @@ export async function handleVideoProcessing(
 
     const data = await response_process.json();
 
-    return data.url;
+    return data;
   } catch (error: any) {
     console.log("Error processing video: ", error.message);
   }
