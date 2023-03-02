@@ -32,6 +32,7 @@ export const VideoPlayer = ({
       videoRef.current.pause();
     } else {
       videoRef.current.play();
+      setIsFinished(false);
     }
     setIsPlaying(!isPlaying);
   };
