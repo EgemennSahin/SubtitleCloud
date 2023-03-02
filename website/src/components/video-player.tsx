@@ -173,7 +173,7 @@ export const VideoPlayer = ({
             className={`${barHeight} bg-gradient-to-r from-teal-400 to-blue-400`}
             style={{
               width: `${isFinished ? 100 : getWatchedPercentage()}%`,
-              transition: isDragging ? "none" : "width 1s linear",
+              transition: isDragging ? "none" : "width 0.1s linear",
             }}
           />
         </div>
