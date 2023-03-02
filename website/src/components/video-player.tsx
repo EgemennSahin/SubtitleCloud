@@ -68,7 +68,7 @@ export const VideoPlayer = ({
   useEffect(() => {
     const interval = setInterval(() => {
       setSliderValue(getCurrentTime());
-    }, 1000);
+    }, 100);
     return () => clearInterval(interval);
   }, []);
 
