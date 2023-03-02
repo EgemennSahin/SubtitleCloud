@@ -50,8 +50,17 @@ export default function EditVideoPage({
             color="primary"
             size="medium"
             onClick={async () => {
-              console.log("Upload Link:", upload_transcript);
-            }}
+              // Upload the subtitles
+              // Redirect to the video page
+              router.push({
+                pathname: "/add-to-video",
+                query: {
+                  video_id: video_id,
+                },
+              });
+
+
+              }}
             text={"Submit"}
           />
         </div>

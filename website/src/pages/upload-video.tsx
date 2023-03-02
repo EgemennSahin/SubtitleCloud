@@ -75,11 +75,10 @@ export default function UploadVideo() {
 }
 
 import { GetServerSidePropsContext } from "next";
-import { getToken, getUser } from "@/helpers/user";
+import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
 import { VideoPlayer } from "@/components/video-player";
-import { handleTranscribe, handleVideoProcessing } from "@/helpers/processing";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

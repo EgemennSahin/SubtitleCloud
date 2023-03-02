@@ -58,7 +58,7 @@ export default function SubtitleInput({
   return (
     <>
       {srtContent && (
-        <div className="flex items-center">
+        <div className="flex flex-col items-center">
           <textarea
             value={srtContent}
             className="mt-4 w-full rounded-md border border-gray-300 py-2 px-4 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
@@ -71,7 +71,6 @@ export default function SubtitleInput({
             onClick={handleUpload}
             text={"Submit"}
           />
-          {uploaded && <p>uploaded</p>}
         </div>
       )}
     </>
