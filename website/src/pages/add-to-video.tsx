@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Turnstile } from "@marsidev/react-turnstile";
 import { useRouter } from "next/router";
 import Spinner from "@/components/spinner";
 import Seo from "@/components/seo";
+import { handleVideoProcessing } from "@/helpers/processing";
 
 export default function AddToVideoPage({
-  video_id,
+  video_url,
   uid,
 }: {
-  video_id: string;
+  video_url: string;
   uid: string;
 }) {
   const router = useRouter();
-  const [token, setToken] = useState<string | null>();
   const [processState, setProcessState] = useState<
     "None" | "Processing" | "Done"
   >("None");
 
   // Process video if it is uploaded and token is received
   useEffect(() => {
-    async function handler(uid: string, video_id: string, token: string) {
+    async function handler() {
       if (processState != "None") return;
       setProcessState("Processing");
       try {
-        const transcribeData = await handleVideoProcessing(video_id, "", uid);
+        const transcribeData = await handleVideoProcessing(video_url, "", uid);
         console.log(transcribeData);
 
         // Redirect to edit-subtitles with the transcribe data
@@ -39,10 +38,8 @@ export default function AddToVideoPage({
       setProcessState("Done");
     }
 
-    if (video_id != null && token != null) {
-      handler(uid, video_id, token);
-    }
-  }, [video_id, token]);
+    handler();
+  }, []);
 
   return (
     <>
@@ -67,24 +64,6 @@ export default function AddToVideoPage({
             This may take a few minutes.
           </h3>
         </div>
-
-        {!token && (
-          <div style={{ position: "fixed", bottom: 0, right: 0 }}>
-            <Turnstile
-              className="mt-7"
-              siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
-              scriptOptions={{ async: true, defer: true, appendTo: "head" }}
-              onSuccess={(token: string) => {
-                setToken(token);
-              }}
-              options={{
-                cData: uid,
-                size: "compact",
-                theme: "light",
-              }}
-            />
-          </div>
-        )}
       </div>
     </>
   );
@@ -94,7 +73,6 @@ import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
-import { handleTranscribe, handleVideoProcessing } from "@/helpers/processing";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -118,9 +96,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    const { video_id } = context.query;
+    const { video_url } = context.query;
 
-    if (!video_id) {
+    if (!video_url) {
       return {
         redirect: {
           destination: "/upload-video",
@@ -131,7 +109,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     return {
       props: {
-        video_id: video_id,
+        video_url: video_url,
         uid: token.uid,
       },
     };

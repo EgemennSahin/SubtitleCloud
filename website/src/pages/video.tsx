@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import TextButton from "@/components/text-button";
-import router from "next/router";
 import { VideoPlayer } from "@/components/video-player";
 
-export default function GeneratedVideoPage() {
-  const { video_url } = router.query;
+export default function GeneratedVideoPage({
+  video_url,
+}: {
+  video_url: string;
+}) {
   const [isLinkCopied, setIsLinkCopied] = useState(false);
 
   const copyLinkToClipboard = () => {
@@ -75,8 +77,22 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
+    const { video_url } = context.query;
+
+    if (!video_url) {
+      return {
+        redirect: {
+          destination: "/upload-video",
+          permanent: false,
+        },
+      };
+    }
+
     return {
-      props: { uid: token.uid },
+      props: {
+        video_url,
+        uid: token.uid,
+      },
     };
   } catch (error) {
     return handleError(error);
