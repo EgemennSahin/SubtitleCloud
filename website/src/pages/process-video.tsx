@@ -15,7 +15,7 @@ export default function ProcessVideoPage({
   const [token, setToken] = useState<string | null>();
   const [processState, setProcessState] = useState<
     "None" | "Processing" | "Done"
-  >();
+  >("None");
 
   // Process video if it is uploaded and token is received
   useEffect(() => {
