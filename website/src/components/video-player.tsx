@@ -140,6 +140,24 @@ export const VideoPlayer = ({
     setIsDragging(false);
   };
 
+  const handleSliderMouseMove = (e: MouseEvent) => {
+    if (isDragging) {
+      const sliderBar = e.currentTarget as HTMLElement;
+      const boundingRect = sliderBar.getBoundingClientRect();
+      const sliderBarWidth = boundingRect.width;
+      const mouseX = e.clientX - boundingRect.left;
+      const percentage = (mouseX / sliderBarWidth) * 100;
+      const video = videoRef.current;
+
+      if (video) {
+        const duration = video.duration;
+        const currentTime = (percentage / 100) * duration;
+        video.currentTime = currentTime;
+        setSliderValue(percentage);
+      }
+    }
+  };
+
   return (
     <div className="relative">
       <video
@@ -168,6 +186,7 @@ export const VideoPlayer = ({
           className={`${barHeight} ${width} cursor-pointer bg-slate-300 outline-none`}
           onMouseDown={handleSliderMouseDown}
           onMouseUp={handleSliderMouseUp}
+          onMouseMove={handleSliderMouseMove}
         >
           <div
             className={`${barHeight} bg-gradient-to-r from-teal-400 to-blue-400`}
