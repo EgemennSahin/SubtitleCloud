@@ -5,10 +5,10 @@ import Seo from "@/components/seo";
 import { handleVideoProcessing } from "@/helpers/processing";
 
 export default function AddToVideoPage({
-  video_url,
+  video_id,
   uid,
 }: {
-  video_url: string;
+  video_id: string;
   uid: string;
 }) {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function AddToVideoPage({
       if (processState != "None") return;
       setProcessState("Processing");
       try {
-        const transcribeData = await handleVideoProcessing(video_url, "", uid);
+        const transcribeData = await handleVideoProcessing(video_id, "", uid);
         console.log(transcribeData);
 
         // Redirect to edit-subtitles with the transcribe data
@@ -96,9 +96,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    const { video_url } = context.query;
+    const { video_id } = context.query;
 
-    if (!video_url) {
+    if (!video_id) {
       return {
         redirect: {
           destination: "/upload-video",
@@ -109,7 +109,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     return {
       props: {
-        video_url: video_url,
+        video_id,
         uid: token.uid,
       },
     };

@@ -49,7 +49,7 @@ export default function EditVideoPage({
           <TextButton
             color="primary"
             size="medium"
-            onClick={async () => {
+            onClick={() => {
               // Upload the subtitles
               // Redirect to the video page
               router.push({
@@ -58,9 +58,7 @@ export default function EditVideoPage({
                   video_id: video_id,
                 },
               });
-
-
-              }}
+            }}
             text={"Submit"}
           />
         </div>

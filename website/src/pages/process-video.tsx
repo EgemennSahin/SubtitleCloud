@@ -28,7 +28,7 @@ export default function ProcessVideoPage({
 
         // Redirect to edit-subtitles with the transcribe data
         router.push({
-          pathname: "/edit-subtitles",
+          pathname: "/edit-video",
           query: {
             video_id: video_id,
             download_transcript: transcribeData?.downloadUrl,
