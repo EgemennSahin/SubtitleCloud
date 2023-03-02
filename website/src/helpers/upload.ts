@@ -57,7 +57,7 @@ export default function uploadFunctions(setFile: (file: File) => void) {
 }
 
 export async function handleUpload(
-  file: File | null,
+  file: Blob | null,
   folder: "main" | "side" | "audio"
 ) {
   if (!file) {

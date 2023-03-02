@@ -168,6 +168,7 @@ export default function PricingPlans({ uid }: { uid?: string }) {
         />
       </div>
       <TextButton
+        color="primary"
         size="small"
         text={selectedPlan == "premium" ? "Checkout" : "Customize"}
         style="mt-8"

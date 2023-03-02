@@ -71,3 +71,41 @@ export async function handleVideoProcessing(
     console.log("Error processing video: ", error.message);
   }
 }
+
+export async function handleTranscribe(
+  uid: string,
+  videoId: string,
+  captchaToken: string
+) {
+  if (!videoId || !uid || !captchaToken) {
+    return;
+  }
+
+  console.log("Starting video processing...");
+
+  try {
+    const endpoint =
+      "https://public-process-api-gateway-6dipdkfs.uc.gateway.dev/subtitle?key=AIzaSyA8gNrXERBjLwY8MlAGNYawoQgfzbhdRYY";
+
+    // Get the subtitle from the video
+    const response_subtitle = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        uid: uid,
+        video_id: videoId,
+        token: captchaToken,
+      }),
+    });
+
+    const subtitle = await response_subtitle.json();
+    const downloadUrl = subtitle.download_url;
+    const uploadUrl = subtitle.upload_url;
+
+    return { downloadUrl, uploadUrl };
+  } catch (error: any) {
+    console.log("Error processing video: ", error.message);
+  }
+}

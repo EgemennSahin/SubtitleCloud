@@ -9,7 +9,13 @@ import {
   ArrowPathIcon,
 } from "@heroicons/react/24/solid";
 
-export const VideoPlayer = ({ src }: { src: string }) => {
+export const VideoPlayer = ({
+  src,
+  size,
+}: {
+  src: string;
+  size?: "small" | "medium" | "large";
+}) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -84,12 +90,39 @@ export const VideoPlayer = ({ src }: { src: string }) => {
     return percentage;
   }
 
+  let width = "w-64";
+  let barHeight = "h-1";
+  let iconSize = "h-6 w-6";
+
+  switch (size) {
+    case "small":
+      width = "w-48";
+      barHeight = "h-1";
+      iconSize = "h-8 w-8";
+      break;
+    case "medium":
+      width = "w-72";
+      barHeight = "h-2";
+      iconSize = "h-10 w-10";
+      break;
+    case "large":
+      width = "w-96";
+      barHeight = "h-3";
+      iconSize = "h-14 w-14";
+      break;
+    default:
+      width = "w-72";
+      barHeight = "h-2";
+      iconSize = "h-10 w-10";
+      break;
+  }
+
   return (
     <div className="relative">
       <video
         ref={videoRef}
         src={src}
-        className="w-64 rounded-lg"
+        className={`${width} rounded-lg`}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onEnded={() => setIsPlaying(false)}
@@ -97,20 +130,20 @@ export const VideoPlayer = ({ src }: { src: string }) => {
       />
 
       <button
-        className="absolute top-1 right-1 rounded-3xl bg-slate-500 bg-opacity-30 p-2 text-slate-50 hover:bg-slate-900 hover:bg-opacity-50"
+        className="absolute top-1 right-1 rounded-3xl bg-slate-500 bg-opacity-30 p-2 text-slate-50 hover:bg-slate-700 hover:bg-opacity-20 hover:text-slate-200"
         onClick={handleMuteUnmute}
       >
         {isMuted ? (
-          <SpeakerXMarkIcon className="h-7 w-7" />
+          <SpeakerXMarkIcon className={iconSize} />
         ) : (
-          <SpeakerWaveIcon className="h-7 w-7" />
+          <SpeakerWaveIcon className={iconSize} />
         )}
       </button>
 
       <div className="absolute bottom-0 flex flex-col">
-        <div className="h-2 w-64 bg-slate-300 outline-none">
+        <div className={`${barHeight} ${width} bg-slate-300 outline-none`}>
           <div
-            className="h-2 bg-gradient-to-r from-teal-400 to-blue-400"
+            className={`${barHeight} bg-gradient-to-r from-teal-400 to-blue-400`}
             style={{
               width: `${getWatchedPercentage()}%`,
               transition: "width 1s linear",
@@ -120,22 +153,22 @@ export const VideoPlayer = ({ src }: { src: string }) => {
 
         <div className="flex w-full items-center justify-between rounded-b-lg bg-slate-900 bg-opacity-50 px-2 py-1">
           <button
-            className="p-2 text-white hover:text-slate-200"
+            className="p-2 text-white hover:text-slate-300"
             onClick={handlePlayPause}
           >
             {isPlaying ? (
-              <PauseIcon className="h-10 w-10" />
+              <PauseIcon className={iconSize} />
             ) : isFinished ? (
-              <ArrowPathIcon className="h-10 w-10" />
+              <ArrowPathIcon className={iconSize} />
             ) : (
-              <PlayIcon className="h-10 w-10" />
+              <PlayIcon className={iconSize} />
             )}
           </button>
           <button
             className="p-2 text-white hover:text-slate-200"
             onClick={handleFullScreen}
           >
-            <ArrowsPointingOutIcon className="h-10 w-10" />
+            <ArrowsPointingOutIcon className={iconSize} />
           </button>
         </div>
       </div>

@@ -1,33 +1,42 @@
-import { ArrowUpTrayIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
+import { CloudArrowUpIcon } from "@heroicons/react/24/solid";
 import uploadFunctions from "@/helpers/upload";
+import TextButton from "./text-button";
 
 export default function UploadButton({
   setFile,
   disabled,
+  text,
   size,
 }: {
-  setFile: (file: File) => void;
+  setFile: (file: Blob) => void;
   disabled: boolean;
-  size: "small" | "large";
+  text?: string;
+  size: "small" | "medium" | "large";
 }) {
   const { handleDrop, handleChooseFile } = uploadFunctions(setFile);
 
-  return (
-    <div
-      onDrop={handleDrop}
-      onClick={handleChooseFile}
-      onDragOver={(e) => e.preventDefault()}
-      className={` ${
-        disabled
-          ? "cursor-default opacity-50"
-          : "transition-textcolor cursor-pointer"
-      }`}
-    >
-      {size === "small" ? (
+  let button = null;
+
+  switch (size) {
+    case "small":
+      button = (
         <div>
-          <PlusCircleIcon className="h-16 w-16 text-teal-500" />
+          <CloudArrowUpIcon className="h-16 w-16 text-teal-500" />
         </div>
-      ) : (
+      );
+      break;
+    case "medium":
+      button = (
+        <TextButton
+          color="secondary"
+          size="small"
+          text={text ? text : "Upload a file"}
+          disabled={disabled}
+        />
+      );
+      break;
+    case "large":
+      button = (
         <div
           className="transition-textcolor flex flex-col justify-center rounded-md bg-slate-600 p-8 text-center shadow-inner-lg hover:bg-slate-700"
           style={{
@@ -42,7 +51,7 @@ export default function UploadButton({
             </p>
           ) : (
             <div className="flex flex-col items-center gap-3">
-              <ArrowUpTrayIcon className="h-16 w-16 text-slate-50" />
+              <CloudArrowUpIcon className="h-16 w-16 text-slate-50" />
               <p className="bg-gradient-to-b from-slate-100 to-slate-200 bg-clip-text text-xl font-semibold tracking-wide text-transparent sm:hidden">
                 Browse your library
               </p>
@@ -53,7 +62,29 @@ export default function UploadButton({
             </div>
           )}
         </div>
-      )}
+      );
+      break;
+    default:
+      button = (
+        <div>
+          <h3 className="text-style-subheader">Upload a file</h3>
+          <CloudArrowUpIcon className="h-16 w-16 text-teal-500" />
+        </div>
+      );
+  }
+
+  return (
+    <div
+      onDrop={handleDrop}
+      onClick={handleChooseFile}
+      onDragOver={(e) => e.preventDefault()}
+      className={` ${
+        disabled
+          ? "cursor-default opacity-50"
+          : "transition-textcolor cursor-pointer"
+      }`}
+    >
+      {button}
     </div>
   );
 }

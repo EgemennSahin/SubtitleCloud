@@ -1,5 +1,5 @@
 import UploadButton from "@/components/upload-button";
-import React from "react";
+import React, { useState } from "react";
 import TextButton from "@/components/text-button";
 import { useRouter } from "next/router";
 import { handleUpload } from "@/helpers/upload";
@@ -8,8 +8,8 @@ import Seo from "@/components/seo";
 export default function UploadVideo() {
   const router = useRouter();
 
-  const [file, setFile] = React.useState<File | null>(null);
-  const [pressed, setPressed] = React.useState(false);
+  const [file, setFile] = useState<Blob | null>(null);
+  const [pressed, setPressed] = useState(false);
 
   return (
     <>
@@ -20,15 +20,29 @@ export default function UploadVideo() {
 
       <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-200 to-slate-400 py-5 sm:py-9">
         <div className="flex flex-col items-center">
-          <h2 className="mb-8 bg-gradient-to-r from-slate-700 to-slate-800 bg-clip-text pr-1 text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
+          <h2 className="mb-4 bg-gradient-to-r from-slate-600 to-slate-800 bg-clip-text pr-1 text-5xl font-bold leading-tight tracking-tighter text-transparent">
             Upload your video
           </h2>
 
-          <UploadButton size="large" setFile={setFile} disabled={false} />
+          {!file ? (
+            <div className="flex flex-col items-center gap-4">
+              <UploadButton size="large" setFile={setFile} disabled={false} />
 
-          <h3 className="text-md mt-7 text-center text-xl font-normal tracking-wide text-slate-800">
-            Video duration must be less than 3 minutes.
-          </h3>
+              <h3 className="text-md mt-7 text-center text-xl font-normal tracking-wide text-slate-800">
+                Video duration must be less than 3 minutes.
+              </h3>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center  gap-4">
+              <VideoPlayer size="small" src={URL.createObjectURL(file)} />
+              <UploadButton
+                size="medium"
+                setFile={setFile}
+                text="Upload"
+                disabled={false}
+              />
+            </div>
+          )}
 
           <div className="mt-6 flex items-center justify-center">
             <TextButton
@@ -50,7 +64,7 @@ export default function UploadVideo() {
                   query: { video_id: video_id },
                 });
               }}
-              text={"Upload"}
+              text={"Process video"}
               disabled={!file || pressed}
             />
           </div>
@@ -64,6 +78,8 @@ import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
+import { VideoPlayer } from "@/components/video-player";
+import { handleTranscribe, handleVideoProcessing } from "@/helpers/processing";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
