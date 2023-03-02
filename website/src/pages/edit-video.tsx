@@ -6,11 +6,13 @@ import Seo from "@/components/seo";
 import { VideoPlayer } from "@/components/video-player";
 
 export default function EditVideoPage({
+  uid,
   video_url,
   video_id,
   download_transcript,
   upload_transcript,
 }: {
+  uid: string;
   video_url: string;
   video_id: string;
   download_transcript: string;
@@ -36,7 +38,11 @@ export default function EditVideoPage({
 
           <div className="flex h-full flex-col items-center justify-start">
             <h3 className="text-style-subheader">Subtitles</h3>
-            <SubtitleInput url={download_transcript} />
+            <SubtitleInput
+              downloadUrl={download_transcript}
+              uploadUrl={upload_transcript}
+              uid={uid}
+            />
           </div>
         </div>
         <div className="mt-6 flex items-center justify-center">
