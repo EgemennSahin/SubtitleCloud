@@ -16,7 +16,7 @@ export default function LoginPage() {
         title="Log In"
         description="Sign in to our short video subtitling solution and gain access to your account."
       />
-      <div className="my-8 flex max-w-xl grow flex-col self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
+      <div className="my-8 flex w-2/5 grow flex-col self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
         <div className="drop-shadow">
           <h2 className="text-style-subtitle">
             <span className="hidden sm:block">

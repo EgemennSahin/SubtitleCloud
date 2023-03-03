@@ -94,7 +94,7 @@ export function PlanBox({
 
 export default function PricingPlans({ uid }: { uid?: string }) {
   const router = useRouter();
-  const [isMonthly, setIsMonthly] = useState(false);
+  const [isMonthly, setIsMonthly] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState("premium");
 
   return (
@@ -109,10 +109,11 @@ export default function PricingPlans({ uid }: { uid?: string }) {
       <div className="mt-3 flex flex-col justify-between gap-8 lg:flex-row">
         <PlanBox
           title="Premium"
-          price={isMonthly ? "26.99/year" : "2.99/month"}
+          price={isMonthly ? "2.99/month" : "26.99/year"}
           features={[
-            <p key="videos">20 Videos per month</p>,
+            <p key="videos">20 videos per month</p>,
             <p key="duration">Video duration up to 3 minutes</p>,
+            <p key="features">Add bottom video & music</p>,
             <div
               key="publishing"
               className="flex flex-nowrap items-center gap-2"
@@ -139,10 +140,11 @@ export default function PricingPlans({ uid }: { uid?: string }) {
 
         <PlanBox
           title="Business"
-          price="Custom Plan"
+          price={isMonthly ? "9.99/month" : "89.99/year"}
           features={[
-            <p key="videos">Unlimited videos</p>,
+            <p key="videos">100 videos per month</p>,
             <p key="duration">Unlimited video duration</p>,
+            <p key="features">Add bottom video & music</p>,
             <div
               key="publishing"
               className="flex flex-nowrap items-center gap-2"
@@ -167,10 +169,11 @@ export default function PricingPlans({ uid }: { uid?: string }) {
           style="dark"
         />
       </div>
+
       <TextButton
         color="primary"
         size="small"
-        text={selectedPlan == "premium" ? "Checkout" : "Customize"}
+        text="Checkout"
         style="mt-8"
         onClick={async () => {
           if (!uid) {

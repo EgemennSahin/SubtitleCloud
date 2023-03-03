@@ -9,7 +9,7 @@ export default function PremiumPage({ uid }: { uid: string }) {
         title="Choose Plan"
         description="Choose a subscription plan to gain access to generate subtitles for your videos."
       />
-      <div className="relative grow bg-gradient-to-b from-slate-50 to-slate-200 px-6 py-5 sm:py-9 md:px-8 lg:px-20">
+      <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-50 to-slate-200 px-4 py-5 sm:py-9">
         <h1 className="text-style-title">Check out</h1>
 
         <h3 className="text-style-subheader">

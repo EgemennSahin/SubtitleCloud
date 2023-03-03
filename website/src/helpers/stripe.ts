@@ -16,12 +16,10 @@ export async function createCheckoutSession(
   console.log("uid: ", uid);
   // Plan = "premium" or "business"
   // Term = "monthly" or "annually"
-  const premium_monthly = "price_1MenijHRv5JZrE6u5gv4cYKm";
-  const premium_annually = "price_1MenijHRv5JZrE6u5gv4cYKm";
-  const business_100_monthly = "price_1MenrvHRv5JZrE6ulZKs6Ade";
-  const business_100_annually = "price_1MenrvHRv5JZrE6uW1l8H7QF";
-  const business_300_monthly = "price_1MeooeHRv5JZrE6uGBGaQziE";
-  const business_300_annually = "price_1MeooeHRv5JZrE6usNosLdF0";
+  const premium_monthly = "price_1MhbnlHRv5JZrE6uqyM0FJRp";
+  const premium_annually = "price_1MhbnlHRv5JZrE6uV2dhY586";
+  const business_monthly = "price_1MenrvHRv5JZrE6ulZKs6Ade";
+  const business_annually = "price_1MhbPqHRv5JZrE6uDNzHWvPA";
 
   let priceId = "";
 
@@ -33,21 +31,19 @@ export async function createCheckoutSession(
         priceId = premium_annually;
       }
       break;
-    case "business_100":
+    case "business":
       if (isMonthly) {
-        priceId = business_100_monthly;
+        priceId = business_monthly;
       } else {
-        priceId = business_100_annually;
-      }
-      break;
-    case "business_300":
-      if (isMonthly) {
-        priceId = business_300_monthly;
-      } else {
-        priceId = business_300_annually;
+        priceId = business_annually;
       }
       break;
     default:
+      if (isMonthly) {
+        priceId = premium_monthly;
+      } else {
+        priceId = premium_annually;
+      }
       break;
   }
 
@@ -81,11 +77,7 @@ export async function createCheckoutSession(
 }
 
 export function isPaidUser({ token }: { token: DecodedIdToken }) {
-  return (
-    token.stripeRole == "premium" ||
-    token.stripeRole == "business100" ||
-    token.stripeRole == "business300"
-  );
+  return token.stripeRole == "premium" || token.stripeRole == "business";
 }
 
 export async function handleCheckout({

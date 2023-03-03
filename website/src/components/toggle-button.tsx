@@ -17,7 +17,7 @@ export default function ToggleButton({
       >
         <p
           className={`text-md font-medium  ${
-            state ? "text-slate-400" : "text-slate-600"
+            state ? "text-slate-600" : "text-slate-400"
           }`}
         >
           {textTrue}
@@ -31,13 +31,13 @@ export default function ToggleButton({
           <span
             aria-hidden="true"
             className={`mx-1 inline-block h-5 w-5 transform self-center rounded-full bg-slate-100 shadow ring-0 drop-shadow-md transition duration-200 ease-in-out ${
-              state ? "translate-x-5 bg-slate-100" : ""
+              state ? "" : "translate-x-5 bg-slate-100"
             }`}
           />
         </div>
         <p
           className={`text-md font-medium  ${
-            state ? "text-slate-600" : "text-slate-400"
+            state ? "text-slate-400" : "text-slate-600"
           }`}
         >
           {textFalse}

@@ -30,9 +30,9 @@ export default function PasswordResetPage() {
         title="Reset Password"
         description="Reset your password and regain access to your account on our short video subtitling solution."
       />
-      <div className="my-8 flex max-w-xl grow flex-col self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
+      <div className="my-8 flex w-2/5 grow flex-col self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
         <div className="drop-shadow">
-          <h2 className="mb-6 text-center text-3xl font-bold text-slate-800">
+          <h2 className="text-style-subtitle">
             <span className="hidden sm:block">
               Reset your Shortzoo password
             </span>
@@ -60,8 +60,7 @@ export default function PasswordResetPage() {
             <TextButton
               size="small"
               text="Continue"
-              color="bg-blue-400"
-              hover="hover:bg-blue-500"
+              color="primary"
               onClick={() => handlePasswordReset}
             />
             <Link href="/login" passHref>
