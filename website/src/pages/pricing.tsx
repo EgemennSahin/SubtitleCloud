@@ -36,24 +36,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const token = await getToken({ context });
 
-    if (!token) {
-      return {
-        redirect: {
-          destination: "/login",
-          permanent: false,
-        },
-      };
-    }
-
-    if (token.email_verified) {
-      return {
-        redirect: {
-          destination: "/dashboard",
-          permanent: false,
-        },
-      };
-    }
-
     return {
       props: {
         uid: token.uid,
