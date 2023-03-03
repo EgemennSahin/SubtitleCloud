@@ -16,10 +16,9 @@ export default async function handler(
   try {
     const sessionCookie = await firebaseAdmin
       .auth()
-      .createSessionCookie(token, { expiresIn: 60 * 60 * 24 * 14 }); // Expires in 1 week
+      .createSessionCookie(token, { expiresIn: 60 * 60 * 24 * 14 * 1000 }); // Expires in 2 weeks
     setCookie({ res }, "session", sessionCookie, {
-      maxAge: 60 * 60 * 24 * 14, // Expires in 1 week
-      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 14 * 1000, // Expires in 2 weeks
       path: "/",
     });
     res.status(200).json({ message: "Login successful" });

@@ -1,6 +1,5 @@
 import Navbar from "@/components/nav-bar";
 import { useIdTokenListener } from "@/helpers/auth";
-
 import "@/styles/globals.css";
 
 import type { AppProps } from "next/app";

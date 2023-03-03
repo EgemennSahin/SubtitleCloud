@@ -77,7 +77,6 @@ export const logOut = async () => {
 };
 
 export const setCookies = async (user: User | null, force?: boolean) => {
-  const tokenName = "firebasetoken";
   if (!user) {
     // Fetch API to set the cookie
     await fetch("/api/logout", {
@@ -85,7 +84,7 @@ export const setCookies = async (user: User | null, force?: boolean) => {
     });
   } else {
     const token = await user.getIdToken(force);
-
+    console.log(setCookies);
     // Fetch API to set the cookie
     await fetch("/api/login", {
       method: "POST",

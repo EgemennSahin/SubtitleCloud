@@ -15,6 +15,8 @@ export function getToken({ context }: { context: GetServerSidePropsContext }) {
   const cookies = nookies.get(context);
   if (!cookies[tokenName]) return null;
 
+  console.log("Cookies: ", cookies);
+
   return verifyToken(cookies[tokenName]);
 }
 
