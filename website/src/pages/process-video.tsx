@@ -13,18 +13,12 @@ export default function ProcessVideoPage({
 }) {
   const router = useRouter();
   const [token, setToken] = useState<string | null>();
-  const [processState, setProcessState] = useState<
-    "None" | "Processing" | "Done"
-  >("None");
 
   // Process video if it is uploaded and token is received
   useEffect(() => {
     async function handler(uid: string, video_id: string, token: string) {
-      if (processState != "None") return;
-      setProcessState("Processing");
       try {
         const transcribeData = await handleTranscribe(uid, video_id, token);
-        console.log(transcribeData);
 
         // Redirect to edit-subtitles with the transcribe data
         router.push({
@@ -37,14 +31,16 @@ export default function ProcessVideoPage({
         });
       } catch (error) {
         console.error(error);
+        router.push("/");
       }
-      setProcessState("Done");
     }
 
-    if (video_id != null && token != null) {
-      handler(uid, video_id, token);
+    if (!token) {
+      return;
     }
-  }, [video_id, token]);
+
+    handler(uid, video_id, token);
+  }, [token]);
 
   return (
     <>
@@ -55,18 +51,19 @@ export default function ProcessVideoPage({
       <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-200 to-slate-400 py-5 sm:py-9">
         <div className="flex h-fit w-fit flex-col items-center justify-start px-5">
           <h2 className="mb-8 bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text px-4 text-center text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
-            Your video is being processed.
+            Your video is being transcribed.
           </h2>
 
           <Spinner size="large" />
 
-          <h3 className="text-md linear-wipe my-8 px-4 text-center sm:hidden ">
-            This may take a few minutes. Please do not close the window or
-            navigate away from this page.
-          </h3>
-
-          <h3 className="text-md linear-wipe my-8 hidden px-4 text-center sm:block ">
-            This may take a few minutes.
+          <h3 className="text-md linear-wipe my-8 px-4 text-center">
+            <span className="sm:hidden">
+              This may take a few minutes. Please do not close the window or
+              navigate away from this page.
+            </span>
+            <span className="hidden sm:block">
+              This may take a few minutes.
+            </span>
           </h3>
         </div>
 
@@ -80,7 +77,6 @@ export default function ProcessVideoPage({
                 setToken(token);
               }}
               options={{
-                cData: uid,
                 size: "compact",
                 theme: "light",
               }}

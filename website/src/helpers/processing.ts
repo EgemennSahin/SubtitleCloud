@@ -1,6 +1,3 @@
-import { premiumStorage } from "@/config/firebase";
-import { ref, getMetadata } from "firebase/storage";
-
 export async function handleVideoProcessing(
   uploadedVideo: string,
   secondaryVideo: string,
@@ -11,26 +8,24 @@ export async function handleVideoProcessing(
   }
 
   try {
-    const response_process = await fetch(
-      "https://public-process-api-gateway-6dipdkfs.uc.gateway.dev/process?key=AIzaSyA8gNrXERBjLwY8MlAGNYawoQgfzbhdRYY",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    const endpoint =
+      "https://public-process-api-gateway-6dipdkfs.uc.gateway.dev/process?key=AIzaSyA8gNrXERBjLwY8MlAGNYawoQgfzbhdRYY";
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        uid: uid,
+        video_data: {
+          video_id: uploadedVideo,
+          secondary_id: secondaryVideo,
         },
-        body: JSON.stringify({
-          uid: uid,
-          video_data: {
-            video_id: uploadedVideo,
-            secondary_id: secondaryVideo,
-          },
-        }),
-      }
-    );
+      }),
+    });
 
-    const data = await response_process.json();
-
-    return data;
+    return await response.json();
   } catch (error: any) {
     console.log("Error processing video: ", error.message);
   }
@@ -52,7 +47,7 @@ export async function handleTranscribe(
       "https://public-process-api-gateway-6dipdkfs.uc.gateway.dev/subtitle?key=AIzaSyA8gNrXERBjLwY8MlAGNYawoQgfzbhdRYY";
 
     // Get the subtitle from the video
-    const response_subtitle = await fetch(endpoint, {
+    const response = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +59,7 @@ export async function handleTranscribe(
       }),
     });
 
-    const subtitle = await response_subtitle.json();
+    const subtitle = await response.json();
     const downloadUrl = subtitle.download_url;
     const uploadUrl = subtitle.upload_url;
 
