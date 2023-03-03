@@ -11,7 +11,7 @@ export function getUser({ uid }: { uid: string | undefined }) {
 }
 
 export function getToken({ context }: { context: GetServerSidePropsContext }) {
-  const tokenName = "firebasetoken";
+  const tokenName = "session";
   const cookies = nookies.get(context);
   if (!cookies[tokenName]) return null;
 
@@ -19,5 +19,5 @@ export function getToken({ context }: { context: GetServerSidePropsContext }) {
 }
 
 export function verifyToken(token: string) {
-  return firebaseAdmin.auth().verifyIdToken(token);
+  return firebaseAdmin.auth().verifySessionCookie(token);
 }

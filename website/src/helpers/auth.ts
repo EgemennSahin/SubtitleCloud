@@ -79,17 +79,21 @@ export const logOut = async () => {
 export const setCookies = async (user: User | null, force?: boolean) => {
   const tokenName = "firebasetoken";
   if (!user) {
-    nookies.destroy(undefined, "firebasetoken", { path: "/" });
+    // Fetch API to set the cookie
+    await fetch("/api/logout", {
+      method: "GET",
+    });
   } else {
     const token = await user.getIdToken(force);
 
-    // Check if it is a different user than the one in the cookie
-    const currentToken = nookies.get(undefined, tokenName)["firebasetoken"];
-    if (currentToken === token) {
-      return;
-    }
-
-    nookies.set(undefined, tokenName, token, { maxAge: 3600, path: "/" });
+    // Fetch API to set the cookie
+    await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token }),
+    });
   }
   return;
 };
