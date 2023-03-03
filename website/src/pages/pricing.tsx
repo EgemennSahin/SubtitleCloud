@@ -38,7 +38,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     return {
       props: {
-        uid: token.uid,
+        uid: token?.uid,
       },
     };
   } catch (error) {
