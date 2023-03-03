@@ -1,36 +1,21 @@
 import React from "react";
-import Head from "next/head";
 import TextButton from "@/components/text-button";
 import router from "next/router";
+import Seo from "@/components/seo";
 
 export default function DashboardPage({ ...props }) {
   return (
     <>
       <Seo
-        title="Dashboard"
-        description="Access your generated videos on our short video subtitling solution. Generate subtitles for your videos in a few minutes."
+        title="Videos"
+        description="Access your generated videos on our short video subtitling solution."
       />
 
       <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-50 to-slate-200 px-4 py-5 sm:py-9">
-        <h1 className="text-style-title"> Dashboard</h1>
+        <h1 className="text-style-title"> Videos</h1>
 
         <div className="flex flex-col gap-4 sm:flex-row">
-          <TextButton
-            color="primary"
-            size="medium"
-            text="Subtitle"
-            onClick={() => {
-              router.push("/process-video");
-            }}
-          />
-          <TextButton
-            size="medium"
-            color="secondary"
-            text="Videos"
-            onClick={() => {
-              router.push("/videos");
-            }}
-          />
+          <VideoList uid={props.uid} />
         </div>
       </div>
     </>
@@ -41,8 +26,7 @@ import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
-import { auth } from "@/config/firebase";
-import Seo from "@/components/seo";
+import VideoList from "@/components/video-list";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

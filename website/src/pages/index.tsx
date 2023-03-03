@@ -86,14 +86,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const token = await getToken({ context });
 
-    if (!token) {
-      return {
-        props: {},
-      };
-    }
-
     return {
-      props: { uid: token.uid },
+      props: { uid: token?.uid },
     };
   } catch (error) {
     return handleError(error);

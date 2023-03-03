@@ -72,10 +72,12 @@ def public_process_video(request):
     non_downloaded_models = [key for key, value in models.items() if value is None]
 
     if (len(non_downloaded_models) > 0):
-        print("Downloading models")
         for model in non_downloaded_models:
+            print("Downloading: ", model)
             pickled_model = model + ".pkl.bz2"
-            models_bucket.blob("models/" + pickled_model).download_to_filename(
+            blob =  models_bucket.blob("models/" + pickled_model)
+            blob.chunk_size =1<<20
+            blob.download_to_filename(
                 "/tmp/" + pickled_model)
             with bz2.BZ2File("/tmp/" + pickled_model, 'rb') as pickle_file:
                 models[model] = pickle.load(pickle_file)
@@ -121,6 +123,7 @@ def public_process_video(request):
         'Access-Control-Allow-Origin': 'https://www.shortzoo.com',
         'Content-Type': 'application/json'
     }
+    
 
     # Return the edited video's url
     response_body = {'download_url': download_url, 'upload_url': upload_url}

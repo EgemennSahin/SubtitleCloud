@@ -133,6 +133,7 @@ export const VideoPlayer = ({
       video.currentTime = currentTime;
       setSliderValue(percentage);
       setIsDragging(true);
+      setIsFinished(false);
     }
   };
 
@@ -154,6 +155,7 @@ export const VideoPlayer = ({
         const currentTime = (percentage / 100) * duration;
         video.currentTime = currentTime;
         setSliderValue(percentage);
+        setIsFinished(false);
       }
     }
   };
@@ -187,6 +189,7 @@ export const VideoPlayer = ({
           onMouseDown={handleSliderMouseDown}
           onMouseUp={handleSliderMouseUp}
           onMouseMove={handleSliderMouseMove}
+          onMouseLeave={handleSliderMouseUp}
         >
           <div
             className={`${barHeight} bg-gradient-to-r from-teal-400 to-blue-400`}
