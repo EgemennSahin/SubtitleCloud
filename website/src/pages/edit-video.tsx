@@ -18,6 +18,7 @@ export default function EditVideoPage({
   upload_transcript: string;
 }) {
   const router = useRouter();
+  const [file, setFile] = React.useState<Blob | null>(null);
 
   return (
     <>
@@ -43,18 +44,30 @@ export default function EditVideoPage({
               uid={uid}
             />
           </div>
+
+          <div className="mt-3 flex flex-col items-center justify-center">
+            <UploadButton
+              size="medium"
+              setFile={setFile}
+              text="Upload Secondary Video"
+              disabled={false}
+            />
+          </div>
         </div>
         <div className="mt-6 flex items-center justify-center">
           <TextButton
             color="primary"
             size="medium"
-            onClick={() => {
-              // Upload the subtitles
+            onClick={async () => {
+              // Upload the secondary video
+              const side_video_id = await handleUpload(file, "side");
+
               // Redirect to the video page
               router.push({
                 pathname: "/add-to-video",
                 query: {
                   video_id: video_id,
+                  side_video_id: side_video_id,
                 },
               });
             }}
@@ -72,6 +85,8 @@ import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
 import { parseCookies } from "nookies";
 import SubtitleInput from "@/components/TextInput";
+import UploadButton from "@/components/upload-button";
+import { handleUpload } from "@/helpers/upload";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

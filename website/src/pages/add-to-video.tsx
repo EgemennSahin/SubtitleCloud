@@ -6,9 +6,11 @@ import { handleVideoProcessing } from "@/helpers/processing";
 
 export default function AddToVideoPage({
   video_id,
+  side_video_id,
   uid,
 }: {
   video_id: string;
+  side_video_id: string;
   uid: string;
 }) {
   const router = useRouter();
@@ -17,7 +19,11 @@ export default function AddToVideoPage({
   useEffect(() => {
     async function handler() {
       try {
-        const videoData = await handleVideoProcessing(video_id, "", uid);
+        const videoData = await handleVideoProcessing(
+          video_id,
+          side_video_id,
+          uid
+        );
 
         // Redirect to edit-subtitles with the transcribe data
         router.push({
@@ -91,7 +97,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    const { video_id } = context.query;
+    const { video_id, side_video_id } = context.query;
 
     if (!video_id) {
       return {
@@ -106,6 +112,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       props: {
         video_id,
         uid: token.uid,
+        side_video_id,
       },
     };
   } catch (error) {
