@@ -73,25 +73,27 @@ export const authGoogle = async () => {
 
 export const logOut = async () => {
   await signOut(auth);
+  await fetch("/api/logout", {
+    method: "GET",
+  });
 };
 
 export const setCookies = async (user: User | null, force?: boolean) => {
   if (!user) {
     // Fetch API to set the cookie
-    await fetch("/api/logout", {
-      method: "GET",
-    });
-  } else {
-    const token = await user.getIdToken(force);
-    // Fetch API to set the cookie
-    await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token }),
-    });
+    return;
   }
+
+  const token = await user.getIdToken(force);
+  // Fetch API to set the cookie
+  await fetch("/api/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token }),
+  });
+
   return;
 };
 

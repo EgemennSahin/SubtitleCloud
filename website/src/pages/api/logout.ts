@@ -13,5 +13,6 @@ export default async function handler(
   destroyCookie({ res }, "session", {
     path: "/",
   });
+  
   res.status(200).json({ message: "Logout successful" });
 }
