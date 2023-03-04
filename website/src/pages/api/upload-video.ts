@@ -31,7 +31,8 @@ export default async function handler(
 
   let maxContentLength = 0;
   switch (folder) {
-    case "main" || "secondary":
+    case "main":
+    case "secondary":
       // Check if type starts with "video"
       if (!type.startsWith("video")) {
         return res.status(400).json({ message: "Invalid file type" });
