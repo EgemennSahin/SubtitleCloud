@@ -13,7 +13,6 @@ export async function createCheckoutSession(
   plan: string,
   isMonthly: boolean
 ) {
-  console.log("uid: ", uid);
   // Plan = "premium" or "business"
   // Term = "monthly" or "annually"
   const premium_monthly = "price_1MhbnlHRv5JZrE6uqyM0FJRp";

@@ -1,6 +1,7 @@
 import React from "react";
-import Head from "next/head";
 import { isPaidUser } from "@/helpers/stripe";
+import PricingPlans from "@/components/pricing-plans";
+import Seo from "@/components/seo";
 
 export default function PremiumPage({ uid }: { uid: string }) {
   return (
@@ -25,14 +26,14 @@ export default function PremiumPage({ uid }: { uid: string }) {
 }
 
 import { GetServerSidePropsContext } from "next";
-import { getToken, getUser } from "@/helpers/user";
+import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import PricingPlans from "@/components/pricing-plans";
-import Seo from "@/components/seo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const token = await getToken({ context });
+
+    console.log("token: ", token);
 
     if (!token) {
       return {

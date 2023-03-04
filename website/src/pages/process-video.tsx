@@ -20,13 +20,15 @@ export default function ProcessVideoPage({
       try {
         const transcribeData = await handleTranscribe(uid, video_id, token);
 
+        console.log("Finished");
+
         // Redirect to edit-subtitles with the transcribe data
         router.push({
           pathname: "/edit-video",
           query: {
             video_id: video_id,
-            download_transcript: transcribeData?.downloadUrl,
-            upload_transcript: transcribeData?.uploadUrl,
+            download_transcript: transcribeData?.download_url,
+            upload_transcript: transcribeData?.upload_url,
           },
         });
       } catch (error) {

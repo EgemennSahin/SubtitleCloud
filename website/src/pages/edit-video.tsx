@@ -1,5 +1,4 @@
-import UploadButton from "@/components/upload-button";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import TextButton from "@/components/text-button";
 import { useRouter } from "next/router";
 import Seo from "@/components/seo";

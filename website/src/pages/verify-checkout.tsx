@@ -46,7 +46,7 @@ export default function VerifyCheckoutPage() {
 }
 
 import { GetServerSidePropsContext } from "next";
-import { getToken, getUser } from "@/helpers/user";
+import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
 

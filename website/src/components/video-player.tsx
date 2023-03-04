@@ -98,7 +98,7 @@ export const VideoPlayer = ({
   switch (size) {
     case "small":
       width = "w-48";
-      barHeight = "h-2";
+      barHeight = "h-3";
       iconSize = "h-8 w-8";
       break;
     case "medium":

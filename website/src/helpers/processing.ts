@@ -59,11 +59,16 @@ export async function handleTranscribe(
       }),
     });
 
-    const subtitle = await response.json();
-    const downloadUrl = subtitle.download_url;
-    const uploadUrl = subtitle.upload_url;
+    console.log("Got result");
 
-    return { downloadUrl, uploadUrl };
+    const subtitle = await response.json();
+    const download_url = subtitle.download_url;
+    const upload_url = subtitle.upload_url;
+
+    console.log("Download URL: ", download_url);
+    console.log("Upload URL: ", upload_url);
+
+    return { download_url, upload_url };
   } catch (error: any) {
     console.log("Error processing video: ", error.message);
   }
