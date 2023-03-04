@@ -58,7 +58,7 @@ export default function uploadFunctions(setFile: (file: File) => void) {
 
 export async function handleUpload(
   file: Blob | null,
-  folder: "main" | "side" | "audio"
+  folder: "main" | "secondary" | "audio"
 ) {
   if (!file) {
     console.log("No file selected");

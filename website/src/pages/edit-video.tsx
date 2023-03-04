@@ -49,8 +49,18 @@ export default function EditVideoPage({
             <UploadButton
               size="medium"
               setFile={setFile}
-              text="Upload Secondary Video"
+              text="Select Secondary Video"
               disabled={false}
+            />
+            <TextButton
+              color="primary"
+              size="medium"
+              onClick={async () => {
+                // Upload the secondary video
+                const side_video_id = await handleUpload(file, "secondary");
+                console.log(side_video_id);
+              }}
+              text={"Upload"}
             />
           </div>
         </div>
@@ -60,7 +70,7 @@ export default function EditVideoPage({
             size="medium"
             onClick={async () => {
               // Upload the secondary video
-              const side_video_id = await handleUpload(file, "side");
+              const side_video_id = await handleUpload(file, "secondary");
 
               // Redirect to the video page
               router.push({
