@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { destroyCookie, setCookie } from "nookies";
+import { destroyCookie } from "nookies";
 
 export default async function handler(
   req: NextApiRequest,

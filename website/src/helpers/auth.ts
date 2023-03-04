@@ -10,7 +10,6 @@ import {
 } from "firebase/auth";
 import { setDoc, doc, getDoc } from "firebase/firestore";
 import { useEffect } from "react";
-import nookies from "nookies";
 
 export function isValidEmail(email: string) {
   // Regular expression to validate email addresses
@@ -84,7 +83,6 @@ export const setCookies = async (user: User | null, force?: boolean) => {
     });
   } else {
     const token = await user.getIdToken(force);
-    console.log(setCookies);
     // Fetch API to set the cookie
     await fetch("/api/login", {
       method: "POST",
