@@ -52,16 +52,6 @@ export default function EditVideoPage({
               text="Select Secondary Video"
               disabled={false}
             />
-            <TextButton
-              color="primary"
-              size="medium"
-              onClick={async () => {
-                // Upload the secondary video
-                const side_video_id = await handleUpload(file, "secondary");
-                console.log(side_video_id);
-              }}
-              text={"Upload"}
-            />
           </div>
         </div>
         <div className="mt-6 flex items-center justify-center">
