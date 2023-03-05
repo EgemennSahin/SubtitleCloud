@@ -9,6 +9,7 @@ import {
   User,
 } from "firebase/auth";
 import { setDoc, doc, getDoc } from "firebase/firestore";
+import { destroyCookie } from "nookies";
 import { useEffect } from "react";
 
 export function isValidEmail(email: string) {
@@ -73,14 +74,14 @@ export const authGoogle = async () => {
 
 export const logOut = async () => {
   await signOut(auth);
-  await fetch("/api/logout", {
-    method: "GET",
-  });
+
   window.location.reload();
 };
 
 export const setCookies = async (user: User | null, force?: boolean) => {
   if (!user) {
+    // Destroy the cookie without using an api
+    destroyCookie(null, "session", { path: "/" });
     return;
   }
 
