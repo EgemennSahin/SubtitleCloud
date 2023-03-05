@@ -55,7 +55,6 @@ function Navbar({ uid }: { uid: string }) {
             className="transition-textcolor hidden cursor-pointer py-3 px-4 text-xl font-bold tracking-wide text-slate-500 hover:text-slate-900 sm:block"
             onClick={async () => {
               await logOut();
-              router.reload();
             }}
           >
             Log out
@@ -71,7 +70,6 @@ function Navbar({ uid }: { uid: string }) {
               <button
                 onClick={async () => {
                   await logOut();
-                  router.reload();
                 }}
                 className="w-full rounded-b-md px-4 py-4 text-left text-lg font-medium text-gray-700"
               >

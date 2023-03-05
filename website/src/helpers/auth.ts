@@ -7,6 +7,7 @@ import {
   signOut,
   onIdTokenChanged,
   User,
+  onAuthStateChanged,
 } from "firebase/auth";
 import { setDoc, doc, getDoc } from "firebase/firestore";
 import { useEffect } from "react";
@@ -76,11 +77,12 @@ export const logOut = async () => {
   await fetch("/api/logout", {
     method: "GET",
   });
+  // Refresh the page
+  window.location.reload();
 };
 
 export const setCookies = async (user: User | null, force?: boolean) => {
   if (!user) {
-    // Fetch API to set the cookie
     return;
   }
 
@@ -99,7 +101,7 @@ export const setCookies = async (user: User | null, force?: boolean) => {
 
 export const useIdTokenListener = () => {
   useEffect(() => {
-    return onIdTokenChanged(auth, async (user) => {
+    return onAuthStateChanged(auth, async (user) => {
       setCookies(user);
     });
   }, []);
