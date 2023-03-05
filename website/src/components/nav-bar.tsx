@@ -10,55 +10,38 @@ function Navbar({ uid }: { uid: string }) {
   const router = useRouter();
 
   return (
-    <nav className="sticky top-0 z-50 flex flex-wrap items-center justify-between bg-white py-3 px-8 shadow">
-      <div className="flex flex-shrink-0 items-center text-white">
-        <Link className="flex items-center" href="/">
-          <Image
-            src="/shortzoo-logo/logo.svg"
-            alt="Shortzoo Logo"
-            width="0"
-            height="0"
-            sizes="100vw"
-            className="h-10 w-10"
-          />
-          <span
-            className="hidden bg-gradient-to-r from-teal-400 to-blue-600
-          bg-clip-text px-2 py-2 text-2xl font-semibold uppercase tracking-wider text-transparent hover:from-teal-500
-          hover:to-blue-700 sm:block"
-          >
-            ShortZoo
-          </span>
+    <nav className="sticky top-0 z-50 flex flex-wrap items-center justify-between bg-white py-3 px-8 shadow md:px-16">
+      <span className="flex flex-row items-center justify-between lg:justify-start">
+        <Link
+          className="tracking-relaxed transform text-lg font-bold tracking-tighter text-blue-600 transition duration-500 ease-in-out hover:text-teal-400 lg:pr-8"
+          href="/"
+        >
+          Shortzoo
         </Link>
 
-        {!uid && (
-          <a
-            className="transition-textcolor mx-5 cursor-pointer p-3 text-xl font-bold tracking-wide text-slate-700 hover:text-slate-900"
-            onClick={() => router.push("/pricing")}
-          >
-            Pricing
-          </a>
-        )}
-      </div>
+        <Link
+          className="focus:shadow-outline text-md px-4 text-gray-500 hover:text-blue-600 focus:outline-none"
+          href="/pricing"
+        >
+          Pricing
+        </Link>
+      </span>
 
       {uid ? (
         <div className="flex items-center gap-4">
-          <Link href="/dashboard">
-            <TextButton
-              text="Dashboard"
-              size="small"
-              color="gray"
-              style="hidden sm:block"
-            />
-          </Link>
-
-          <a
-            className="transition-textcolor hidden cursor-pointer py-3 px-4 text-xl font-bold tracking-wide text-slate-500 hover:text-slate-900 sm:block"
-            onClick={async () => {
-              await logOut();
-            }}
-          >
-            Log out
-          </a>
+          <div className="hidden list-none items-center gap-2 md:inline-flex lg:ml-auto">
+            <Link href="/dashboard" className="btn-primary">
+              Dashboard
+            </Link>
+            <button
+              className="btn-secondary"
+              onClick={async () => {
+                await logOut();
+              }}
+            >
+              Log out
+            </button>
+          </div>
 
           <div className="sm:hidden">
             <NavBarDropdown>
@@ -80,22 +63,16 @@ function Navbar({ uid }: { uid: string }) {
         </div>
       ) : (
         <div className="flex items-center gap-4">
-          <TextButton
-            onClick={() => router.push("/signup")}
-            text="Sign up"
-            size="small"
-            color="gray"
-            style="hidden sm:block"
-          />
+          <div className="hidden list-none items-center gap-2 md:inline-flex lg:ml-auto">
+            <Link href="/login" className="btn-secondary">
+              Log in
+            </Link>
+            <Link href="/signup" className="btn-primary">
+              Sign up
+            </Link>
+          </div>
 
-          <a
-            className="transition-textcolor hidden cursor-pointer py-3 px-4 text-xl font-bold tracking-wide text-slate-500 hover:text-slate-900 sm:block"
-            onClick={() => router.push("/login")}
-          >
-            Log in
-          </a>
-
-          <div className="sm:hidden">
+          <div className="md:hidden">
             <NavBarDropdown>
               <button
                 onClick={() => router.push("/signup")}

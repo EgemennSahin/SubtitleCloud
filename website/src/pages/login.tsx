@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import TextButton from "@/components/text-button";
-import Head from "next/head";
 import { authGoogle, logIn } from "@/helpers/auth";
 
 export default function LoginPage() {
@@ -10,93 +7,131 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+
+    try {
+      await logIn(email, password);
+
+      router.push("/dashboard");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Seo
         title="Log In"
-        description="Sign in to our short video subtitling solution and gain access to your account."
+        description="Log in to our short video subtitling solution and gain access to your account."
       />
-      <div className="my-8 flex w-2/5 grow flex-col self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
-        <div className="drop-shadow">
-          <h2 className="text-style-subtitle">
-            <span className="hidden sm:block">
-              Log in to your Shortzoo account
-            </span>
-            <span className="sm:hidden">Log in</span>
-          </h2>
 
-          <div className="mb-8 flex flex-col">
-            <label className="text-lg font-bold tracking-wide text-slate-600">
-              Email
-            </label>
-            <input
-              type="email"
-              className="rounded-md border-2 border-slate-700 bg-white p-2.5 text-black shadow-inner"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-
-          <div className="mb-8 flex flex-col">
-            <div className="flex justify-between">
-              <label className="text-lg font-bold tracking-wide text-slate-600">
-                Password
-              </label>
-              <Link href="/password-reset" passHref>
-                <p className="transition-textcolor text-lg font-bold tracking-wide text-teal-500 hover:text-teal-600">
-                  <span className="hidden sm:block">Forgot password? </span>
-                  <span className="sm:hidden">Forgot?</span>
-                </p>
-              </Link>
+      <section>
+        <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+          <div className="mx-auto w-full max-w-xl lg:w-96">
+            <div>
+              <h2 className="mt-6 text-3xl font-extrabold text-neutral-600">
+                Log in
+              </h2>
             </div>
 
-            <input
-              type="password"
-              className="rounded-md border-2 border-slate-700 bg-white p-2.5 text-black shadow-inner"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+            <div className="mt-8">
+              <div className="mt-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-neutral-600"
+                    >
+                      {" "}
+                      Email address{" "}
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        required
+                        placeholder="Your Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="block w-full transform rounded-lg border border-transparent bg-gray-50 px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+                      />
+                    </div>
+                  </div>
 
-          <div className="flex flex-col">
-            <TextButton
-              color="primary"
-              size="small"
-              text="Continue"
-              onClick={async () => {
-                try {
-                  await logIn(email, password);
-                  router.push("/dashboard");
-                } catch (error: any) {
-                  if (error.code === "auth/user-not-found") {
-                    alert("No user found with this email.");
-                  } else if (error.code === "auth/wrong-password") {
-                    alert("Incorrect password.");
-                  } else {
-                    alert("An error occurred. Please try again.");
-                  }
-                }
-              }}
-            />
+                  <div className="space-y-1">
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium text-neutral-600"
+                    >
+                      {" "}
+                      Password{" "}
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        autoComplete="current-password"
+                        required
+                        placeholder="Your Password"
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                        className="block w-full transform rounded-lg border border-transparent bg-gray-50 px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+                      />
+                    </div>
+                  </div>
 
-            <span className="my-4 text-center text-lg font-bold tracking-wide text-slate-600">
-              or
-            </span>
+                  <div className="flex items-center justify-end">
+                    <div className="text-sm">
+                      <Link
+                        href="/password-reset"
+                        className="font-medium text-blue-600 hover:text-blue-500"
+                      >
+                        {" "}
+                        Forgot your password?{" "}
+                      </Link>
+                    </div>
+                  </div>
 
-            <TextButton
-              color="red"
-              size="small"
-              text="Sign in with Google"
-              onClick={async () => {
-                try {
-                  await authGoogle();
-                  router.push("/dashboard");
-                } catch (error: any) {
-                  alert("An error occured. Please try again.");
-                }
-              }}
-            />
+                  <div>
+                    <button
+                      type="submit"
+                      className="flex w-full transform items-center justify-center rounded-xl bg-blue-600 px-10 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    >
+                      Log in
+                    </button>
+                  </div>
+                </form>
+                <div className="relative my-4">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-300"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="bg-white px-2 text-neutral-600">
+                      {" "}
+                      Or continue with{" "}
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <button
+                    onClick={async () => {
+                      await authGoogle();
+                      router.push("/dashboard");
+                    }}
+                    className="flex w-full transform items-center justify-center rounded-xl bg-red-600 px-10 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                  >
+                    Log in with Google
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 }
@@ -105,6 +140,7 @@ import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
+import Link from "next/link";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

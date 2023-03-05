@@ -1,128 +1,125 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import TextButton from "@/components/text-button";
-import Head from "next/head";
-import { signUp, authGoogle } from "@/helpers/auth";
+import { authGoogle, signUp } from "@/helpers/auth";
 
-export default function SignUpPage() {
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [validEmail, setValidEmail] = useState(true);
-  const [showPasswordMessage, setShowPasswordMessage] = useState(false);
   const router = useRouter();
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+
+    try {
+      await signUp(email, password);
+
+      router.push("/dashboard");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
       <Seo
-        title="Sign Up"
-        description="Sign up for our short video subtitling solution and start adding subtitles to your videos in minutes. Increase your reach and engagement with subtitles."
+        title="Log In"
+        description="Sign in to our short video subtitling solution and gain access to your account."
       />
-      <div className="my-8 flex w-2/5 grow flex-col self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
-        <div className="drop-shadow">
-          <h2 className="text-style-subtitle">
-            <span className="hidden sm:block">
-              Create your Shortzoo account
-            </span>
-            <span className="sm:hidden">Create account</span>
-          </h2>
-          <div className="flex flex-col">
-            <div
-              className="mb-8 flex flex-col"
-              style={{ position: "relative" }}
-            >
-              <label className="text-lg font-bold tracking-wide text-slate-600">
-                Email
-              </label>
-              <input
-                type="email"
-                className="rounded-md border-2 border-slate-700 bg-white p-2.5 text-black shadow-inner"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {!validEmail && (
-                <p
-                  className="absolute top-full left-0 mt-1 text-red-400"
-                  style={{ zIndex: 1 }}
-                >
-                  Please enter a valid email address
-                </p>
-              )}
+
+      <section>
+        <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+          <div className="mx-auto w-full max-w-xl lg:w-96">
+            <div>
+              <h2 className="mt-6 text-3xl font-extrabold text-neutral-600">
+                Sign up
+              </h2>
             </div>
 
-            <div
-              className="mb-8 flex flex-col"
-              style={{ position: "relative" }}
-            >
-              <div className="flex">
-                <label className="text-lg font-bold tracking-wide text-slate-600">
-                  Password
-                </label>
+            <div className="mt-8">
+              <div className="mt-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-neutral-600"
+                    >
+                      {" "}
+                      Email address{" "}
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        required
+                        placeholder="Your Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="block w-full transform rounded-lg border border-transparent bg-gray-50 px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium text-neutral-600"
+                    >
+                      {" "}
+                      Password{" "}
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        autoComplete="current-password"
+                        required
+                        placeholder="Your Password"
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                        className="block w-full transform rounded-lg border border-transparent bg-gray-50 px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <button
+                      type="submit"
+                      className="flex w-full transform items-center justify-center rounded-xl bg-blue-600 px-10 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    >
+                      Sign up
+                    </button>
+                  </div>
+                </form>
+                <div className="relative my-4">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-300"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="bg-white px-2 text-neutral-600">
+                      {" "}
+                      Or continue with{" "}
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <button
+                    onClick={async () => {
+                      await authGoogle();
+                      router.push("/dashboard");
+                    }}
+                    className="flex w-full transform items-center justify-center rounded-xl bg-red-600 px-10 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                  >
+                    Sign up with Google
+                  </button>
+                </div>
               </div>
-
-              <input
-                type="password"
-                className="rounded-md border-2 border-slate-700 bg-white p-2.5 text-black shadow-inner"
-                onChange={(e) => setPassword(e.target.value)}
-                onFocus={() => setShowPasswordMessage(true)}
-                onBlur={() => setShowPasswordMessage(false)}
-              />
-
-              {showPasswordMessage && (
-                <p
-                  className="absolute top-full place-self-end rounded-md bg-slate-100 bg-opacity-95 p-4 text-sm text-slate-500 drop-shadow-xl"
-                  style={{ zIndex: 1 }}
-                >
-                  Password must contain at least:
-                  <ul>
-                    <li className="font-bold">8 characters</li>
-                    <li className="font-bold">1 uppercase letter</li>
-                    <li className="font-bold">1 lowercase letter</li>
-                    <li className="font-bold">1 number</li>
-                  </ul>
-                </p>
-              )}
             </div>
-            <TextButton
-              color="primary"
-              size="small"
-              text="Sign up"
-              onClick={async () => {
-                try {
-                  await signUp(email, password);
-                  router.push("/dashboard");
-                } catch (error: any) {
-                  if (error.message === "Invalid email") {
-                    setValidEmail(false);
-                  } else if (error.message === "Invalid password") {
-                    setValidEmail(true);
-                    setShowPasswordMessage(true);
-                  } else {
-                    alert("An error occured. Please try again.");
-                    console.error(error);
-                  }
-                }
-              }}
-            />
-
-            <span className="my-4 text-center text-lg font-bold tracking-wide text-slate-600">
-              or
-            </span>
-
-            <TextButton
-              color="red"
-              size="small"
-              text="Sign up with Google"
-              onClick={async () => {
-                try {
-                  await authGoogle();
-                  router.push("/dashboard");
-                } catch (error: any) {
-                  alert("An error occured. Please try again.");
-                }
-              }}
-            />
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 }
@@ -131,6 +128,7 @@ import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
+import Link from "next/link";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

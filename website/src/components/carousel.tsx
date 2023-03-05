@@ -10,7 +10,7 @@ const CarouselColumn = ({
   speed: number;
   initOffset: number;
 }) => {
-  const [offset, setOffset] = useState(initOffset);
+  const [offset, setOffset] = useState(0);
   const itemHeight = 500; // assuming each item has a height of 384px
   const totalHeight = items.length * itemHeight * 2; // double the height to create a seamless loop
 
@@ -75,21 +75,8 @@ const CarouselColumn = ({
 };
 
 export const ThreeCarouselColumns = () => {
-  const items1 = [
-    "/images/Test.png",
-    "/images/Test.png",
-    "/images/Test.png",
-    "/images/Test.png",
-    "/images/Test.png",
-  ];
-  const items2 = [
-    "/images/Test.png",
-    "/images/Test.png",
-    "/images/Test.png",
-    "/images/Test.png",
-    "/images/Test.png",
-    "/images/Test.png",
-  ];
+  const items1 = ["/images/Test.png"];
+  const items2 = ["/images/Test.png"];
   const items3 = [
     "/images/Test.png",
     "/images/Test.png",
@@ -100,9 +87,9 @@ export const ThreeCarouselColumns = () => {
   ];
   return (
     <div className="grid grid-cols-3 gap-4">
-      <CarouselColumn items={items1} speed={56} initOffset={550} />
-      <CarouselColumn items={items2} speed={147} initOffset={230} />
-      <CarouselColumn items={items3} speed={110} initOffset={350} />
+      <CarouselColumn items={items1} speed={56} initOffset={35} />
+      <CarouselColumn items={items2} speed={147} initOffset={0} />
+      <CarouselColumn items={items3} speed={110} initOffset={80} />
     </div>
   );
 };

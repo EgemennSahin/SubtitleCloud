@@ -26,53 +26,68 @@ export default function EditVideoPage({
         title="Edit Subtitles"
         description="Upload your video to be processed in our cloud servers. Be notified when your video is ready. Quickly and securely process your video files."
       />
-      <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-200 to-slate-400 py-5 sm:py-9">
-        <h2 className="mb-8 bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text px-4 text-center text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
-          Edit Video
-        </h2>
 
-        <div className="grid grid-cols-2 items-center">
-          <div className="flex flex-col items-center justify-center">
-            <VideoPlayer src={video_url} size="medium" />
-          </div>
+      <div className="flex overflow-hidden rounded-lg bg-white">
+        <Sidebar />
+        <div className="flex w-0 flex-1 flex-col overflow-hidden">
+          <main className="relative flex-1 overflow-y-auto focus:outline-none">
+            <div className="py-6">
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+                <h1 className="mb-8 text-center text-3xl text-neutral-600">
+                  Edit video
+                </h1>
 
-          <div className="flex h-full flex-col items-center justify-start">
-            <h3 className="text-style-subheader">Subtitles</h3>
-            <SubtitleInput
-              downloadUrl={download_transcript}
-              uploadUrl={upload_transcript}
-              uid={uid}
-            />
-          </div>
+                <div className="grid grid-cols-2 items-center">
+                  <div className="flex flex-col items-center justify-center">
+                    <VideoPlayer src={video_url} size="medium" />
+                  </div>
 
-          <div className="mt-3 flex flex-col items-center justify-center">
-            <UploadButton
-              size="medium"
-              setFile={setFile}
-              text="Select Secondary Video"
-              disabled={false}
-            />
-          </div>
-        </div>
-        <div className="mt-6 flex items-center justify-center">
-          <TextButton
-            color="primary"
-            size="medium"
-            onClick={async () => {
-              // Upload the secondary video
-              const side_video_id = await handleUpload(file, "secondary");
+                  <div className="flex h-full flex-col items-center justify-start gap-2">
+                    <h3>Subtitles</h3>
+                    <SubtitleInput
+                      downloadUrl={download_transcript}
+                      uploadUrl={upload_transcript}
+                      uid={uid}
+                    />
+                    <UploadButton
+                      size="medium"
+                      setFile={setFile}
+                      text="Select Secondary Video"
+                      disabled={false}
+                    />
+                  </div>
+                </div>
 
-              // Redirect to the video page
-              router.push({
-                pathname: "/add-to-video",
-                query: {
-                  video_id: video_id,
-                  side_video_id: side_video_id,
-                },
-              });
-            }}
-            text={"Submit"}
-          />
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+                  <div className="py-4">
+                    <div className="items-bottom mt-6 flex justify-center">
+                      <button
+                        onClick={async () => {
+                          // Upload the secondary video
+                          const side_video_id = await handleUpload(
+                            file,
+                            "secondary"
+                          );
+
+                          // Redirect to the video page
+                          router.push({
+                            pathname: "/add-to-video",
+                            query: {
+                              video_id: video_id,
+                              side_video_id: side_video_id,
+                            },
+                          });
+                        }}
+                        className="btn-primary"
+                      >
+                        Continue
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
         </div>
       </div>
     </>
@@ -87,6 +102,7 @@ import { parseCookies } from "nookies";
 import SubtitleInput from "@/components/TextInput";
 import UploadButton from "@/components/upload-button";
 import { handleUpload } from "@/helpers/upload";
+import Sidebar from "@/components/side-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

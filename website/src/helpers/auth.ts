@@ -68,7 +68,6 @@ export const authGoogle = async () => {
     }
   } catch (error) {
     console.log(error);
-    throw new Error("Error signing up");
   }
 };
 

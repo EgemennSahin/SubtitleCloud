@@ -91,6 +91,21 @@ export const VideoPlayer = ({
     return percentage;
   }
 
+  async function downloadVideo() {
+    const response = await fetch(src as string);
+    const blob = await response.blob();
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "Shortzoo Captioned Video.mp4";
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
+  const copyLinkToClipboard = () => {
+    const websiteLink = window.location.href;
+    navigator.clipboard.writeText(websiteLink);
+  };
+
   let width = "";
   let barHeight = "";
   let iconSize = "";
@@ -161,65 +176,78 @@ export const VideoPlayer = ({
   };
 
   return (
-    <div className="relative">
-      <video
-        ref={videoRef}
-        src={src}
-        className={`${width} rounded-lg`}
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
-        onEnded={() => setIsPlaying(false)}
-        onClick={handlePlayPause}
-      />
+    <div className="flex flex-col items-center">
+      <div className="relative h-fit w-fit">
+        <video
+          ref={videoRef}
+          src={src}
+          className={`${width} rounded-lg`}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          onEnded={() => setIsPlaying(false)}
+          onClick={handlePlayPause}
+        />
 
-      <button
-        className="absolute top-1 right-1 rounded-3xl bg-slate-500 bg-opacity-30 p-2 text-slate-50 hover:bg-slate-700 hover:bg-opacity-20 hover:text-slate-200"
-        onClick={handleMuteUnmute}
-      >
-        {isMuted ? (
-          <SpeakerXMarkIcon className={iconSize} />
-        ) : (
-          <SpeakerWaveIcon className={iconSize} />
-        )}
-      </button>
-
-      <div className="absolute bottom-0 flex flex-col">
-        <div
-          className={`${barHeight} ${width} cursor-pointer bg-slate-300 outline-none`}
-          onMouseDown={handleSliderMouseDown}
-          onMouseUp={handleSliderMouseUp}
-          onMouseMove={handleSliderMouseMove}
-          onMouseLeave={handleSliderMouseUp}
+        <button
+          className="absolute top-1 right-1 rounded-3xl bg-slate-500 bg-opacity-30 p-2 text-slate-50 hover:bg-slate-700 hover:bg-opacity-20 hover:text-slate-200"
+          onClick={handleMuteUnmute}
         >
-          <div
-            className={`${barHeight} bg-gradient-to-r from-teal-400 to-blue-400`}
-            style={{
-              width: `${isFinished ? 100 : getWatchedPercentage()}%`,
-              transition: isDragging ? "none" : "width 0.1s linear",
-            }}
-          />
-        </div>
+          {isMuted ? (
+            <SpeakerXMarkIcon className={iconSize} />
+          ) : (
+            <SpeakerWaveIcon className={iconSize} />
+          )}
+        </button>
 
-        <div className="flex w-full items-center justify-between rounded-b-lg bg-slate-900 bg-opacity-50 px-2 py-1">
-          <button
-            className="p-2 text-white hover:text-slate-300"
-            onClick={handlePlayPause}
+        <div className="absolute bottom-0 flex flex-col">
+          <div
+            className={`${barHeight} ${width} cursor-pointer bg-slate-300 outline-none`}
+            onMouseDown={handleSliderMouseDown}
+            onMouseUp={handleSliderMouseUp}
+            onMouseMove={handleSliderMouseMove}
+            onMouseLeave={handleSliderMouseUp}
           >
-            {isPlaying ? (
-              <PauseIcon className={iconSize} />
-            ) : isFinished ? (
-              <ArrowPathIcon className={iconSize} />
-            ) : (
-              <PlayIcon className={iconSize} />
-            )}
-          </button>
-          <button
-            className="p-2 text-white hover:text-slate-200"
-            onClick={handleFullScreen}
-          >
-            <ArrowsPointingOutIcon className={iconSize} />
-          </button>
+            <div
+              className={`${barHeight} bg-gradient-to-r from-teal-400 to-blue-400`}
+              style={{
+                width: `${isFinished ? 100 : getWatchedPercentage()}%`,
+                transition: isDragging ? "none" : "width 0.1s linear",
+              }}
+            />
+          </div>
+
+          <div className="flex w-full items-center justify-between rounded-b-lg bg-slate-900 bg-opacity-50 px-2 py-1">
+            <button
+              className="p-2 text-white hover:text-slate-300"
+              onClick={handlePlayPause}
+            >
+              {isPlaying ? (
+                <PauseIcon className={iconSize} />
+              ) : isFinished ? (
+                <ArrowPathIcon className={iconSize} />
+              ) : (
+                <PlayIcon className={iconSize} />
+              )}
+            </button>
+            <button
+              className="p-2 text-white hover:text-slate-200"
+              onClick={handleFullScreen}
+            >
+              <ArrowsPointingOutIcon className={iconSize} />
+            </button>
+          </div>
         </div>
+      </div>
+      <div className="mt-4 flex gap-4">
+        <button onClick={copyLinkToClipboard} className="btn-secondary">
+          Share
+        </button>
+        <button
+          onClick={downloadVideo}
+          className="focus:ring-offset-2; block transform items-center rounded-xl bg-blue-600 px-10 py-3 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Download
+        </button>
       </div>
     </div>
   );

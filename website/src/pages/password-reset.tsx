@@ -2,26 +2,22 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import TextButton from "@/components/text-button";
 
 export default function PasswordResetPage() {
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-
   const router = useRouter();
+  const [email, setEmail] = useState("");
 
-  function handlePasswordReset(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    sendPasswordResetEmail(auth, email)
-      .then(() => {
-        setMessage("Check your email to reset password");
-      })
-      .catch((error: any) => {
-        console.log(error);
-        setError("E-mail not found");
-      });
+    try {
+      await sendPasswordResetEmail(auth, email);
+
+      // Show modal and redirect to login page
+
+      router.push("/login");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -30,47 +26,55 @@ export default function PasswordResetPage() {
         title="Reset Password"
         description="Reset your password and regain access to your account on our short video subtitling solution."
       />
-      <div className="my-8 flex w-2/5 grow flex-col self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
-        <div className="drop-shadow">
-          <h2 className="text-style-subtitle">
-            <span className="hidden sm:block">
-              Reset your Shortzoo password
-            </span>
-            <span className="sm:hidden">Reset password</span>
-          </h2>
-          <h3 className="mb-4 hidden text-slate-600 sm:block">
-            Enter the email associated with your account and you will receive a
-            link to reset your password.
-          </h3>
-          <div className="flex flex-col">
-            <div
-              className="mb-8 flex flex-col"
-              style={{ position: "relative" }}
-            >
-              <label className="text-lg font-bold tracking-wide text-slate-600">
-                Email
-              </label>
-              <input
-                type="email"
-                className="rounded-md border-2 border-slate-700 bg-white p-2.5 text-black shadow-inner"
-                onChange={(e) => setEmail(e.target.value)}
-              />
+      <section>
+        <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+          <div className="mx-auto w-full max-w-xl lg:w-96">
+            <div>
+              <h2 className="mt-6 text-3xl font-extrabold text-neutral-600">
+                Reset password
+              </h2>
             </div>
 
-            <TextButton
-              size="small"
-              text="Continue"
-              color="primary"
-              onClick={() => handlePasswordReset}
-            />
-            <Link href="/login" passHref>
-              <p className="transition-textcolor mt-5 text-center text-lg font-bold tracking-wide text-teal-500 hover:text-teal-600">
-                Return to sign in
-              </p>
-            </Link>
+            <div className="mt-8">
+              <div className="mt-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-neutral-600"
+                    >
+                      {" "}
+                      Email address{" "}
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        required
+                        placeholder="Your Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="block w-full transform rounded-lg border border-transparent bg-gray-50 px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <button
+                      type="submit"
+                      className="flex w-full transform items-center justify-center rounded-xl bg-blue-600 px-10 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    >
+                      Log in
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 }

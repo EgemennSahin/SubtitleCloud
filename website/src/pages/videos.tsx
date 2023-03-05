@@ -11,11 +11,19 @@ export default function DashboardPage({ ...props }) {
         description="Access your generated videos on our short video subtitling solution."
       />
 
-      <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-50 to-slate-200 px-4 py-5 sm:py-9">
-        <h1 className="text-style-title"> Videos</h1>
-
-        <div className="flex flex-col gap-4 sm:flex-row">
-          <VideoList uid={props.uid} />
+      <div className="flex overflow-hidden rounded-lg bg-white">
+        <Sidebar />
+        <div className="flex w-0 flex-1 flex-col overflow-hidden">
+          <main className="relative flex-1 overflow-y-auto focus:outline-none">
+            <div className="py-6">
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+                <h1 className="mb-8 text-center text-3xl text-neutral-600">
+                  Your videos
+                </h1>
+              </div>
+              <VideoList uid={props.uid} />
+            </div>
+          </main>
         </div>
       </div>
     </>
@@ -27,6 +35,7 @@ import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
 import VideoList from "@/components/video-list";
+import Sidebar from "@/components/side-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

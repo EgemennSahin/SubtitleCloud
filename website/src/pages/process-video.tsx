@@ -50,42 +50,50 @@ export default function ProcessVideoPage({
         title="Process Video"
         description="Upload your video to be processed in our cloud servers. Be notified when your video is ready. Quickly and securely process your video files."
       />
-      <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-200 to-slate-400 py-5 sm:py-9">
-        <div className="flex h-fit w-fit flex-col items-center justify-start px-5">
-          <h2 className="mb-8 bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text px-4 text-center text-4xl font-bold leading-relaxed tracking-tighter text-transparent">
-            Your video is being transcribed.
-          </h2>
+      <div className="flex overflow-hidden rounded-lg bg-white">
+        <Sidebar />
+        <div className="flex w-0 flex-1 flex-col overflow-hidden">
+          <main className="relative flex-1 overflow-y-auto focus:outline-none">
+            <div className="py-6">
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+                <h1 className="mb-8 text-center text-3xl text-neutral-600">
+                  Transcribing...
+                </h1>
+                <div className="my-5 flex flex-col items-center justify-center">
+                  <Spinner size="large" />
 
-          <Spinner size="large" />
-
-          <h3 className="text-md linear-wipe my-8 px-4 text-center">
-            <span className="sm:hidden">
-              This may take a few minutes. Please do not close the window or
-              navigate away from this page.
-            </span>
-            <span className="hidden sm:block">
-              This may take a few minutes.
-            </span>
-          </h3>
+                  <h3 className="text-md linear-wipe my-12 px-4 text-center">
+                    <span className="sm:hidden">
+                      This may take a few minutes. Please do not close the
+                      window or navigate away from this page.
+                    </span>
+                    <span className="hidden sm:block">
+                      This may take a few minutes.
+                    </span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </main>
         </div>
-
-        {!token && (
-          <div style={{ position: "fixed", bottom: 0, right: 0 }}>
-            <Turnstile
-              className="mt-7"
-              siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
-              scriptOptions={{ async: true, defer: true, appendTo: "head" }}
-              onSuccess={(token: string) => {
-                setToken(token);
-              }}
-              options={{
-                size: "compact",
-                theme: "light",
-              }}
-            />
-          </div>
-        )}
       </div>
+
+      {!token && (
+        <div style={{ position: "fixed", bottom: 0, right: 0 }}>
+          <Turnstile
+            className="mt-7"
+            siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
+            scriptOptions={{ async: true, defer: true, appendTo: "head" }}
+            onSuccess={(token: string) => {
+              setToken(token);
+            }}
+            options={{
+              size: "compact",
+              theme: "light",
+            }}
+          />
+        </div>
+      )}
     </>
   );
 }
@@ -95,6 +103,7 @@ import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
 import { handleTranscribe } from "@/helpers/processing";
+import Sidebar from "@/components/side-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

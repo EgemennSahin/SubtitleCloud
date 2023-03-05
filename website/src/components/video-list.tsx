@@ -26,7 +26,7 @@ export default function VideoList({ uid }: { uid: string }) {
     <ul className="grid grid-cols-4 gap-8">
       {videos.map((video, index) => (
         <li className="flex items-center justify-center" key={index}>
-          <VideoPlayer src={video} />
+          <VideoPlayer size="small" src={video} />
         </li>
       ))}
     </ul>

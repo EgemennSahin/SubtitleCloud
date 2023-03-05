@@ -11,26 +11,18 @@ export default function DashboardPage({ ...props }) {
         description="Access your generated videos on our short video subtitling solution. Generate subtitles for your videos in a few minutes."
       />
 
-      <div className="flex grow flex-col items-center justify-start bg-gradient-to-b from-slate-50 to-slate-200 px-4 py-5 sm:py-9">
-        <h1 className="text-style-title"> Dashboard</h1>
-
-        <div className="flex flex-col gap-4 sm:flex-row">
-          <TextButton
-            color="primary"
-            size="medium"
-            text="Subtitle"
-            onClick={() => {
-              router.push("/process-video");
-            }}
-          />
-          <TextButton
-            size="medium"
-            color="secondary"
-            text="Videos"
-            onClick={() => {
-              router.push("/videos");
-            }}
-          />
+      <div className="flex overflow-hidden rounded-lg bg-white">
+        <Sidebar />
+        <div className="flex w-0 flex-1 flex-col overflow-hidden">
+          <main className="relative flex-1 overflow-y-auto focus:outline-none">
+            <div className="py-6">
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+                <h1 className="mb-8 text-center text-3xl text-neutral-600">
+                  Your dashboard
+                </h1>
+              </div>
+            </div>
+          </main>
         </div>
       </div>
     </>
@@ -43,6 +35,7 @@ import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
 import { auth } from "@/config/firebase";
 import Seo from "@/components/seo";
+import Sidebar from "@/components/side-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
