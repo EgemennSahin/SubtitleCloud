@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { destroyCookie } from "nookies";
+import { setCookie } from "nookies";
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,9 +10,10 @@ export default async function handler(
     return;
   }
 
-  destroyCookie({ res }, "session", {
+  setCookie({ res }, "session", "", {
+    maxAge: 0, // Expires in 2 weeks
     path: "/",
   });
-  
+
   res.status(200).json({ message: "Logout successful" });
 }

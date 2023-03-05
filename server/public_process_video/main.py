@@ -1,5 +1,5 @@
 from audioProcessing import process_audio
-from google.cloud import storage
+from google.cloud import storage, firestore
 import functions_framework
 from flask import json
 import requests
@@ -76,7 +76,7 @@ def public_process_video(request):
             print("Downloading: ", model)
             pickled_model = model + ".pkl.bz2"
             blob =  models_bucket.blob("models/" + pickled_model)
-            blob.chunk_size =1<<20
+            blob.chunk_size =1<<30
             blob.download_to_filename(
                 "/tmp/" + pickled_model)
             with bz2.BZ2File("/tmp/" + pickled_model, 'rb') as pickle_file:
@@ -118,13 +118,25 @@ def public_process_video(request):
         method='PUT'
     )
 
+    # Delete all the temporary files
+    os.remove(file_tmp_path)
+    os.remove(output_file)
+
+    # Decrease the number of credits
+    print("Decreasing credits")
+    db = firestore.client()
+    user_ref = db.collection('users').document(uid)
+
+    user_ref.update({
+        'video_credit': firestore.Increment(-1)
+    })
+
     # Set CORS headers for the main request
     headers = {
         'Access-Control-Allow-Origin': 'https://www.shortzoo.com',
         'Content-Type': 'application/json'
     }
     
-
     # Return the edited video's url
     response_body = {'download_url': download_url, 'upload_url': upload_url}
     response = json.dumps(response_body)
