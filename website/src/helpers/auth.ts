@@ -9,7 +9,7 @@ import {
   User,
 } from "firebase/auth";
 import { setDoc, doc, getDoc } from "firebase/firestore";
-import { destroyCookie } from "nookies";
+import { destroyCookie, setCookie } from "nookies";
 import { useEffect } from "react";
 
 export function isValidEmail(email: string) {
@@ -87,12 +87,20 @@ export const setCookies = async (user: User | null, force?: boolean) => {
 
   const token = await user.getIdToken(force);
   // Fetch API to set the cookie
-  await fetch("/api/login", {
+  const cookie = await fetch("/api/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ token }),
+  });
+
+  // Set the cookie
+  const { sessionCookie } = await cookie.json();
+
+  setCookie(null, "session", sessionCookie, {
+    maxAge: 60 * 60 * 24 * 14, // Expires in 2 weeks
+    path: "/",
   });
 
   return;

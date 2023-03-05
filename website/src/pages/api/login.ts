@@ -17,11 +17,10 @@ export default async function handler(
     const sessionCookie = await firebaseAdmin
       .auth()
       .createSessionCookie(token, { expiresIn: 60 * 60 * 24 * 14 * 1000 }); // Expires in 2 weeks
-    setCookie({ res }, "session", sessionCookie, {
-      maxAge: 60 * 60 * 24 * 14, // Expires in 2 weeks
-      path: "/",
-    });
-    res.status(200).json({ message: "Login successful" });
+
+    res
+      .status(200)
+      .json({ sessionCookie: sessionCookie, message: "Login successful" });
   } catch (error) {
     console.error(error);
     res.status(401).json({ message: "Invalid email or password" });
