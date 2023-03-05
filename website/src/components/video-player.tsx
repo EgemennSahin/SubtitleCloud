@@ -12,9 +12,11 @@ import {
 export const VideoPlayer = ({
   src,
   size,
+  hideControls,
 }: {
   src: string;
   size?: "small" | "medium" | "large";
+  hideControls?: boolean;
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -238,17 +240,19 @@ export const VideoPlayer = ({
           </div>
         </div>
       </div>
-      <div className="mt-4 flex gap-4">
-        <button onClick={copyLinkToClipboard} className="btn-secondary">
-          Share
-        </button>
-        <button
-          onClick={downloadVideo}
-          className="focus:ring-offset-2; block transform items-center rounded-xl bg-blue-600 px-10 py-3 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          Download
-        </button>
-      </div>
+      {!hideControls && (
+        <div className="mt-4 flex gap-4">
+          <button onClick={copyLinkToClipboard} className="btn-secondary">
+            Share
+          </button>
+          <button
+            onClick={downloadVideo}
+            className="focus:ring-offset-2; block transform items-center rounded-xl bg-blue-600 px-10 py-3 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Download
+          </button>
+        </div>
+      )}
     </div>
   );
 };

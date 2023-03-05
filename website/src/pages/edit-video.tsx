@@ -39,7 +39,7 @@ export default function EditVideoPage({
 
                 <div className="grid grid-cols-2 items-center">
                   <div className="flex flex-col items-center justify-center">
-                    <VideoPlayer src={video_url} size="medium" />
+                    <VideoPlayer src={video_url} size="medium" hideControls />
                   </div>
 
                   <div className="flex h-full flex-col items-center justify-start gap-2">

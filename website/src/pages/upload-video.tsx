@@ -42,7 +42,11 @@ export default function UploadVideo() {
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center gap-4">
-                    <VideoPlayer size="small" src={URL.createObjectURL(file)} />
+                    <VideoPlayer
+                      size="small"
+                      src={URL.createObjectURL(file)}
+                      hideControls
+                    />
                     <UploadButton
                       size="medium"
                       setFile={setFile}
