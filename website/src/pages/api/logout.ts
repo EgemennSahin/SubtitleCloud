@@ -11,7 +11,7 @@ export default async function handler(
   }
 
   setCookie({ res }, "session", "", {
-    maxAge: 0, // Expires in 2 weeks
+    maxAge: 0,
     path: "/",
   });
 
