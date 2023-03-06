@@ -6,10 +6,13 @@ export default function Hero() {
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:px-12 lg:px-24 lg:py-24">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center">
         <div className="w-full rounded-xl lg:w-1/2 lg:max-w-lg">
-          <div className="relative mx-auto w-full max-w-lg">
+          <div className="relative  mx-auto w-full max-w-lg">
+            <div className="animate-blob absolute top-0 -left-4 h-72 w-72 rounded-full bg-teal-100 opacity-70 mix-blend-multiply blur-xl filter"></div>
+
+            <div className="animate-blob animation-delay-4000 absolute -bottom-24 right-20 h-72 w-72 rounded-full bg-blue-100 opacity-70 mix-blend-multiply blur-xl filter"></div>
             <div className="relative">
               <Image
-                className="mx-auto h-64 w-fit shadow-2xl sm:h-96"
+                className="mx-auto h-64 w-fit sm:h-96"
                 width="0"
                 height="0"
                 sizes="100vw"
