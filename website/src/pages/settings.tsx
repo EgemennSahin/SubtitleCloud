@@ -7,6 +7,7 @@ import React from "react";
 import Link from "next/link";
 import BottomNavigation from "@/components/bottom-navigation";
 import {
+  ArrowLeftOnRectangleIcon,
   ArrowUpTrayIcon,
   Cog6ToothIcon,
   CreditCardIcon,
@@ -66,8 +67,7 @@ export default function DashboardPage({ ...props }) {
                   <div className="flex w-1/3 flex-col items-center p-6">
                     <Link
                       href="/"
-                      className="focus:ring-offset-2; block transform items-center rounded-xl border-2 border-white px-10 py-2.5 text-center text-base font-medium text-red-600 shadow-md transition duration-500 ease-in-out hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-gray-500
-"
+                      className="focus:ring-offset-2; block transform items-center rounded-xl border-2 border-white px-10 py-2.5 text-center text-base font-medium text-red-600 shadow-md transition duration-500 ease-in-out hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
                     >
                       <div className="flex flex-col items-center py-4">
                         <TrashIcon
@@ -76,6 +76,23 @@ export default function DashboardPage({ ...props }) {
                         />
 
                         <div className="mt-4 text-xl">Delete account</div>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center justify-center gap-6 lg:flex-row">
+                  <div className="flex w-1/3 flex-col items-center p-6">
+                    <Link
+                      href="/"
+                      className="focus:ring-offset-2; block transform items-center rounded-xl border-2 border-white px-10 py-2.5 text-center text-base font-medium text-slate-600 shadow-md transition duration-500 ease-in-out hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    >
+                      <div className="flex flex-col items-center py-4">
+                        <ArrowLeftOnRectangleIcon
+                          className="h-12 w-12 opacity-60"
+                          aria-hidden="true"
+                        />
+
+                        <div className="mt-4 text-xl">Log out</div>
                       </div>
                     </Link>
                   </div>

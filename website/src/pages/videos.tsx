@@ -1,9 +1,11 @@
 import React from "react";
-import TextButton from "@/components/text-button";
-import router from "next/router";
 import Seo from "@/components/seo";
 
-export default function DashboardPage({ ...props }) {
+export default function DashboardPage({
+  videos,
+}: {
+  videos: { title: string; video_id: string; url: string }[];
+}) {
   return (
     <>
       <Seo
@@ -23,7 +25,7 @@ export default function DashboardPage({ ...props }) {
                   Your videos
                 </h1>
               </div>
-              <VideoList folder="output" uid={props.uid} />
+              <VideoList videos={videos} />
             </div>
           </main>
         </div>
@@ -33,12 +35,13 @@ export default function DashboardPage({ ...props }) {
 }
 
 import { GetServerSidePropsContext } from "next";
-import { getToken, getUser } from "@/helpers/user";
+import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
 import VideoList from "@/components/video-list";
 import Sidebar from "@/components/side-bar";
 import BottomNavigation from "@/components/bottom-navigation";
+import { getVideos } from "@/helpers/firebase";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -61,9 +64,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
+    // Get videos
+    const videos = await getVideos({ uid: token.uid, folder: "output" });
+
     return {
       props: {
         uid: token.uid,
+        videos,
       },
     };
   } catch (error) {

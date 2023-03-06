@@ -1,4 +1,11 @@
 import { logOut } from "@/helpers/auth";
+import {
+  ArrowUpTrayIcon,
+  CircleStackIcon,
+  Cog6ToothIcon,
+  FolderIcon,
+  HomeIcon,
+} from "@heroicons/react/24/solid";
 import Link from "next/link";
 
 export default function Sidebar() {
@@ -22,15 +29,23 @@ export default function Sidebar() {
                       className="focus:shadow-outline mt-1 inline-flex w-full transform items-center rounded-lg px-4 py-2 text-base text-slate-900 transition duration-500 ease-in-out hover:bg-slate-100"
                       href="/dashboard"
                     >
-                      <span className="ml-4">Dashboard</span>
+                      <HomeIcon className="my mx-4 h-4 w-4 text-slate-500" />
+                      <span>Dashboard</span>
                     </Link>
+                  </li>
+                  <li>
+                    <div className="flex items-center px-8">
+                      <div className="w-12 border-t border-blue-300"></div>
+                    </div>
                   </li>
                   <li>
                     <Link
                       className="focus:shadow-outline mt-1 inline-flex w-full transform items-center rounded-lg px-4 py-2 text-base text-slate-900 transition duration-500 ease-in-out hover:bg-slate-100"
                       href="/upload-video"
                     >
-                      <span className="ml-4">Upload</span>
+                      <ArrowUpTrayIcon className="my mx-4 h-4 w-4 text-slate-500" />
+
+                      <span>Upload</span>
                     </Link>
                   </li>
                   <li>
@@ -38,7 +53,9 @@ export default function Sidebar() {
                       className="focus:shadow-outline mt-1 inline-flex w-full transform items-center rounded-lg px-4 py-2 text-base text-slate-900 transition duration-500 ease-in-out hover:bg-slate-100"
                       href="/videos"
                     >
-                      <span className="ml-4">Videos</span>
+                      <FolderIcon className="my mx-4 h-4 w-4 text-slate-500" />
+
+                      <span>Videos</span>
                     </Link>
                   </li>
                   <li>
@@ -46,27 +63,23 @@ export default function Sidebar() {
                       className="focus:shadow-outline mt-1 inline-flex w-full transform items-center rounded-lg px-4 py-2 text-base text-slate-900 transition duration-500 ease-in-out hover:bg-slate-100"
                       href="/extras"
                     >
-                      <span className="ml-4">Extras</span>
+                      <CircleStackIcon className="my mx-4 h-4 w-4 text-slate-500" />
+                      <span>Extras</span>
                     </Link>
+                  </li>
+                  <li>
+                    <div className="flex items-center px-8">
+                      <div className="w-full border-t border-slate-300"></div>
+                    </div>
                   </li>
                   <li>
                     <Link
                       className="focus:shadow-outline mt-1 inline-flex w-full transform items-center rounded-lg px-4 py-2 text-base text-slate-900 transition duration-500 ease-in-out hover:bg-slate-100"
                       href="/settings"
                     >
-                      <span className="ml-4">Settings</span>
+                      <Cog6ToothIcon className="my mx-4 h-4 w-4 text-slate-500" />
+                      <span>Settings</span>
                     </Link>
-                  </li>
-
-                  <li>
-                    <button
-                      className="focus:shadow-outline mt-1 inline-flex w-full transform items-center rounded-lg px-4 py-2 text-base text-slate-600 transition duration-500 ease-in-out hover:bg-slate-100"
-                      onClick={async () => {
-                        await logOut();
-                      }}
-                    >
-                      <span className="ml-4">Log out</span>
-                    </button>
                   </li>
                 </ul>
               </nav>

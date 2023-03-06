@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect, MouseEvent } from "react";
-import { useRouter } from "next/router";
 import {
   PlayIcon,
   PauseIcon,
@@ -10,6 +9,7 @@ import {
   ShareIcon,
   ArrowDownTrayIcon,
 } from "@heroicons/react/24/solid";
+import { showModal } from "./modal";
 
 export const VideoPlayer = ({
   src,
@@ -30,6 +30,10 @@ export const VideoPlayer = ({
   const [sliderValue, setSliderValue] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
+  const [showControls, setShowControls] = useState(false);
+  const { Modal, closeModal, openModal } = showModal(
+    "Video copied to clipboard!"
+  );
 
   const handlePlayPause = () => {
     if (!videoRef.current) {
@@ -183,10 +187,14 @@ export const VideoPlayer = ({
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div
+      className="flex h-full flex-col items-center"
+      onMouseEnter={(e) => setShowControls(true)}
+      onMouseLeave={(e) => setShowControls(false)}
+    >
       <h1 className="mb-3 text-center text-lg font-semibold">{title}</h1>
 
-      <div className="relative h-fit w-fit">
+      <div className="relative flex h-full w-fit items-center justify-center rounded-xl bg-slate-300 bg-opacity-60 p-1">
         <video
           ref={videoRef}
           src={src}
@@ -197,59 +205,71 @@ export const VideoPlayer = ({
           onClick={handlePlayPause}
         />
 
-        <button
-          className="absolute top-1 right-1 rounded-3xl bg-slate-500 bg-opacity-30 p-2 text-slate-50 hover:bg-slate-700 hover:bg-opacity-20 hover:text-slate-200"
-          onClick={handleMuteUnmute}
-        >
-          {isMuted ? (
-            <SpeakerXMarkIcon className={iconSize} />
-          ) : (
-            <SpeakerWaveIcon className={iconSize} />
-          )}
-        </button>
-
-        <div className="absolute bottom-0 flex flex-col">
-          <div
-            className={`${barHeight} ${width} cursor-pointer bg-slate-300 outline-none`}
-            onMouseDown={handleSliderMouseDown}
-            onMouseUp={handleSliderMouseUp}
-            onMouseMove={handleSliderMouseMove}
-            onMouseLeave={handleSliderMouseUp}
-          >
-            <div
-              className={`${barHeight} bg-gradient-to-r from-teal-400 to-blue-400`}
-              style={{
-                width: `${isFinished ? 100 : getWatchedPercentage()}%`,
-                transition: isDragging ? "none" : "width 0.1s linear",
-              }}
-            />
-          </div>
-
-          <div className="flex w-full items-center justify-between rounded-b-lg bg-slate-900 bg-opacity-50 px-2 py-1">
+        {showControls && (
+          <>
             <button
-              className="p-2 text-white hover:text-slate-300"
-              onClick={handlePlayPause}
+              className="absolute top-2 right-2 rounded-3xl bg-slate-500 bg-opacity-30 p-2 text-slate-50 hover:bg-slate-700 hover:bg-opacity-20 hover:text-slate-200"
+              onClick={handleMuteUnmute}
             >
-              {isPlaying ? (
-                <PauseIcon className={iconSize} />
-              ) : isFinished ? (
-                <ArrowPathIcon className={iconSize} />
+              {isMuted ? (
+                <SpeakerXMarkIcon className={iconSize} />
               ) : (
-                <PlayIcon className={iconSize} />
+                <SpeakerWaveIcon className={iconSize} />
               )}
             </button>
-            <button
-              className="p-2 text-white hover:text-slate-200"
-              onClick={handleFullScreen}
-            >
-              <ArrowsPointingOutIcon className={iconSize} />
-            </button>
-          </div>
-        </div>
+
+            <div className="absolute bottom-1 flex flex-col">
+              <div
+                className={`${barHeight} ${width} cursor-pointer bg-slate-300 outline-none`}
+                onMouseDown={handleSliderMouseDown}
+                onMouseUp={handleSliderMouseUp}
+                onMouseMove={handleSliderMouseMove}
+                onMouseLeave={handleSliderMouseUp}
+              >
+                <div
+                  className={`${barHeight} bg-gradient-to-r from-teal-400 to-blue-400`}
+                  style={{
+                    width: `${isFinished ? 100 : getWatchedPercentage()}%`,
+                    transition: isDragging ? "none" : "width 0.1s linear",
+                  }}
+                />
+              </div>
+
+              <div className="flex w-full items-center justify-between rounded-b-lg bg-slate-900 bg-opacity-50 px-2 py-1">
+                <button
+                  className="p-2 text-white hover:text-slate-300"
+                  onClick={handlePlayPause}
+                >
+                  {isPlaying ? (
+                    <PauseIcon className={iconSize} />
+                  ) : isFinished ? (
+                    <ArrowPathIcon className={iconSize} />
+                  ) : (
+                    <PlayIcon className={iconSize} />
+                  )}
+                </button>
+                <button
+                  className="p-2 text-white hover:text-slate-200"
+                  onClick={handleFullScreen}
+                >
+                  <ArrowsPointingOutIcon className={iconSize} />
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
+
       {!hideControls && (
         <div className="mt-4 flex gap-4">
-          <button onClick={copyLinkToClipboard} className="btn-secondary">
+          <Modal onClose={closeModal} />
+          <button
+            onClick={() => {
+              copyLinkToClipboard();
+              openModal();
+            }}
+            className="btn-secondary"
+          >
             <ShareIcon className="h-6 w-6" />
           </button>
           <button
