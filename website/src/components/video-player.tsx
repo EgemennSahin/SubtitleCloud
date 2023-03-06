@@ -9,7 +9,7 @@ import {
   ShareIcon,
   ArrowDownTrayIcon,
 } from "@heroicons/react/24/solid";
-import { showModal } from "./modal";
+import { Modal } from "./modal";
 
 export const VideoPlayer = ({
   src,
@@ -31,7 +31,7 @@ export const VideoPlayer = ({
   const [isDragging, setIsDragging] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [showControls, setShowControls] = useState(false);
-  const { Modal, closeModal, openModal } = showModal(
+  const { ModalElement, closeModal, openModal } = Modal(
     "Video copied to clipboard!"
   );
 
@@ -262,7 +262,7 @@ export const VideoPlayer = ({
 
       {!hideControls && (
         <div className="mt-4 flex gap-4">
-          <Modal onClose={closeModal} />
+          <ModalElement />
           <button
             onClick={() => {
               copyLinkToClipboard();

@@ -1,13 +1,13 @@
 import { useState } from "react";
 
-export const showModal = (text: string) => {
+export const Modal = (text: string) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleModalClick = () => {
     setShowModal(!showModal);
   };
 
-  const Modal = () => {
+  const ModalElement = () => {
     return (
       <>
         {showModal && (
@@ -41,5 +41,5 @@ export const showModal = (text: string) => {
     }, 1500);
   };
 
-  return { Modal, closeModal, openModal };
+  return { ModalElement, closeModal, openModal };
 };

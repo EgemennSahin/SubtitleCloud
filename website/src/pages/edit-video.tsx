@@ -10,27 +10,17 @@ export default function EditVideoPage({
   video_id,
   download_transcript,
   upload_transcript,
+  secondaryVideos,
 }: {
   uid: string;
   video_url: string;
   video_id: string;
   download_transcript: string;
   upload_transcript: string;
+  secondaryVideos: { title: string; uid: string; url: string }[];
 }) {
   const router = useRouter();
   const [secondaryVideo, setSecondaryVideo] = useState<any>(null);
-
-  const [videos, setVideos] = useState<
-    { title: string | undefined; uid: string | undefined; url: string }[]
-  >([]);
-
-  const storageRef = ref(premiumStorage, `secondary/${uid}`);
-
-  useEffect(() => {
-    getVideos(storageRef).then((videoUrls) => {
-      setVideos(videoUrls);
-    });
-  }, [uid, storageRef]);
 
   return (
     <>
@@ -67,7 +57,7 @@ export default function EditVideoPage({
                     )}
                     <div className="flex items-center gap-2">
                       <Dropdown
-                        options={videos.map((video) => ({
+                        options={secondaryVideos.map((video) => ({
                           id: video.uid!,
                           label: video.title!,
                           other: video.url,
@@ -217,6 +207,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
+    // Get videos
+    const secondaryVideos = await getVideos({
+      uid: token.uid,
+      folder: "secondary",
+    });
+
     return {
       props: {
         uid: token.uid,
@@ -224,6 +220,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         video_id,
         download_transcript,
         upload_transcript,
+        secondaryVideos,
       },
     };
   } catch (error) {
