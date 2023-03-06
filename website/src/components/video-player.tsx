@@ -195,10 +195,16 @@ export const VideoPlayer = ({
       <h1 className="mb-3 text-center text-lg font-semibold">{title}</h1>
 
       <div className="relative w-2/3 rounded-xl bg-slate-300 bg-opacity-60 p-1 sm:hidden">
-        <video className="rounded-lg" ref={videoRef} src={src} controls />
+        <video
+          className="rounded-lg"
+          ref={videoRef}
+          src={`${src}#t=0.1`}
+          controls
+          preload=""
+        />
       </div>
 
-      <div className="relative flex hidden h-full w-fit items-center justify-center rounded-xl bg-slate-300 bg-opacity-60 p-1 sm:block">
+      <div className="relative hidden h-full w-fit items-center justify-center rounded-xl bg-slate-300 bg-opacity-60 p-1 sm:flex">
         <video
           ref={videoRef}
           src={src}
