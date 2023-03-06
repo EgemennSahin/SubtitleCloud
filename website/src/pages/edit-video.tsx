@@ -69,7 +69,7 @@ export default function EditVideoPage({
                       <Dropdown
                         options={videos.map((video) => ({
                           id: video.uid!,
-                          label: video.uid!,
+                          label: video.title!,
                           other: video.url,
                         }))}
                         onChange={(option) => {
@@ -87,8 +87,18 @@ export default function EditVideoPage({
                             "secondary"
                           );
 
+                          // Get the download URL
+                          const side_video_url = await getDownloadURL(
+                            ref(
+                              premiumStorage,
+
+                              `secondary/${uid}/${side_video_id}`
+                            )
+                          );
+
                           setSecondaryVideo({
                             uid: side_video_id,
+                            url: side_video_url,
                           });
                         }}
                         disabled={false}

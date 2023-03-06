@@ -82,10 +82,11 @@ export async function handleUpload(
     await fetch(url, {
       method: "PUT",
       headers: {
-        "Content-Type": file.type,
-        "Content-Length": file.size.toString(),
-        "x-goog-meta-title": "test",
+        "Content-Type": type,
+        "x-goog-content-length-range": `0,${100 * 1024 * 1024}`,
+        "x-goog-meta-title": title,
       },
+
       body: file,
     });
 

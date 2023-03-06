@@ -2,7 +2,11 @@
   {
     "origin": ["https://www.shortzoo.com", "http://localhost:3000"],
     "method": ["GET", "PUT"],
-    "responseHeader": ["Content-Type"],
+    "responseHeader": [
+      "Content-Type",
+      "x-goog-content-length-range",
+      "x-goog-meta-title"
+    ],
     "maxAgeSeconds": 3600
   }
 ]

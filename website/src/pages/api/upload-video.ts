@@ -58,11 +58,13 @@ export default async function handler(
     action: "write" as const,
     expires: Date.now() + 15 * 60 * 1000, // 15 minutes
     contentType: type,
-    contentLength: maxContentLength,
     extensionHeaders: {
-      "x-goog-meta-title": "test",
+      "x-goog-content-length-range": `0,${maxContentLength}`,
+      "x-goog-meta-title": title,
     },
   };
+
+  console.log("Title: ", title);
 
   try {
     const [url] = await firebaseAdmin
