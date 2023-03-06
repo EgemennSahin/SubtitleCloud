@@ -26,7 +26,7 @@ export default function PricingPlans({
 
   return (
     <div className="flex flex-col items-center">
-      <div className="mt-4 flex flex-col justify-between gap-8 lg:flex-row">
+      <div className="mt-4 flex flex-col justify-between gap-8 md:flex-row">
         <div className="relative flex flex-col bg-white p-8">
           <div className="flex-1">
             <h3 className="text-xl font-semibold text-slate-600">Premium</h3>

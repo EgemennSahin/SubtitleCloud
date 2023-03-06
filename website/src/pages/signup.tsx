@@ -93,6 +93,15 @@ export default function LoginPage() {
                     </button>
                   </div>
                 </form>
+
+                <div className="mt-4 flex w-full justify-end">
+                  <Link
+                    href="/login"
+                    className="text-end font-medium text-slate-600 hover:text-slate-500"
+                  >
+                    Already have an account?
+                  </Link>
+                </div>
                 <div className="relative my-4">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-gray-300"></div>

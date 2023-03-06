@@ -5,6 +5,7 @@ import {
   FolderIcon,
   ArrowRightOnRectangleIcon,
   CircleStackIcon,
+  Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
 import Link from "next/link";
 
@@ -49,15 +50,13 @@ export default function BottomNavigation() {
           </Link>
         </li>
         <li className="flex-1">
-          <div
-            onClick={async () => {
-              await logOut();
-            }}
+          <Link
+            href="/settings"
             className="block text-center text-gray-500 hover:text-gray-900"
           >
-            <ArrowRightOnRectangleIcon className="mx-auto h-6 w-6" />
-            <span className="mt-1 text-xs">Logout</span>
-          </div>
+            <Cog6ToothIcon className="mx-auto h-6 w-6" />
+            <span className="mt-1 text-xs">Settings</span>
+          </Link>
         </li>
       </ul>
     </nav>

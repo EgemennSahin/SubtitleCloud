@@ -17,9 +17,9 @@ export default function PricingPage({ uid }: { uid: string }) {
       />
       <Navbar uid={uid} />
       <section>
-        <div className="relative mx-auto w-full max-w-7xl items-center py-24 md:px-12 lg:px-16">
-          <div className="flex w-full items-start justify-center gap-4 px-5 lg:px-0">
-            <div className="w-full md:text-center lg:w-2/6 lg:text-left xl:w-1/3">
+        <div className="relative mx-auto w-full max-w-7xl items-center py-8 md:px-12 lg:py-24 lg:px-16">
+          <div className="flex w-full flex-col items-start justify-center gap-4 px-5 lg:flex-row lg:px-0">
+            <div className="w-full lg:w-2/6 lg:text-left xl:w-1/3">
               <div className="flex flex-col p-8 lg:p-0">
                 <strong className="mb-1 text-xs font-semibold uppercase tracking-widest text-blue-500">
                   Safe payments with Stripe

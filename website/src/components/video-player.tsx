@@ -7,16 +7,22 @@ import {
   SpeakerXMarkIcon,
   ArrowsPointingOutIcon,
   ArrowPathIcon,
+  ShareIcon,
+  ArrowDownTrayIcon,
 } from "@heroicons/react/24/solid";
 
 export const VideoPlayer = ({
   src,
   size,
   hideControls,
+  title,
+  uid,
 }: {
   src: string;
   size?: "small" | "medium" | "large";
   hideControls?: boolean;
+  title?: string;
+  uid?: string;
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -178,6 +184,8 @@ export const VideoPlayer = ({
 
   return (
     <div className="flex flex-col items-center">
+      <h1 className="mb-3 text-center text-lg font-semibold">{title}</h1>
+
       <div className="relative h-fit w-fit">
         <video
           ref={videoRef}
@@ -242,13 +250,13 @@ export const VideoPlayer = ({
       {!hideControls && (
         <div className="mt-4 flex gap-4">
           <button onClick={copyLinkToClipboard} className="btn-secondary">
-            Share
+            <ShareIcon className="h-6 w-6" />
           </button>
           <button
             onClick={downloadVideo}
             className="focus:ring-offset-2; block transform items-center rounded-xl bg-blue-600 px-10 py-3 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            Download
+            <ArrowDownTrayIcon className="h-6 w-6" />
           </button>
         </div>
       )}

@@ -26,64 +26,25 @@ function Navbar({ uid }: { uid: string }) {
 
       {uid ? (
         <div className="flex items-center gap-4">
-          <div className="hidden list-none items-center gap-2 md:inline-flex lg:ml-auto">
+          <div className="inline-flex list-none items-center gap-2 lg:ml-auto">
             <Link href="/dashboard" className="btn-primary">
               Dashboard
             </Link>
-            <button
-              className="btn-secondary"
-              onClick={async () => {
-                await logOut();
-              }}
-            >
-              Log out
-            </button>
-          </div>
-
-          <div className="sm:hidden">
-            <NavBarDropdown>
-              <Link href="/dashboard">
-                <button className="w-full px-4 py-4 text-left text-lg font-medium text-gray-700">
-                  Dashboard
-                </button>
-              </Link>
-              <button
-                onClick={async () => {
-                  await logOut();
-                }}
-                className="w-full rounded-b-md px-4 py-4 text-left text-lg font-medium text-gray-700"
-              >
-                Log out
-              </button>
-            </NavBarDropdown>
           </div>
         </div>
       ) : (
         <div className="flex items-center gap-4">
-          <div className="hidden list-none items-center gap-2 md:inline-flex lg:ml-auto">
+          <div className="inline-flex list-none items-center gap-2 lg:ml-auto">
             <Link href="/login" className="btn-secondary">
               Log in
             </Link>
-            <Link href="/signup" className="btn-primary">
+            <Link
+              href="/signup"
+              className="focus:ring-offset-2; hidden transform items-center rounded-xl bg-blue-600 px-10 py-3 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2
+ focus:ring-blue-500 sm:block"
+            >
               Sign up
             </Link>
-          </div>
-
-          <div className="md:hidden">
-            <NavBarDropdown>
-              <button
-                onClick={() => router.push("/signup")}
-                className="w-full px-4 py-4 text-left text-lg font-medium text-gray-700"
-              >
-                Sign up
-              </button>
-              <button
-                onClick={() => router.push("/login")}
-                className="w-full rounded-b-md px-4 py-4 text-left text-lg font-medium text-gray-700"
-              >
-                Log in
-              </button>
-            </NavBarDropdown>
           </div>
         </div>
       )}

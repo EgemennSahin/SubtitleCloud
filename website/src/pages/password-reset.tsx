@@ -3,7 +3,7 @@ import { auth } from "@/config/firebase";
 import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 
-export default function PasswordResetPage() {
+export default function PasswordResetPage({ uid }: { uid: string }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
 
@@ -26,6 +26,8 @@ export default function PasswordResetPage() {
         title="Reset Password"
         description="Reset your password and regain access to your account on our short video subtitling solution."
       />
+      <Navbar uid={uid} />
+
       <section>
         <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-xl lg:w-96">
@@ -66,7 +68,7 @@ export default function PasswordResetPage() {
                       type="submit"
                       className="flex w-full transform items-center justify-center rounded-xl bg-blue-600 px-10 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     >
-                      Log in
+                      Send password reset email
                     </button>
                   </div>
                 </form>
@@ -83,11 +85,17 @@ import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
+import Navbar from "@/components/nav-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const token = await getToken({ context });
 
+    if (!token) {
+      return {
+        props: {},
+      };
+    }
     return {
       props: { uid: token?.uid },
     };

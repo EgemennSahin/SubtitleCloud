@@ -68,6 +68,7 @@ export default function LoginPage() {
                       {" "}
                       Password{" "}
                     </label>
+
                     <div className="mt-1">
                       <input
                         id="password"
@@ -83,18 +84,6 @@ export default function LoginPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-end">
-                    <div className="text-sm">
-                      <Link
-                        href="/password-reset"
-                        className="font-medium text-blue-600 hover:text-blue-500"
-                      >
-                        {" "}
-                        Forgot your password?{" "}
-                      </Link>
-                    </div>
-                  </div>
-
                   <div>
                     <button
                       type="submit"
@@ -104,17 +93,33 @@ export default function LoginPage() {
                     </button>
                   </div>
                 </form>
+
+                <div className="mt-4 flex w-full justify-between">
+                  <Link
+                    href="/signup"
+                    className="text-end font-medium text-slate-600 hover:text-slate-500"
+                  >
+                    Don&apos;t have an account?
+                  </Link>
+                  <Link
+                    href="/password-reset"
+                    className="font-medium text-teal-600 hover:text-teal-500"
+                  >
+                    {" "}
+                    Forgot your password?{" "}
+                  </Link>
+                </div>
                 <div className="relative my-4">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-gray-300"></div>
                   </div>
                   <div className="relative flex justify-center text-sm">
                     <span className="bg-white px-2 text-neutral-600">
-                      {" "}
-                      Or continue with{" "}
+                      Or continue with
                     </span>
                   </div>
                 </div>
+
                 <div>
                   <button
                     onClick={async () => {
