@@ -20,10 +20,11 @@ export default function DashboardPage({ ...props }) {
             <div className="py-6">
               <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                 <h1 className="mb-8 text-center text-3xl text-neutral-600">
-                  Your videos
+                  Your extras
                 </h1>
               </div>
-              <VideoList folder="output" uid={props.uid} />
+
+              <VideoList folder="secondary" uid={props.uid} />
             </div>
           </main>
         </div>
@@ -39,6 +40,7 @@ import { isPaidUser } from "@/helpers/stripe";
 import VideoList from "@/components/video-list";
 import Sidebar from "@/components/side-bar";
 import BottomNavigation from "@/components/bottom-navigation";
+import Dropdown, { DropdownOption } from "@/components/dropdown-menu";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

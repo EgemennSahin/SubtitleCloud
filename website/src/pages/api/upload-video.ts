@@ -11,7 +11,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { type, folder } = req.body;
+  const { type, title, folder } = req.body;
 
   const context: GetServerSidePropsContext = {
     req: req,
@@ -59,6 +59,9 @@ export default async function handler(
     expires: Date.now() + 15 * 60 * 1000, // 15 minutes
     contentType: type,
     contentLength: maxContentLength,
+    metadata: {
+      title: title,
+    },
   };
 
   try {

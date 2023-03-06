@@ -1,6 +1,14 @@
+import { GetServerSidePropsContext } from "next";
+import { getToken } from "@/helpers/user";
+import { handleError } from "@/helpers/error";
 import PricingPlans from "@/components/pricing-plans";
+import Seo from "@/components/seo";
+import Navbar from "@/components/nav-bar";
+import { useState } from "react";
+import ToggleButton from "@/components/toggle-button";
 
 export default function PricingPage({ uid }: { uid: string }) {
+  const [isMonthly, setIsMonthly] = useState(true);
   return (
     <>
       <Seo
@@ -16,30 +24,33 @@ export default function PricingPage({ uid }: { uid: string }) {
                 <strong className="mb-1 text-xs font-semibold uppercase tracking-widest text-blue-500">
                   Safe payments with Stripe
                 </strong>
-                <span className="tracking-relaxed mb-8 text-2xl font-bold text-neutral-600 lg:text-5xl">
+                <span className="tracking-relaxed mb-6 text-2xl font-bold text-slate-600 lg:text-5xl">
                   Pricing
                 </span>
-                <p className="mb-4 text-xl font-light text-gray-500 text-opacity-70 lg:pr-10">
+                <div className="mb-6">
+                  <ToggleButton
+                    state={isMonthly}
+                    setState={setIsMonthly}
+                    textTrue={"Monthly"}
+                    textFalse={"Annual"}
+                  />
+                </div>
+
+                <p className="mb-4 text-xl font-light text-slate-500 text-opacity-70 lg:pr-10">
                   Choose the plan that fits your needs.
                 </p>
-                <p className="mb-2 text-xl font-light text-gray-500 text-opacity-70 lg:pr-10">
+                <p className="mb-2 text-xl font-light text-slate-500 text-opacity-70 lg:pr-10">
                   Get the business plan and get personalized support.
                 </p>
               </div>
             </div>
-            <PricingPlans />
+            <PricingPlans state={isMonthly} />
           </div>
         </div>
       </section>
     </>
   );
 }
-
-import { GetServerSidePropsContext } from "next";
-import { getToken } from "@/helpers/user";
-import { handleError } from "@/helpers/error";
-import Seo from "@/components/seo";
-import Navbar from "@/components/nav-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

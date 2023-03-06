@@ -67,13 +67,14 @@ export async function handleUpload(
 
   try {
     const type = file.type;
+    const title = file.name;
     // Get the signed url from the server
     const response = await fetch("/api/upload-video", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ type, folder }),
+      body: JSON.stringify({ type, title, folder }),
     });
 
     const { url, file_id } = await response.json();

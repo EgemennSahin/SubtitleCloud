@@ -20,6 +20,8 @@ export default function UploadVideo() {
 
       <div className="flex overflow-hidden rounded-lg bg-white">
         <Sidebar />
+        <BottomNavigation />
+
         <div className="flex w-0 flex-1 flex-col overflow-hidden">
           <main className="relative flex-1 overflow-y-auto focus:outline-none">
             <div className="py-6">
@@ -97,6 +99,7 @@ import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
 import { VideoPlayer } from "@/components/video-player";
 import Sidebar from "@/components/side-bar";
+import BottomNavigation from "@/components/bottom-navigation";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -114,7 +117,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     if (!isPaidUser({ token })) {
       return {
         redirect: {
-          destination: "/premium",
+          destination: "/pricing",
           permanent: false,
         },
       };

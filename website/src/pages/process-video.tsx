@@ -121,7 +121,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     if (!isPaidUser({ token })) {
       return {
         redirect: {
-          destination: "/premium",
+          destination: "/pricing",
           permanent: false,
         },
       };

@@ -104,8 +104,7 @@ export const VideoPlayer = ({
   }
 
   const copyLinkToClipboard = () => {
-    const websiteLink = window.location.href;
-    navigator.clipboard.writeText(websiteLink);
+    navigator.clipboard.writeText(src);
   };
 
   let width = "";

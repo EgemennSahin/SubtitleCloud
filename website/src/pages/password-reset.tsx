@@ -88,17 +88,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const token = await getToken({ context });
 
-    if (token) {
-      return {
-        redirect: {
-          destination: "/dashboard",
-          permanent: false,
-        },
-      };
-    }
-
     return {
-      props: {},
+      props: { uid: token?.uid },
     };
   } catch (error) {
     return handleError(error);

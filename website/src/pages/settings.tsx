@@ -1,28 +1,21 @@
 import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import { isPaidUser } from "@/helpers/stripe";
 import Seo from "@/components/seo";
 import Sidebar from "@/components/side-bar";
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import BottomNavigation from "@/components/bottom-navigation";
 import {
   ArrowUpTrayIcon,
-  CircleStackIcon,
   Cog6ToothIcon,
+  CreditCardIcon,
   FolderIcon,
+  TrashIcon,
+  UserIcon,
 } from "@heroicons/react/24/solid";
-import VideoList from "@/components/video-list";
 
-export default function DashboardPage({
-  uid,
-  user,
-}: {
-  uid: string;
-  user: any;
-}) {
+export default function DashboardPage({ ...props }) {
   return (
     <>
       <Seo
@@ -37,63 +30,52 @@ export default function DashboardPage({
           <main className="relative flex-1 overflow-y-auto focus:outline-none">
             <div className="py-6">
               <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                <Link href="/">
-                  <h1 className="mb-4 text-center text-xl text-blue-600 opacity-60 md:hidden">
-                    Shortzoo
-                  </h1>
-                </Link>
-                <h1 className="mb-3 text-center text-3xl text-slate-600">
-                  Your dashboard
+                <h1 className="mb-8 text-center text-3xl text-neutral-600">
+                  Settings
                 </h1>
-                <h2 className="mb-8 text-center text-xl text-slate-600">
-                  You have {user.video_credit} credits left this month.
-                </h2>
-                <div className="grid grid-cols-1 items-center justify-center gap-6 lg:w-full lg:grid-cols-3">
-                  <div className="flex flex-col items-center p-6">
-                    <Link href="/upload-video" className="btn-primary">
+                <div className="flex flex-col items-center justify-center gap-6 lg:flex-row">
+                  <div className="flex w-1/3 flex-col items-center p-6">
+                    <Link href="/profile" className="btn-primary">
                       <div className="flex flex-col items-center py-4">
-                        <ArrowUpTrayIcon
+                        <UserIcon
                           className="h-12 w-12 opacity-60"
                           aria-hidden="true"
                         />
 
-                        <div className="mt-4 text-xl">Upload a video</div>
+                        <div className="mt-4 text-xl">
+                          Profile & Preferences
+                        </div>
                       </div>
                     </Link>
                   </div>
-                  <div className="flex flex-col items-center p-6">
-                    <Link href="/videos" className="btn-primary">
+                  <div className="flex w-1/3 flex-col items-center p-6">
+                    <Link
+                      href="https://billing.stripe.com/p/login/test_7sI9Cn7WY3VE07K8ww"
+                      className="btn-primary"
+                    >
                       <div className="flex flex-col items-center py-4">
-                        <FolderIcon
+                        <CreditCardIcon
                           className="h-12 w-12 opacity-60"
                           aria-hidden="true"
                         />
 
-                        <div className="mt-4 text-xl">See your videos</div>
+                        <div className="mt-4 text-xl">Subscription details</div>
                       </div>
                     </Link>
                   </div>
-                  <div className="flex flex-col items-center p-6">
-                    <Link href="/extras" className="btn-primary">
+                  <div className="flex w-1/3 flex-col items-center p-6">
+                    <Link
+                      href="/"
+                      className="focus:ring-offset-2; block transform items-center rounded-xl border-2 border-white px-10 py-2.5 text-center text-base font-medium text-red-600 shadow-md transition duration-500 ease-in-out hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-gray-500
+"
+                    >
                       <div className="flex flex-col items-center py-4">
-                        <CircleStackIcon
+                        <TrashIcon
                           className="h-12 w-12 opacity-60"
                           aria-hidden="true"
                         />
 
-                        <div className="mt-4 text-xl">See your extras</div>
-                      </div>
-                    </Link>
-                  </div>
-                  <div className="flex flex-col items-center p-6">
-                    <Link href="/settings" className="btn-primary">
-                      <div className="flex flex-col items-center py-4">
-                        <Cog6ToothIcon
-                          className="h-12 w-12 opacity-60"
-                          aria-hidden="true"
-                        />
-
-                        <div className="mt-4 text-xl">Account settings</div>
+                        <div className="mt-4 text-xl">Delete account</div>
                       </div>
                     </Link>
                   </div>
@@ -119,20 +101,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    if (!isPaidUser({ token })) {
-      return {
-        redirect: {
-          destination: "/pricing",
-          permanent: false,
-        },
-      };
-    }
-
-    const user = await getUser({ uid: token.uid });
-
     return {
       props: {
-        user: user?.data(),
         uid: token.uid,
       },
     };

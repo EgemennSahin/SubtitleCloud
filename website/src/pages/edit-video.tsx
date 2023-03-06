@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TextButton from "@/components/text-button";
 import { useRouter } from "next/router";
 import Seo from "@/components/seo";
@@ -18,7 +18,20 @@ export default function EditVideoPage({
   upload_transcript: string;
 }) {
   const router = useRouter();
-  const [file, setFile] = React.useState<Blob | null>(null);
+  const [file, setFile] = useState<Blob | null>(null);
+  const [secondaryVideo, setSecondaryVideo] = useState<string | null>(null);
+
+  const [videos, setVideos] = useState<
+    { title: string | undefined; url: string }[]
+  >([]);
+
+  const storageRef = ref(premiumStorage, `secondary/${uid}`);
+
+  useEffect(() => {
+    getVideos(storageRef).then((videoUrls) => {
+      setVideos(videoUrls);
+    });
+  }, [uid, storageRef]);
 
   return (
     <>
@@ -29,6 +42,8 @@ export default function EditVideoPage({
 
       <div className="flex overflow-hidden rounded-lg bg-white">
         <Sidebar />
+        <BottomNavigation />
+
         <div className="flex w-0 flex-1 flex-col overflow-hidden">
           <main className="relative flex-1 overflow-y-auto focus:outline-none">
             <div className="py-6">
@@ -49,12 +64,31 @@ export default function EditVideoPage({
                       uploadUrl={upload_transcript}
                       uid={uid}
                     />
-                    <UploadButton
-                      size="medium"
-                      setFile={setFile}
-                      text="Select Secondary Video"
-                      disabled={false}
-                    />
+                    <h3>Secondary Video</h3>
+                    <div className="flex items-center justify-center gap-2">
+                      <Dropdown
+                        options={videos.map((video) => ({
+                          id: video.title!,
+                          label: video.url,
+                        }))}
+                        onChange={(option) => {
+                          setSecondaryVideo(option.id);
+                        }}
+                      />
+                      <UploadButton
+                        size="medium"
+                        setFile={async (file: Blob) => {
+                          const side_video_id = await handleUpload(
+                            file,
+                            "secondary"
+                          );
+
+                          setSecondaryVideo(side_video_id);
+                        }}
+                        text="Select Secondary Video"
+                        disabled={false}
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -64,17 +98,13 @@ export default function EditVideoPage({
                       <button
                         onClick={async () => {
                           // Upload the secondary video
-                          const side_video_id = await handleUpload(
-                            file,
-                            "secondary"
-                          );
 
                           // Redirect to the video page
                           router.push({
                             pathname: "/add-to-video",
                             query: {
                               video_id: video_id,
-                              side_video_id: side_video_id,
+                              side_video_id: secondaryVideo,
                             },
                           });
                         }}
@@ -103,6 +133,12 @@ import SubtitleInput from "@/components/TextInput";
 import UploadButton from "@/components/upload-button";
 import { handleUpload } from "@/helpers/upload";
 import Sidebar from "@/components/side-bar";
+import BottomNavigation from "@/components/bottom-navigation";
+import Dropdown from "@/components/dropdown-menu";
+import videos from "./videos";
+import { premiumStorage } from "@/config/firebase";
+import { getVideos } from "@/helpers/firebase";
+import { ref } from "firebase/storage";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -120,7 +156,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     if (!isPaidUser({ token })) {
       return {
         redirect: {
-          destination: "/premium",
+          destination: "/pricing",
           permanent: false,
         },
       };

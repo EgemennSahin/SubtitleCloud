@@ -4,9 +4,13 @@ import { useState } from "react";
 import ToggleButton from "./toggle-button";
 import { handleCheckout } from "@/helpers/stripe";
 
-export default function PricingPlans({ uid }: { uid?: string }) {
-  const [isMonthly, setIsMonthly] = useState(true);
-
+export default function PricingPlans({
+  uid,
+  state,
+}: {
+  uid?: string;
+  state: boolean;
+}) {
   const handleSubmit = async (selectedPlan: string) => {
     if (!uid) {
       router.push("/dashboard");
@@ -16,29 +20,22 @@ export default function PricingPlans({ uid }: { uid?: string }) {
     await handleCheckout({
       uid,
       selectedPlan,
-      isMonthly,
+      isMonthly: state,
     });
   };
 
   return (
     <div className="flex flex-col items-center">
-      <ToggleButton
-        state={isMonthly}
-        setState={setIsMonthly}
-        textTrue={"Monthly"}
-        textFalse={"Annual"}
-      />
-
       <div className="mt-4 flex flex-col justify-between gap-8 lg:flex-row">
         <div className="relative flex flex-col bg-white p-8">
           <div className="flex-1">
             <h3 className="text-xl font-semibold text-slate-600">Premium</h3>
             <p className="mt-4 flex items-baseline text-slate-600">
               <span className="text-5xl font-extrabold tracking-tight">
-                {isMonthly ? 2.99 : 26.99}
+                {state ? 2.99 : 26.99}
               </span>
               <span className="ml-1 text-xl font-semibold">
-                {isMonthly ? "/month" : "/year"}
+                {state ? "/month" : "/year"}
               </span>
             </p>
             <p className="mt-6 text-slate-500">
@@ -168,10 +165,10 @@ export default function PricingPlans({ uid }: { uid?: string }) {
             <h3 className="text-xl font-semibold text-white">Business</h3>
             <p className="mt-4 flex items-baseline text-white">
               <span className="text-5xl font-extrabold tracking-tight">
-                {isMonthly ? 9.99 : 89.99}
+                {state ? 9.99 : 89.99}
               </span>
               <span className="ml-1 text-xl font-semibold">
-                {isMonthly ? "/month" : "/year"}
+                {state ? "/month" : "/year"}
               </span>
             </p>
             <p className="text-solitud mt-6 text-white">

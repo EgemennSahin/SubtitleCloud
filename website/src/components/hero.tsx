@@ -12,7 +12,7 @@ export default function Hero() {
             <div className="animate-blob animation-delay-4000 absolute -bottom-24 right-20 h-72 w-72 rounded-full bg-blue-100 opacity-70 mix-blend-multiply blur-xl filter"></div>
             <div className="relative">
               <Image
-                className="mx-auto h-96 w-fit object-cover object-center shadow-2xl"
+                className="mx-auto h-64 w-fit object-cover object-center shadow-2xl sm:h-96"
                 width="0"
                 height="0"
                 sizes="100vw"
@@ -31,19 +31,20 @@ export default function Hero() {
           </h1>
           <p className="mb-8 text-left text-base leading-relaxed text-gray-500">
             Shortzoo gives you access to premium AI models that
-            <span className="font-bold"> caption </span> your videos. You can
-            also add <span className="font-bold"> secondary content </span>
+            <span className="font-bold text-teal-500"> caption </span> your
+            videos. You can also add{" "}
+            <span className="font-bold text-teal-500"> secondary content </span>
             to increase viewer engagement.
           </p>
-          <div className="mt-0 max-w-7xl sm:flex lg:mt-6">
+          <div className="mt-0 flex items-center lg:mt-6">
             <div className="mt-3 rounded-lg sm:mt-0">
               <Link href="/dashboard" className="btn-primary">
-                Start my Shortzoo journey
+                Get started with Shortzoo
               </Link>
             </div>
             <div className="mt-3 rounded-lg sm:mt-0 sm:ml-3">
               <Link href="/pricing" className="btn-secondary">
-                See features
+                See features and pricing tiers
               </Link>
             </div>
           </div>
