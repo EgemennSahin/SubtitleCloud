@@ -17,7 +17,7 @@ export default function EditVideoPage({
   video_id: string;
   download_transcript: string;
   upload_transcript: string;
-  secondaryVideos: { title: string; uid: string; url: string }[];
+  secondaryVideos: { title: string; video_id: string; url: string }[];
 }) {
   const router = useRouter();
   const [secondaryVideo, setSecondaryVideo] = useState<any>(null);
@@ -58,7 +58,7 @@ export default function EditVideoPage({
                     <div className="flex items-center gap-2">
                       <Dropdown
                         options={secondaryVideos.map((video) => ({
-                          id: video.uid!,
+                          id: video.video_id!,
                           label: video.title!,
                           other: video.url,
                         }))}
@@ -87,7 +87,7 @@ export default function EditVideoPage({
                           );
 
                           setSecondaryVideo({
-                            uid: side_video_id,
+                            video_id: side_video_id,
                             url: side_video_url,
                           });
                         }}
@@ -118,7 +118,7 @@ export default function EditVideoPage({
                             pathname: "/add-to-video",
                             query: {
                               video_id: video_id,
-                              side_video_id: secondaryVideo.uid,
+                              side_video_id: secondaryVideo.video_id,
                             },
                           });
                         }}

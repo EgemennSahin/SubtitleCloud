@@ -8,6 +8,10 @@ import Sidebar from "@/components/side-bar";
 import BottomNavigation from "@/components/bottom-navigation";
 import { getVideos } from "@/helpers/firebase";
 import Seo from "@/components/seo";
+import UploadButton from "@/components/upload-button";
+import { premiumStorage } from "@/config/firebase";
+import { handleUpload } from "@/helpers/upload";
+import { getDownloadURL, ref } from "firebase/storage";
 
 export default function DashboardPage({
   videos,
@@ -32,6 +36,18 @@ export default function DashboardPage({
                 <h1 className="mb-8 text-center text-3xl text-neutral-600">
                   Your extras
                 </h1>
+                <div className="mb-8 flex justify-center">
+                  <UploadButton
+                    size="medium"
+                    setFile={async (file: Blob) => {
+                      const side_video_id = await handleUpload(
+                        file,
+                        "secondary"
+                      );
+                    }}
+                    text="Upload an extra"
+                  />
+                </div>
               </div>
 
               <VideoList videos={videos} />

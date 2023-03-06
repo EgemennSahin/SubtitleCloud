@@ -10,3 +10,4 @@ server/localFunctions
 server/backup
 public-process-account-key.json
 server/.DS_Store
+*.pkl

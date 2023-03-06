@@ -9,7 +9,7 @@ export default function UploadButton({
   size,
 }: {
   setFile: (file: Blob) => void;
-  disabled: boolean;
+  disabled?: boolean;
   text?: string;
   size: "small" | "medium" | "large";
 }) {
@@ -27,12 +27,9 @@ export default function UploadButton({
       break;
     case "medium":
       button = (
-        <TextButton
-          color="secondary"
-          size="small"
-          text={text ? text : "Upload a file"}
-          disabled={disabled}
-        />
+        <button className="btn-secondary" disabled={disabled}>
+          {text ? text : "Upload a file"}
+        </button>
       );
       break;
     case "large":

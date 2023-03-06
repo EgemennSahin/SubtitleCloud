@@ -16,7 +16,7 @@ paths:
       summary: Generate word-level subtitles and upload the subtitle to google cloud bucket
       operationId: "subtitle"
       x-google-backend:
-        address: https://us-central1-captioning-693de.cloudfunctions.net/public_process_video
+        address: https://transcribe-video-px2m4mdiyq-uc.a.run.app
         deadline: 360.0
       produces:
         - "application/json"

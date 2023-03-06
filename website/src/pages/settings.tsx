@@ -35,8 +35,11 @@ export default function DashboardPage({ ...props }) {
                   Settings
                 </h1>
                 <div className="flex flex-col items-center justify-center gap-6 lg:flex-row">
-                  <div className="flex w-1/3 flex-col items-center p-6">
-                    <Link href="/profile" className="btn-primary">
+                  <div className="flex h-full w-1/3 flex-col items-center p-6">
+                    <Link
+                      href="/profile"
+                      className="btn-primary mx-4 w-72 shadow-xl"
+                    >
                       <div className="flex flex-col items-center py-4">
                         <UserIcon
                           className="h-12 w-12 opacity-60"
@@ -52,7 +55,7 @@ export default function DashboardPage({ ...props }) {
                   <div className="flex w-1/3 flex-col items-center p-6">
                     <Link
                       href="https://billing.stripe.com/p/login/test_7sI9Cn7WY3VE07K8ww"
-                      className="btn-primary"
+                      className="btn-primary w-72 shadow-xl"
                     >
                       <div className="flex flex-col items-center py-4">
                         <CreditCardIcon
@@ -64,27 +67,12 @@ export default function DashboardPage({ ...props }) {
                       </div>
                     </Link>
                   </div>
-                  <div className="flex w-1/3 flex-col items-center p-6">
-                    <Link
-                      href="/"
-                      className="focus:ring-offset-2; block transform items-center rounded-xl border-2 border-white px-10 py-2.5 text-center text-base font-medium text-red-600 shadow-md transition duration-500 ease-in-out hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    >
-                      <div className="flex flex-col items-center py-4">
-                        <TrashIcon
-                          className="h-12 w-12 opacity-60"
-                          aria-hidden="true"
-                        />
-
-                        <div className="mt-4 text-xl">Delete account</div>
-                      </div>
-                    </Link>
-                  </div>
                 </div>
                 <div className="flex flex-col items-center justify-center gap-6 lg:flex-row">
                   <div className="flex w-1/3 flex-col items-center p-6">
                     <Link
                       href="/"
-                      className="focus:ring-offset-2; block transform items-center rounded-xl border-2 border-white px-10 py-2.5 text-center text-base font-medium text-slate-600 shadow-md transition duration-500 ease-in-out hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                      className="focus:ring-offset-2; block w-72 transform items-center rounded-xl border-2 border-white px-10 py-2.5 text-center text-base font-medium text-slate-600 shadow-xl shadow-md transition duration-500 ease-in-out hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
                     >
                       <div className="flex flex-col items-center py-4">
                         <ArrowLeftOnRectangleIcon

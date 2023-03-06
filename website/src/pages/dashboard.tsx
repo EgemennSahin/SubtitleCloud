@@ -50,7 +50,10 @@ export default function DashboardPage({
                 </h2>
                 <div className="grid grid-cols-1 items-center justify-center gap-6 lg:w-full lg:grid-cols-3">
                   <div className="flex flex-col items-center p-6">
-                    <Link href="/upload-video" className="btn-primary">
+                    <Link
+                      href="/upload-video"
+                      className="btn-primary w-72 shadow-xl"
+                    >
                       <div className="flex flex-col items-center py-4">
                         <ArrowUpTrayIcon
                           className="h-12 w-12 opacity-60"
@@ -62,7 +65,7 @@ export default function DashboardPage({
                     </Link>
                   </div>
                   <div className="flex flex-col items-center p-6">
-                    <Link href="/videos" className="btn-primary">
+                    <Link href="/videos" className="btn-primary w-72 shadow-xl">
                       <div className="flex flex-col items-center py-4">
                         <FolderIcon
                           className="h-12 w-12 opacity-60"
@@ -74,7 +77,7 @@ export default function DashboardPage({
                     </Link>
                   </div>
                   <div className="flex flex-col items-center p-6">
-                    <Link href="/extras" className="btn-primary">
+                    <Link href="/extras" className="btn-primary w-72 shadow-xl">
                       <div className="flex flex-col items-center py-4">
                         <CircleStackIcon
                           className="h-12 w-12 opacity-60"
@@ -86,7 +89,10 @@ export default function DashboardPage({
                     </Link>
                   </div>
                   <div className="flex flex-col items-center p-6">
-                    <Link href="/settings" className="btn-primary">
+                    <Link
+                      href="/settings"
+                      className="btn-primary w-72 shadow-xl"
+                    >
                       <div className="flex flex-col items-center py-4">
                         <Cog6ToothIcon
                           className="h-12 w-12 opacity-60"
