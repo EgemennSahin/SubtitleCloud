@@ -200,6 +200,7 @@ export const VideoPlayer = ({
           ref={videoRef}
           src={`${src}${other != "upload" && "#t=0.1"}`}
           controls
+          preload="metadata"
         />
       </div>
 
