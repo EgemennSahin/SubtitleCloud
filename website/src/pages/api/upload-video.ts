@@ -59,8 +59,8 @@ export default async function handler(
     expires: Date.now() + 15 * 60 * 1000, // 15 minutes
     contentType: type,
     contentLength: maxContentLength,
-    metadata: {
-      title: title,
+    extensionHeaders: {
+      "x-goog-meta-title": "test",
     },
   };
 

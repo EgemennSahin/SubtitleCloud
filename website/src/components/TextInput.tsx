@@ -65,12 +65,9 @@ export default function SubtitleInput({
             rows={13}
             onChange={(e) => setSrtContent(e.target.value)}
           />
-          <TextButton
-            color="secondary"
-            size="medium"
-            onClick={handleUpload}
-            text={"Submit"}
-          />
+          <button className="btn-secondary" onClick={handleUpload}>
+            Update Subtitles
+          </button>
         </div>
       )}
     </>

@@ -18,11 +18,10 @@ export default function EditVideoPage({
   upload_transcript: string;
 }) {
   const router = useRouter();
-  const [file, setFile] = useState<Blob | null>(null);
-  const [secondaryVideo, setSecondaryVideo] = useState<string | null>(null);
+  const [secondaryVideo, setSecondaryVideo] = useState<any>(null);
 
   const [videos, setVideos] = useState<
-    { title: string | undefined; url: string }[]
+    { title: string | undefined; uid: string | undefined; url: string }[]
   >([]);
 
   const storageRef = ref(premiumStorage, `secondary/${uid}`);
@@ -56,6 +55,46 @@ export default function EditVideoPage({
                   <div className="flex flex-col items-center justify-center">
                     <VideoPlayer src={video_url} size="medium" hideControls />
                   </div>
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <h3>Secondary Video</h3>
+
+                    {secondaryVideo && (
+                      <VideoPlayer
+                        src={secondaryVideo.url}
+                        size="small"
+                        hideControls
+                      />
+                    )}
+                    <div className="flex items-center gap-2">
+                      <Dropdown
+                        options={videos.map((video) => ({
+                          id: video.uid!,
+                          label: video.uid!,
+                          other: video.url,
+                        }))}
+                        onChange={(option) => {
+                          setSecondaryVideo({
+                            uid: option.id,
+                            url: option.other,
+                          });
+                        }}
+                      />
+                      <UploadButton
+                        size="small"
+                        setFile={async (file: Blob) => {
+                          const side_video_id = await handleUpload(
+                            file,
+                            "secondary"
+                          );
+
+                          setSecondaryVideo({
+                            uid: side_video_id,
+                          });
+                        }}
+                        disabled={false}
+                      />
+                    </div>
+                  </div>
 
                   <div className="flex h-full flex-col items-center justify-start gap-2">
                     <h3>Subtitles</h3>
@@ -64,31 +103,6 @@ export default function EditVideoPage({
                       uploadUrl={upload_transcript}
                       uid={uid}
                     />
-                    <h3>Secondary Video</h3>
-                    <div className="flex items-center justify-center gap-2">
-                      <Dropdown
-                        options={videos.map((video) => ({
-                          id: video.title!,
-                          label: video.url,
-                        }))}
-                        onChange={(option) => {
-                          setSecondaryVideo(option.id);
-                        }}
-                      />
-                      <UploadButton
-                        size="medium"
-                        setFile={async (file: Blob) => {
-                          const side_video_id = await handleUpload(
-                            file,
-                            "secondary"
-                          );
-
-                          setSecondaryVideo(side_video_id);
-                        }}
-                        text="Select Secondary Video"
-                        disabled={false}
-                      />
-                    </div>
                   </div>
                 </div>
 
@@ -104,7 +118,7 @@ export default function EditVideoPage({
                             pathname: "/add-to-video",
                             query: {
                               video_id: video_id,
-                              side_video_id: secondaryVideo,
+                              side_video_id: secondaryVideo.uid,
                             },
                           });
                         }}
@@ -138,7 +152,7 @@ import Dropdown from "@/components/dropdown-menu";
 import videos from "./videos";
 import { premiumStorage } from "@/config/firebase";
 import { getVideos } from "@/helpers/firebase";
-import { ref } from "firebase/storage";
+import { getDownloadURL, ref } from "firebase/storage";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

@@ -79,12 +79,12 @@ export async function handleUpload(
 
     const { url, file_id } = await response.json();
 
-    // Upload to the signed url
     await fetch(url, {
       method: "PUT",
       headers: {
         "Content-Type": file.type,
         "Content-Length": file.size.toString(),
+        "x-goog-meta-title": "test",
       },
       body: file,
     });

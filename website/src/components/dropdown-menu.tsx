@@ -3,6 +3,7 @@ import React, { useState } from "react";
 export type DropdownOption = {
   id: string;
   label: string;
+  other?: any;
 };
 
 export default function Dropdown({
