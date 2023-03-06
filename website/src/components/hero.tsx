@@ -12,7 +12,7 @@ export default function Hero() {
             <div className="animate-blob animation-delay-4000 absolute -bottom-24 right-20 h-72 w-72 rounded-full bg-blue-100 opacity-70 mix-blend-multiply blur-xl filter"></div>
             <div className="relative">
               <Image
-                className="mx-auto h-64 w-fit object-cover object-center shadow-2xl sm:h-96"
+                className="mx-auto h-64 w-fit shadow-2xl sm:h-96"
                 width="0"
                 height="0"
                 sizes="100vw"
