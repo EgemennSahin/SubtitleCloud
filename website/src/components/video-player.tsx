@@ -16,13 +16,13 @@ export const VideoPlayer = ({
   size,
   hideControls,
   title,
-  uid,
+  other,
 }: {
   src: string;
   size?: "small" | "medium" | "large";
   hideControls?: boolean;
   title?: string;
-  uid?: string;
+  other?: string;
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -198,7 +198,7 @@ export const VideoPlayer = ({
         <video
           className="rounded-lg"
           ref={videoRef}
-          src={`${src}#t=0.1`}
+          src={`${src}${other != "upload" && "#t=0.1"}`}
           controls
           preload=""
         />

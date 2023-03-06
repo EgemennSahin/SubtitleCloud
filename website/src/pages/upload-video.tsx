@@ -48,6 +48,7 @@ export default function UploadVideo() {
                       size="small"
                       src={URL.createObjectURL(file)}
                       hideControls
+                      other="upload"
                     />
                     <UploadButton
                       size="medium"
