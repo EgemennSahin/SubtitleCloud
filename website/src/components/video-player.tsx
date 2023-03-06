@@ -104,13 +104,44 @@ export const VideoPlayer = ({
   }
 
   async function downloadVideo() {
-    const response = await fetch(src as string);
-    const blob = await response.blob();
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "Shortzoo Captioned Video.mp4";
-    link.click();
-    URL.revokeObjectURL(link.href);
+    try {
+      const response = await fetch(src);
+      const blob = await response.blob();
+
+      if (!navigator.mediaDevices) {
+        // MediaDevices API is not available
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "Captioned Video.mp4";
+        link.click();
+        URL.revokeObjectURL(link.href);
+        return;
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      const chunks: Blob[] = [];
+
+      mediaRecorder.ondataavailable = (e) => {
+        chunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const videoBlob = new Blob(chunks, { type: "video/mp4" });
+        const url = URL.createObjectURL(videoBlob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "Captioned Video.mp4";
+        link.click();
+        URL.revokeObjectURL(url);
+      };
+
+      mediaRecorder.start();
+      setTimeout(() => mediaRecorder.stop(), 10000);
+    } catch (error) {
+      console.error(error);
+      // Handle error
+    }
   }
 
   const copyLinkToClipboard = () => {
