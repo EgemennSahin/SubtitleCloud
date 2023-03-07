@@ -218,7 +218,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         video_id,
         download_transcript,
         upload_transcript,
-        secondaryVideos,
+        secondaryVideos: secondaryVideos.videoData,
       },
     };
   } catch (error) {
