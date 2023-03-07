@@ -68,6 +68,24 @@ export async function handleUpload(
   try {
     const type = file.type;
     const title = file.name;
+
+    // Check if file is less than 3 minutes
+    if (folder === "main" || folder === "secondary") {
+      const video = document.createElement("video");
+      video.src = URL.createObjectURL(file);
+      const duration = await new Promise((resolve) => {
+        video.onloadedmetadata = () => {
+          resolve(video.duration);
+        };
+      });
+      console.log("Duration: ", duration);
+
+      if ((duration as number) > 180) {
+        console.log("Video is too long");
+        return null;
+      }
+    }
+
     // Get the signed url from the server
     const response = await fetch("/api/upload-video", {
       method: "POST",

@@ -129,9 +129,7 @@ export default function PricingPlans({
                     ></path>
                   </svg>
                 </div>
-                <span className="mx-3 text-slate-600">
-                  Automatically publish to
-                </span>
+                <span className="ml-3 mr-2 text-slate-600">Formatted for</span>
                 {["youtube", "instagram", "tiktok"].map((platform) => (
                   <div key={platform} className="mr-2 w-6 drop-shadow">
                     <Image
@@ -262,9 +260,7 @@ export default function PricingPlans({
                     ></path>
                   </svg>
                 </div>
-                <span className="mx-3 text-white">
-                  Automatically publish to{" "}
-                </span>
+                <span className="mr-2 ml-3 text-white">Formatted for</span>
                 {["youtube", "instagram", "tiktok"].map((platform) => (
                   <div key={platform} className="mr-2 w-6 drop-shadow">
                     <Image
