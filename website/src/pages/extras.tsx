@@ -86,7 +86,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       props: {
         uid: token.uid,
-        videos,
+        videos: videos.videoData,
       },
     };
   } catch (error) {

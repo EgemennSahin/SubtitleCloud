@@ -23,6 +23,8 @@ export default function OnboardingPage({ user }: { user: User }) {
         title="Verify Email"
         description="Verify your email to gain access to generate subtitles for your videos."
       />
+      <Navbar uid={user.uid} />
+      <BottomNavigation />
       <div className="my-8 max-w-xl grow self-center rounded-lg bg-slate-50 px-16 py-14 drop-shadow-xl sm:grow-0">
         <div className="flex flex-col items-center drop-shadow">
           <h2 className="mb-6 text-center text-3xl font-bold text-slate-800">
@@ -57,6 +59,8 @@ import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
+import BottomNavigation from "@/components/bottom-navigation";
+import Navbar from "@/components/nav-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

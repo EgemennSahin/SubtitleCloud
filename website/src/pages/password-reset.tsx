@@ -27,7 +27,7 @@ export default function PasswordResetPage({ uid }: { uid: string }) {
         description="Reset your password and regain access to your account on our short video subtitling solution."
       />
       <Navbar uid={uid} />
-
+      <BottomNavigation />
       <section>
         <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-xl lg:w-96">

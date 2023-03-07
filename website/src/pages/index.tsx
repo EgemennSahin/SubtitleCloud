@@ -3,6 +3,8 @@ import Hero from "@/components/hero";
 export default function NewPage({ uid }: { uid: string }) {
   return (
     <>
+      <Seo title="Home" description="Home page" />
+
       <Navbar uid={uid} />
 
       <Hero />
@@ -14,6 +16,7 @@ import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Navbar from "@/components/nav-bar";
+import Seo from "@/components/seo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

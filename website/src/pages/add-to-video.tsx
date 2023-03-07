@@ -49,6 +49,7 @@ export default function AddToVideoPage({
       />
       <div className="flex overflow-hidden rounded-lg bg-white">
         <Sidebar />
+        <BottomNavigation />
         <div className="flex w-0 flex-1 flex-col overflow-hidden">
           <main className="relative flex-1 overflow-y-auto focus:outline-none">
             <div className="py-6">
