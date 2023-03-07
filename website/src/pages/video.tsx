@@ -15,6 +15,7 @@ export default function GeneratedVideoPage({
       />
       <div className="flex overflow-hidden rounded-lg bg-white">
         <Sidebar />
+        <BottomNavigation />
         <div className="flex w-0 flex-1 flex-col overflow-hidden">
           <main className="relative flex-1 overflow-y-auto focus:outline-none">
             <div className="py-6">
@@ -39,6 +40,7 @@ import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
 import Sidebar from "@/components/side-bar";
+import BottomNavigation from "@/components/bottom-navigation";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

@@ -5,17 +5,28 @@ import {
   StorageReference,
   getMetadata,
   ref,
+  list,
 } from "firebase/storage";
 
 export async function getVideos({
   uid,
   folder,
+  pageToken,
 }: {
   uid: string;
   folder: "main" | "secondary" | "output";
+  pageToken?: string;
 }) {
   const storageRef = ref(premiumStorage, `${folder}/${uid}`);
-  const res = await listAll(storageRef); // Wait for listAll to resolve
+
+  let options = {};
+  if (folder == "output") {
+    options = {
+      maxResults: 3,
+      pageToken: pageToken || null,
+    };
+  }
+  const res = await list(storageRef, options); // Wait for listAll to resolve
   const promises = res.items.map(async (item) => {
     const downloadURL = await getDownloadURL(item); // Wait for getDownloadURL to resolve
     const metadata = await getMetadata(item); // Get the metadata for the item
@@ -24,5 +35,7 @@ export async function getVideos({
     return { title, url: downloadURL, video_id: video_id }; // Return an object with the uid and url
   });
   const videoData = await Promise.all(promises); // Wait for all promises to resolve
-  return videoData;
+
+  console.log("Next page token: ", res.nextPageToken);
+  return { videoData, nextPageToken: res.nextPageToken };
 }

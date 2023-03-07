@@ -1,10 +1,14 @@
 import React from "react";
 import Seo from "@/components/seo";
 
-export default function DashboardPage({
+export default function Videos({
   videos,
+  nextPageToken,
+  prevPageToken,
 }: {
   videos: { title: string; video_id: string; url: string }[];
+  nextPageToken: string;
+  prevPageToken: string;
 }) {
   return (
     <>
@@ -24,6 +28,20 @@ export default function DashboardPage({
                 <h1 className="mb-8 text-center text-3xl text-neutral-600">
                   Your videos
                 </h1>
+                <div className="flex items-center justify-center gap-4 px-4">
+                  {nextPageToken ? (
+                    <Link
+                      className="btn-secondary"
+                      href={`/videos?page=${nextPageToken}`}
+                    >
+                      <ArrowRightIcon className="h-5 w-5" />
+                    </Link>
+                  ) : (
+                    <Link className="btn-secondary" href={`/videos?`}>
+                      <FolderIcon className="h-5 w-5" />
+                    </Link>
+                  )}
+                </div>
               </div>
               <VideoList videos={videos} />
             </div>
@@ -42,6 +60,12 @@ import VideoList from "@/components/video-list";
 import Sidebar from "@/components/side-bar";
 import BottomNavigation from "@/components/bottom-navigation";
 import { getVideos } from "@/helpers/firebase";
+import Link from "next/link";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  FolderIcon,
+} from "@heroicons/react/24/solid";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -64,16 +88,30 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
+    // Get the page from the query
+    const { page } = context.query;
+
+    const pageToken = page?.toString();
+
     // Get videos
-    const videos = await getVideos({ uid: token.uid, folder: "output" });
+    const videos = await getVideos({
+      uid: token.uid,
+      folder: "output",
+      pageToken: pageToken,
+    });
 
     return {
       props: {
         uid: token.uid,
-        videos,
+        videos: videos.videoData,
+        nextPageToken: videos.nextPageToken || null,
       },
     };
   } catch (error) {
     return handleError(error);
   }
 }
+
+// Start with no prevPage and nextPage
+// Get this page's token, or null if it's the first page
+// Go to nextPage, set this page's token as its prevPage
