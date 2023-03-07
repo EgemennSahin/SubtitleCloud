@@ -10,7 +10,7 @@ export default function VideoList({
 }) {
   return (
     <>
-      <ul className=" grid grid-cols-1 gap-y-12 pb-16 md:grid-cols-2 md:gap-y-16 xl:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-y-12 md:grid-cols-2 md:gap-y-16 xl:grid-cols-3">
         {videos.map((video, index) => (
           <li className="flex items-center justify-center" key={index}>
             <VideoPlayer

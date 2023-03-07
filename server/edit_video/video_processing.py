@@ -12,10 +12,10 @@ def find_square_length(main_mp4_filename, game_mp4_filename):
     return min(probe_main['width'], probe_main['height'], probe_game['width'], probe_game['height'])
 
 def create_mp3(mp4_filename, output_name):
-    output = output_name + ".mp3"
+    output = "".join(output_name.split(".")[:-1]) + ".mp3"
     (
         ffmpeg.input(mp4_filename)
-        .output(output, acodec="libmp3lame", preset="ultrafast")
+        .output(output, preset="ultrafast")
         .overwrite_output()
         .run()
     )
