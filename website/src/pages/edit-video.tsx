@@ -64,7 +64,7 @@ export default function EditVideoPage({
                         }))}
                         onChange={(option) => {
                           setSecondaryVideo({
-                            uid: option.id,
+                            video_id: option.id,
                             url: option.other,
                           });
                         }}
@@ -111,8 +111,6 @@ export default function EditVideoPage({
                     <div className="items-bottom mt-6 flex justify-center">
                       <button
                         onClick={async () => {
-                          // Upload the secondary video
-
                           // Redirect to the video page
                           router.push({
                             pathname: "/add-to-video",
