@@ -45,17 +45,10 @@ export default function DashboardPage({
                       </Link>
 
                       <Link
-                        href="/"
-                        className="focus:ring-offset-2; mx-auto block w-72 transform items-center rounded-xl border-2 border-white px-10 py-2.5 text-center text-base font-medium text-red-600 shadow-md transition duration-500 ease-in-out hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        href="/delete-account"
+                        className="flex w-full transform items-center justify-center rounded-xl border-2 border-red-600 px-10  py-3 text-center text-base font-medium text-red-600 transition duration-500 ease-in-out hover:border-red-700 hover:bg-red-700 hover:text-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                       >
-                        <div className="flex flex-col items-center py-4">
-                          <TrashIcon
-                            className="h-12 w-12 opacity-60"
-                            aria-hidden="true"
-                          />
-
-                          <div className="mt-4 text-xl">Delete account</div>
-                        </div>
+                        Delete Account
                       </Link>
                     </div>
                   </div>
