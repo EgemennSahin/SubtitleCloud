@@ -8,8 +8,10 @@ import {
   ArrowPathIcon,
   ShareIcon,
   ArrowDownTrayIcon,
+  TrashIcon,
 } from "@heroicons/react/24/solid";
 import { Modal } from "./modal";
+import { useRouter } from "next/router";
 
 export const VideoPlayer = ({
   src,
@@ -17,12 +19,16 @@ export const VideoPlayer = ({
   hideControls,
   title,
   other,
+  folder,
+  video_id,
 }: {
   src: string;
   size?: "small" | "medium" | "large";
   hideControls?: boolean;
   title?: string;
   other?: string;
+  folder?: string;
+  video_id?: string;
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -34,6 +40,7 @@ export const VideoPlayer = ({
   const { ModalElement, closeModal, openModal } = Modal(
     "Video copied to clipboard!"
   );
+  const router = useRouter();
 
   const handlePlayPause = () => {
     if (!videoRef.current) {
@@ -271,24 +278,48 @@ export const VideoPlayer = ({
       </div>
 
       {!hideControls && (
-        <div className="mt-4 flex gap-4">
-          <ModalElement />
-          <button
-            onClick={() => {
-              copyLinkToClipboard();
-              openModal();
-            }}
-            className="btn-secondary"
-          >
-            <ShareIcon className="h-6 w-6" />
-          </button>
-          <button
-            onClick={downloadVideo}
-            className="focus:ring-offset-2; block transform items-center rounded-xl bg-blue-600 px-10 py-3 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <ArrowDownTrayIcon className="h-6 w-6" />
-          </button>
-        </div>
+        <>
+          <div className="mt-4 flex gap-4">
+            <ModalElement />
+            <button
+              onClick={() => {
+                copyLinkToClipboard();
+                openModal();
+              }}
+              className="btn-secondary"
+            >
+              <ShareIcon className="h-6 w-6" />
+            </button>
+            <button
+              onClick={downloadVideo}
+              className="focus:ring-offset-2; block transform items-center rounded-xl bg-blue-600 px-10 py-3 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <ArrowDownTrayIcon className="h-6 w-6" />
+            </button>
+          </div>
+
+          <div className="mt-4 flex gap-4">
+            <button
+              onClick={async () => {
+                await fetch("/api/delete-video", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    folder,
+                    video_id,
+                  }),
+                });
+
+                router.reload();
+              }}
+              className="focus:ring-offset-2; block transform items-center rounded-xl bg-red-600 px-10 py-3 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              <TrashIcon className="h-6 w-6" />
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

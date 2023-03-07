@@ -50,7 +50,7 @@ export default function DashboardPage({
                 </div>
               </div>
 
-              <VideoList videos={videos} />
+              <VideoList videos={videos} folder="secondary" />
             </div>
           </main>
         </div>

@@ -4,11 +4,9 @@ import Seo from "@/components/seo";
 export default function Videos({
   videos,
   nextPageToken,
-  prevPageToken,
 }: {
   videos: { title: string; video_id: string; url: string }[];
   nextPageToken: string;
-  prevPageToken: string;
 }) {
   return (
     <>
@@ -43,7 +41,7 @@ export default function Videos({
                   )}
                 </div>
               </div>
-              <VideoList videos={videos} />
+              <VideoList videos={videos} folder="output" />
             </div>
           </main>
         </div>
