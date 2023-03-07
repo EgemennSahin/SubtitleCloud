@@ -55,7 +55,7 @@ paths:
       summary: Add subtitles to the video
       operationId: "process"
       x-google-backend:
-        address: https://edit-video-px2m4mdiyq-uc.a.run.app
+        address: https://us-central1-captioning-693de.cloudfunctions.net/edit-video
         deadline: 360.0
       produces:
         - "application/json"

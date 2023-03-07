@@ -8,22 +8,6 @@ from datetime import timedelta
 client = storage.Client.from_service_account_json('public-process-account-key.json')
 bucket = client.bucket("shortzoo-premium")
 
-'''
-Request format:
-{
-    uid: "uid",
-    video_data: {
-        video_id: "video_id",
-        secondary_video_id: "secondary_video_id",
-    }
-}
-
-Response format:
-{
-    url: "url",
-}
-'''
-
 @functions_framework.http
 def edit_video(request):
     if request.method == 'OPTIONS':
