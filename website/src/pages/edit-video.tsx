@@ -64,7 +64,7 @@ export default function EditVideoPage({
                         }))}
                         onChange={(option) => {
                           setSecondaryVideo({
-                            uid: option.video_id,
+                            uid: option.id,
                             url: option.other,
                           });
                         }}
