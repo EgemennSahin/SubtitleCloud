@@ -13,11 +13,7 @@ export default function TermsOfService() {
         We use Your Personal data to provide and improve the Service. By using
         the Service, You agree to the collection and use of information in
         accordance with this Privacy Policy. This Privacy Policy has been
-        created with the help of the
-        <a href="https://www.freeprivacypolicy.com/free-privacy-policy-generator/">
-          Free Privacy Policy Generator
-        </a>
-        .
+        created with the help of the .
       </p>
       <h1>Interpretation and Definitions</h1>
       <h2>Interpretation</h2>
