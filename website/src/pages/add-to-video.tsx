@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import Spinner from "@/components/spinner";
 import Seo from "@/components/seo";
 import { handleVideoProcessing } from "@/helpers/processing";
+import Sidebar from "@/components/side-bar";
+import BottomNavigation from "@/components/bottom-navigation";
 
 export default function AddToVideoPage({
   video_id,
@@ -83,7 +85,6 @@ import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { isPaidUser } from "@/helpers/stripe";
-import Sidebar from "@/components/side-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

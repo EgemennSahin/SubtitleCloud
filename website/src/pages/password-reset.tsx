@@ -2,6 +2,9 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
+import Seo from "@/components/seo";
+import Navbar from "@/components/nav-bar";
+import BottomNavigation from "@/components/bottom-navigation";
 
 export default function PasswordResetPage({ uid }: { uid: string }) {
   const router = useRouter();
@@ -84,8 +87,6 @@ export default function PasswordResetPage({ uid }: { uid: string }) {
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import Seo from "@/components/seo";
-import Navbar from "@/components/nav-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
