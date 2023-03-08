@@ -1,7 +1,6 @@
 import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import { isPaidUser } from "@/helpers/stripe";
 import Seo from "@/components/seo";
 import Sidebar from "@/components/side-bar";
 import React from "react";
@@ -125,10 +124,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    if (!isPaidUser({ token })) {
+    if (!token.email_verified) {
       return {
         redirect: {
-          destination: "/pricing",
+          destination: "/onboarding",
           permanent: false,
         },
       };

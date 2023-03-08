@@ -40,11 +40,6 @@ export default function Hero() {
                 Get started with Shortzoo
               </Link>
             </div>
-            <div className="mt-3 rounded-lg sm:mt-0 sm:ml-3">
-              <Link href="/pricing" className="btn-secondary">
-                See features and pricing tiers
-              </Link>
-            </div>
           </div>
         </div>
       </div>

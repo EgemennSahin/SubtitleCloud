@@ -139,7 +139,6 @@ export default function EditVideoPage({
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import { isPaidUser } from "@/helpers/stripe";
 import { parseCookies } from "nookies";
 import SubtitleInput from "@/components/TextInput";
 import UploadButton from "@/components/upload-button";
@@ -147,7 +146,6 @@ import { handleUpload } from "@/helpers/upload";
 import Sidebar from "@/components/side-bar";
 import BottomNavigation from "@/components/bottom-navigation";
 import Dropdown from "@/components/dropdown-menu";
-import videos from "./videos";
 import { premiumStorage } from "@/config/firebase";
 import { getVideos } from "@/helpers/firebase";
 import { getDownloadURL, ref } from "firebase/storage";
@@ -160,15 +158,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       return {
         redirect: {
           destination: "/login",
-          permanent: false,
-        },
-      };
-    }
-
-    if (!isPaidUser({ token })) {
-      return {
-        redirect: {
-          destination: "/pricing",
           permanent: false,
         },
       };

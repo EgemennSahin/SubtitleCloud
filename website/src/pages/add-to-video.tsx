@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import Spinner from "@/components/spinner";
 import Seo from "@/components/seo";
 import { handleVideoProcessing } from "@/helpers/processing";
+import { GetServerSidePropsContext } from "next";
+import { getToken } from "@/helpers/user";
+import { handleError } from "@/helpers/error";
+import Sidebar from "@/components/side-bar";
 
 export default function AddToVideoPage({
   video_id,
@@ -78,12 +82,6 @@ export default function AddToVideoPage({
   );
 }
 
-import { GetServerSidePropsContext } from "next";
-import { getToken } from "@/helpers/user";
-import { handleError } from "@/helpers/error";
-import { isPaidUser } from "@/helpers/stripe";
-import Sidebar from "@/components/side-bar";
-
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const token = await getToken({ context });
@@ -92,15 +90,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       return {
         redirect: {
           destination: "/login",
-          permanent: false,
-        },
-      };
-    }
-
-    if (!isPaidUser({ token })) {
-      return {
-        redirect: {
-          destination: "/pricing",
           permanent: false,
         },
       };

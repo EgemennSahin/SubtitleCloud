@@ -101,7 +101,6 @@ export default function ProcessVideoPage({
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import { isPaidUser } from "@/helpers/stripe";
 import { handleTranscribe } from "@/helpers/processing";
 import Sidebar from "@/components/side-bar";
 
@@ -118,14 +117,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    if (!isPaidUser({ token })) {
-      return {
-        redirect: {
-          destination: "/pricing",
-          permanent: false,
-        },
-      };
-    }
+
 
     const { video_id } = context.query;
 

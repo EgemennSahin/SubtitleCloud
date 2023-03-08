@@ -2,7 +2,6 @@ import React from "react";
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import { isPaidUser } from "@/helpers/stripe";
 import VideoList from "@/components/video-list";
 import Sidebar from "@/components/side-bar";
 import BottomNavigation from "@/components/bottom-navigation";
@@ -71,14 +70,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    if (!isPaidUser({ token })) {
-      return {
-        redirect: {
-          destination: "/pricing",
-          permanent: false,
-        },
-      };
-    }
 
     // Get videos
     const videos = await getVideos({ uid: token.uid, folder: "secondary" });
