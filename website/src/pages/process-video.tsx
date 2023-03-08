@@ -102,7 +102,6 @@ export default function ProcessVideoPage({
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import { isPaidUser } from "@/helpers/stripe";
 import { handleTranscribe } from "@/helpers/processing";
 import Sidebar from "@/components/side-bar";
 import BottomNavigation from "@/components/bottom-navigation";
@@ -115,15 +114,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       return {
         redirect: {
           destination: "/login",
-          permanent: false,
-        },
-      };
-    }
-
-    if (!isPaidUser({ token })) {
-      return {
-        redirect: {
-          destination: "/pricing",
           permanent: false,
         },
       };

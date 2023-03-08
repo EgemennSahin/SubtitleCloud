@@ -139,7 +139,6 @@ export default function EditVideoPage({
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import { isPaidUser } from "@/helpers/stripe";
 import { parseCookies } from "nookies";
 import SubtitleInput from "@/components/TextInput";
 import UploadButton from "@/components/upload-button";
@@ -165,14 +164,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    if (!isPaidUser({ token })) {
-      return {
-        redirect: {
-          destination: "/pricing",
-          permanent: false,
-        },
-      };
-    }
+
 
     // Get the video_id and transcribeData from the query
     const { video_id, download_transcript, upload_transcript } = context.query;
