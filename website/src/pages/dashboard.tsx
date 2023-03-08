@@ -13,7 +13,7 @@ import {
   Cog6ToothIcon,
   FolderIcon,
 } from "@heroicons/react/24/solid";
-import VideoList from "@/components/video-list";
+import { dashboardRoute } from "@/helpers/routing";
 
 export default function DashboardPage({
   uid,
@@ -45,7 +45,7 @@ export default function DashboardPage({
                   Your dashboard
                 </h1>
                 <h2 className="mb-8 text-center text-xl text-slate-600">
-                  You have {user.video_credit} credits left this month.
+                  You have {user.video_credit || 0} credits left this month.
                 </h2>
                 <div className="grid grid-cols-1 items-center justify-center gap-6 lg:w-full lg:grid-cols-3">
                   <div className="flex flex-col items-center p-6">
@@ -124,13 +124,21 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-
+    const authorized = dashboardRoute(token);
+    if (!(authorized == true)) {
+      return {
+        redirect: {
+          destination: authorized,
+          permanent: false,
+        },
+      };
+    }
 
     const user = await getUser({ uid: token.uid });
 
     return {
       props: {
-        user: user?.data(),
+        user: user?.data() || {},
         uid: token.uid,
       },
     };

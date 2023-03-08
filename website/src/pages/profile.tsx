@@ -5,7 +5,7 @@ import Seo from "@/components/seo";
 import Sidebar from "@/components/side-bar";
 import React from "react";
 import BottomNavigation from "@/components/bottom-navigation";
-import { CreditCardIcon, TrashIcon, UserIcon } from "@heroicons/react/24/solid";
+import { UserIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 
 export default function DashboardPage({
@@ -79,7 +79,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       props: {
         uid: token.uid,
-        user: user?.data(),
+        user: user?.data() || {},
       },
     };
   } catch (error) {

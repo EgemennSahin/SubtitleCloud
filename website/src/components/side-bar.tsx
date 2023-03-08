@@ -13,7 +13,7 @@ export default function Sidebar() {
     <>
       <div className="hidden md:flex md:flex-shrink-0">
         <div className="flex w-56 flex-col">
-          <div className="flex flex-grow flex-col overflow-y-auto border-r border-slate-50 bg-white pt-5">
+          <div className="flex flex-grow flex-col overflow-y-auto border-r border-slate-50 bg-slate-50 pt-5">
             <div className="flex flex-shrink-0 flex-col items-center px-4">
               <Link href="/" className="px-8 text-left focus:outline-none">
                 <h2 className="block transform cursor-pointer p-2 text-xl font-medium tracking-tighter text-slate-900 transition duration-500 ease-in-out hover:text-slate-900">
@@ -22,7 +22,7 @@ export default function Sidebar() {
               </Link>
             </div>
             <div className="mt-5 flex flex-grow flex-col px-4">
-              <nav className="flex-1 space-y-1 bg-white">
+              <nav className="flex-1 space-y-1">
                 <ul>
                   <li>
                     <Link

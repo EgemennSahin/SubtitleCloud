@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export default function BottomNavigation() {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-slate-50 md:hidden">
       <ul className="flex justify-around py-2">
         <li className="flex-1">
           <Link
