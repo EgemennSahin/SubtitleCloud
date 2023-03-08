@@ -1,6 +1,10 @@
 [
   {
-    "origin": ["https://www.shortzoo.com", "http://localhost:3000"],
+    "origin": [
+      "https://www.shortzoo.com",
+      "http://localhost:3000",
+      "https://shortzoo-git-preview-egemennsahin.vercel.app"
+    ],
     "method": ["GET", "PUT"],
     "responseHeader": [
       "Content-Type",
