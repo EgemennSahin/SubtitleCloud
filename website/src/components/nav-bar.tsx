@@ -15,13 +15,6 @@ function Navbar({ uid }: { uid: string }) {
         >
           Shortzoo
         </Link>
-
-        <Link
-          className="focus:shadow-outline text-md px-4 text-gray-500 hover:text-blue-600 focus:outline-none"
-          href="/pricing"
-        >
-          Pricing
-        </Link>
       </span>
 
       {uid ? (
