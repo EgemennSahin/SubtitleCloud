@@ -37,12 +37,7 @@ export default function Hero() {
           <div className="mt-0 flex items-center lg:mt-6">
             <div className="mt-3 rounded-lg sm:mt-0">
               <Link href="/dashboard" className="btn-primary">
-                Get started with Shortzoo
-              </Link>
-            </div>
-            <div className="mt-3 rounded-lg sm:mt-0 sm:ml-3">
-              <Link href="/pricing" className="btn-secondary">
-                See features and pricing tiers
+                Get started for free with Shortzoo
               </Link>
             </div>
           </div>
