@@ -1,5 +1,4 @@
 import Link from "next/link";
-import AnimateBlob from "../animate-blob";
 
 export default function ContentLarge({
   title,

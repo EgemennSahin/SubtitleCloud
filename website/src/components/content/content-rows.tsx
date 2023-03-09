@@ -1,5 +1,3 @@
-import AnimateBlob from "../animate-blob";
-
 export default function ContentRows({
   title,
   header,
@@ -12,8 +10,6 @@ export default function ContentRows({
   return (
     <section>
       <div className="relative mx-auto flex max-w-7xl flex-col items-center px-5 py-8 sm:px-6 lg:px-8">
-        <AnimateBlob color="teal" position="-bottom-20 right-0" />
-
         <div className="prose prose-blue mx-auto flex w-full max-w-3xl flex-col text-left">
           <div className="mx-auto w-full">
             <h1 className="mb-8 text-3xl font-bold leading-none tracking-tight text-slate-600 md:text-6xl lg:text-4xl">
@@ -23,7 +19,7 @@ export default function ContentRows({
               {header}
             </h2>
             {main.map((item, index) => {
-              let w = "32";
+              let w = "";
               switch (index) {
                 case 0:
                   w = "32";

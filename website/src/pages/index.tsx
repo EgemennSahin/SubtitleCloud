@@ -7,6 +7,12 @@ import Seo from "@/components/seo";
 import ContentRows from "@/components/content/content-rows";
 import ContentGrids from "../components/content/content-grids";
 import ContentLarge from "@/components/content/content-large";
+import Footer from "@/components/footer";
+import {
+  ChatBubbleBottomCenterTextIcon,
+  ShieldCheckIcon,
+  VideoCameraIcon,
+} from "@heroicons/react/24/solid";
 
 export default function NewPage({ uid }: { uid: string }) {
   return (
@@ -41,17 +47,19 @@ export default function NewPage({ uid }: { uid: string }) {
         grids={[
           {
             title: "Caption 15 videos for free every month",
-            image: "/images/block1.png",
+            icon: <VideoCameraIcon className="h-8 w-8 text-blue-500" />,
             body: "With Shortzoo, you can create up to 15 videos for free every month. Our platform will always be free!",
           },
           {
             title: "Secure storage for your videos and data",
-            image: "/images/illustration.png",
+            icon: <ShieldCheckIcon className="h-8 w-8 text-blue-500" />,
             body: "At Shortzoo, we take the security and privacy of your videos and data very seriously. We use advanced encryption and secure servers to ensure that your information is always protected.",
           },
           {
             title: "Accurate and automated captions for each word",
-            image: "/images/illustration.png",
+            icon: (
+              <ChatBubbleBottomCenterTextIcon className="h-8 w-8 text-blue-500" />
+            ),
             body: "Shortzoo uses premium AI models to provide accurate and automated captions for your videos. This saves you time and effort, and ensures that your captions are always of high quality.",
           },
         ]}
@@ -61,6 +69,8 @@ export default function NewPage({ uid }: { uid: string }) {
         title="Start a new way of creation with Shortzoo. Unleash your creativity."
         body="Create videos that captivate"
       />
+
+      <Footer />
     </>
   );
 }
