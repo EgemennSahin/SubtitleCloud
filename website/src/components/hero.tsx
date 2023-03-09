@@ -6,7 +6,7 @@ export default function Hero() {
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:px-12 lg:px-24 lg:py-24">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center">
         <div className="w-full rounded-xl lg:w-1/2 lg:max-w-lg">
-          <div className="relative  mx-auto w-full max-w-lg">
+          <div className="relative mx-auto w-full max-w-lg">
             <div className="animate-blob absolute top-0 -left-4 h-72 w-72 rounded-full bg-teal-100 opacity-70 mix-blend-multiply blur-xl filter"></div>
 
             <div className="animate-blob animation-delay-4000 absolute -bottom-24 right-20 h-72 w-72 rounded-full bg-blue-100 opacity-70 mix-blend-multiply blur-xl filter"></div>
@@ -34,7 +34,7 @@ export default function Hero() {
             <span className="font-bold text-teal-500"> secondary content </span>
             to increase viewer engagement.
           </p>
-          <div className="mt-0 flex items-center lg:mt-6">
+          <div className="mt-0 flex w-full justify-center lg:mt-6 lg:justify-start">
             <div className="mt-3 rounded-lg sm:mt-0">
               <Link href="/dashboard" className="btn-primary">
                 Get started for free with Shortzoo

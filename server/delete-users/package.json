@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "start": "npx functions-framework --target=deleteUsers [--signature-type=http]"
+  },
+  "dependencies": {
+    "firebase-admin": "^11.5.0"
+  },
+  "devDependencies": {
+    "@google-cloud/functions-framework": "^3.1.3"
+  }
+}

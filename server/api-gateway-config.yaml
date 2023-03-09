@@ -1,0 +1,101 @@
+swagger: "2.0"
+host: "public-process-api-3uhvqd62v9z7a.apigateway.captioning-693de.cloud.goog"
+x-google-endpoints:
+  - name: "public-process-api-3uhvqd62v9z7a.apigateway.captioning-693de.cloud.goog"
+    allowCors: True
+info:
+  title: public-process-api
+  version: 1.0.0
+schemes:
+  - https
+produces:
+  - application/json
+paths:
+  /subtitle:
+    post:
+      summary: Generate word-level subtitles and upload the subtitle to google cloud bucket
+      operationId: "subtitle"
+      x-google-backend:
+        address: https://transcribe-video-px2m4mdiyq-uc.a.run.app
+        deadline: 360.0
+      produces:
+        - "application/json"
+      security:
+        - api_key: []
+      parameters:
+        - name: video_id
+          in: body
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: body
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              url:
+                type: string
+                description: The response message
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized request
+        "403":
+          description: Error in parameters
+        "500":
+          description: Internal server error
+  /process:
+    post:
+      summary: Add subtitles to the video
+      operationId: "process"
+      x-google-backend:
+        address: https://us-central1-captioning-693de.cloudfunctions.net/edit-video
+        deadline: 360.0
+      produces:
+        - "application/json"
+      security:
+        - api_key: []
+      parameters:
+        - name: uid
+          in: body
+          required: true
+          schema:
+            type: string
+        - name: video_data
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              video_id:
+                type: string
+              secondary_id:
+                type: string
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              url:
+                type: string
+                description: The response message
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized request
+        "403":
+          description: Error in parameters
+        "500":
+          description: Internal server error
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "key"
+    in: "query"

@@ -29,17 +29,22 @@ export default function PasswordResetPage({ uid }: { uid: string }) {
         title="Reset Password"
         description="Reset your password and regain access to your account on our short video subtitling solution."
       />
-      <Navbar uid={uid} />
-      <BottomNavigation />
-      <section>
-        <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-          <div className="mx-auto w-full max-w-xl lg:w-96">
-            <h2 className="mt-6 text-3xl font-extrabold text-neutral-600">
-              Reset password
-            </h2>
+      {!uid && <Navbar uid={""} />}
+      <div className="flex overflow-hidden rounded-lg bg-white">
+        {uid && (
+          <>
+            <Sidebar />
+            <BottomNavigation />
+          </>
+        )}
+        <div className="flex w-0 flex-1 flex-col overflow-hidden">
+          <main className="relative flex-1 overflow-y-auto focus:outline-none">
+            <div className="py-6 pb-24">
+              <div className="mx-auto flex max-w-7xl flex-col items-center px-4 sm:px-6 md:px-8">
+                <h1 className="mb-8 text-center text-3xl text-neutral-600">
+                  Reset Password
+                </h1>
 
-            <div className="mt-8">
-              <div className="mt-6">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <label
@@ -75,9 +80,9 @@ export default function PasswordResetPage({ uid }: { uid: string }) {
                 </form>
               </div>
             </div>
-          </div>
+          </main>
         </div>
-      </section>
+      </div>
     </>
   );
 }
@@ -85,6 +90,7 @@ export default function PasswordResetPage({ uid }: { uid: string }) {
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
+import Sidebar from "@/components/side-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

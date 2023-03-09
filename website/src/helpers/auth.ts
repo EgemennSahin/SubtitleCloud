@@ -8,7 +8,13 @@ import {
   onIdTokenChanged,
   User,
 } from "firebase/auth";
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import {
+  setDoc,
+  doc,
+  getDoc,
+  deleteField,
+  updateDoc,
+} from "firebase/firestore";
 import { destroyCookie, setCookie } from "nookies";
 import { useEffect } from "react";
 
@@ -50,6 +56,11 @@ export const signUp = async (email: string, password: string) => {
 
 export const logIn = async (email: string, password: string) => {
   await signInWithEmailAndPassword(auth, email, password);
+  if (auth.currentUser) {
+    await fetch("/api/save-account", {
+      method: "POST",
+    });
+  }
 };
 
 export const authGoogle = async () => {
@@ -66,6 +77,14 @@ export const authGoogle = async () => {
         email: userCredentials.user.email,
       });
     }
+
+    if (userExists) {
+      await fetch("/api/save-account", {
+        method: "POST",
+      });
+    }
+
+    return;
   } catch (error) {
     console.log(error);
   }
@@ -73,8 +92,6 @@ export const authGoogle = async () => {
 
 export const logOut = async () => {
   await signOut(auth);
-
-  window.location.reload();
 };
 
 export const setCookies = async (user: User | null, force?: boolean) => {

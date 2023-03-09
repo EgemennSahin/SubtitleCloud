@@ -125,6 +125,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
 
     const authorized = dashboardRoute(token);
+    
     if (!(authorized == true)) {
       return {
         redirect: {

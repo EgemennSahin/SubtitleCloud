@@ -11,3 +11,7 @@ server/backup
 public-process-account-key.json
 server/.DS_Store
 *.pkl
+
+node_modules
+.gcloudignore
+.python-version

@@ -1,5 +1,6 @@
 import { firebaseAdmin } from "@/config/firebase-admin";
 import { getToken } from "@/helpers/user";
+import moment from "moment";
 import {
   GetServerSidePropsContext,
   NextApiRequest,
@@ -48,9 +49,21 @@ export default async function handler(
       return res.status(200).json({ message: "User document already exists" });
     }
 
+    const signupDate = new Date();
+    let weekOfMonth =
+      moment(signupDate).week() -
+      moment(signupDate).startOf("month").week() +
+      1;
+
+    if (weekOfMonth > 4) {
+      weekOfMonth = 4;
+    }
+    
+
     await firebaseAdmin.firestore().collection("users").doc(uid).set({
       uid,
       video_credit: 15,
+      signup_week: weekOfMonth,
     });
 
     res.status(200).json({ message: "User document initialized" });
