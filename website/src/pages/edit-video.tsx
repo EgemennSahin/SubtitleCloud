@@ -117,7 +117,7 @@ export default function EditVideoPage({
                             pathname: "/add-to-video",
                             query: {
                               video_id: video_id,
-                              side_video_id: secondaryVideo.video_id,
+                              side_video_id: secondaryVideo?.video_id || null,
                             },
                           });
                         }}
