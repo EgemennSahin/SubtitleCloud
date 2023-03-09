@@ -15,7 +15,7 @@ export default function ContentRows({
             <h1 className="mb-8 text-3xl font-bold leading-none tracking-tight text-slate-600 md:text-6xl lg:text-4xl">
               {title}
             </h1>
-            <h2 className="mb-8 text-xs font-bold uppercase tracking-widest text-blue-600">
+            <h2 className=" mb-8 text-xs font-bold uppercase tracking-widest text-blue-600">
               {header}
             </h2>
             {main.map((item, index) => {

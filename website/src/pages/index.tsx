@@ -10,6 +10,7 @@ import ContentLarge from "@/components/content/content-large";
 import Footer from "@/components/footer";
 import {
   ChatBubbleBottomCenterTextIcon,
+  FaceSmileIcon,
   ShieldCheckIcon,
   VideoCameraIcon,
 } from "@heroicons/react/24/solid";
@@ -33,7 +34,7 @@ export default function NewPage({ uid }: { uid: string }) {
           {
             title: "Engage your audience",
             paragraph:
-              "When you add secondary content to your videos, like bottom videos, you can make your videos more interactive and engaging. With Shortzoo, it's easy to add gameplay to your videos and increase viewer engagement.",
+              "When you add secondary content to your videos, you can make your videos more interactive and engaging. With Shortzoo, it's easy to add gameplay to your videos and increase viewer engagement.",
           },
           {
             title: "Built by video creators, for video creators",
@@ -46,21 +47,21 @@ export default function NewPage({ uid }: { uid: string }) {
       <ContentGrids
         grids={[
           {
-            title: "Caption 15 videos for free every month",
-            icon: <VideoCameraIcon className="h-8 w-8 text-blue-500" />,
-            body: "With Shortzoo, you can create up to 15 videos for free every month. Our platform will always be free!",
+            title: "Free forever",
+            icon: <FaceSmileIcon className="h-8 w-8 text-blue-500" />,
+            body: "With Shortzoo, you can create up to 15 videos for free every month. Plus, our platform will always be free!",
           },
           {
-            title: "Secure storage for your videos and data",
+            title: "Secure storage",
             icon: <ShieldCheckIcon className="h-8 w-8 text-blue-500" />,
-            body: "At Shortzoo, we take the security and privacy of your videos and data very seriously. We use advanced encryption and secure servers to ensure that your information is always protected.",
+            body: "At Shortzoo, we take the security and privacy of your data very seriously. We use secure servers to ensure that your information is always protected.",
           },
           {
-            title: "Accurate and automated captions for each word",
+            title: "Word level captions",
             icon: (
               <ChatBubbleBottomCenterTextIcon className="h-8 w-8 text-blue-500" />
             ),
-            body: "Shortzoo uses premium AI models to provide accurate and automated captions for your videos. This saves you time and effort, and ensures that your captions are always of high quality.",
+            body: "Shortzoo uses premium AI models to provide accurate and automated captions for your videos to provide captions of the highest quality.",
           },
         ]}
       />
