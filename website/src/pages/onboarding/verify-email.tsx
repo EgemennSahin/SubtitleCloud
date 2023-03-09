@@ -5,11 +5,11 @@ import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
-import BottomNavigation from "@/components/bottom-navigation";
-import Navbar from "@/components/nav-bar";
+import BottomNavigation from "@/components/navigation/bottom-bar";
+import Navbar from "@/components/navigation/nav-bar";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import { auth } from "@/config/firebase";
-import Sidebar from "@/components/side-bar";
+import Sidebar from "@/components/navigation/side-bar";
 import { dashboardRoute } from "@/helpers/routing";
 
 export default function VerifyEmail({ token }: { token: DecodedIdToken }) {

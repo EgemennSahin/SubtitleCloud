@@ -98,8 +98,8 @@ import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { VideoPlayer } from "@/components/video-player";
-import Sidebar from "@/components/side-bar";
-import BottomNavigation from "@/components/bottom-navigation";
+import Sidebar from "@/components/navigation/side-bar";
+import BottomNavigation from "@/components/navigation/bottom-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -113,8 +113,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         },
       };
     }
-
-
 
     return {
       props: {

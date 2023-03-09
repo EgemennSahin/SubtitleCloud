@@ -3,8 +3,8 @@ import { auth } from "@/config/firebase";
 import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import Seo from "@/components/seo";
-import Navbar from "@/components/nav-bar";
-import BottomNavigation from "@/components/bottom-navigation";
+import Navbar from "@/components/navigation/nav-bar";
+import BottomNavigation from "@/components/navigation/bottom-bar";
 
 export default function PasswordResetPage({ uid }: { uid: string }) {
   const router = useRouter();
@@ -90,7 +90,7 @@ export default function PasswordResetPage({ uid }: { uid: string }) {
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import Sidebar from "@/components/side-bar";
+import Sidebar from "@/components/navigation/side-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

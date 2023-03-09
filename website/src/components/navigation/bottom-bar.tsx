@@ -9,7 +9,7 @@ import {
 } from "@heroicons/react/24/solid";
 import Link from "next/link";
 
-export default function BottomNavigation() {
+export default function BottomBar() {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-slate-50 md:hidden">
       <ul className="flex justify-around py-2">

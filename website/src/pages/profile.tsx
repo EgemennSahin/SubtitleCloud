@@ -2,19 +2,13 @@ import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
-import Sidebar from "@/components/side-bar";
+import Sidebar from "@/components/navigation/side-bar";
 import React from "react";
-import BottomNavigation from "@/components/bottom-navigation";
+import BottomNavigation from "@/components/navigation/bottom-bar";
 import { UserIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 
-export default function DashboardPage({
-  uid,
-  user,
-}: {
-  uid: string;
-  user: any;
-}) {
+export default function DashboardPage({ user }: { user: any }) {
   return (
     <>
       <Seo
@@ -78,8 +72,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     return {
       props: {
-        uid: token.uid,
-        user: user?.data() || {},
+        user: token,
       },
     };
   } catch (error) {

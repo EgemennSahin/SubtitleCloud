@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
-import TextButton from "@/components/text-button";
 import { useRouter } from "next/router";
 import Seo from "@/components/seo";
-import { VideoPlayer } from "@/components/video-player";
+import { VideoPlayer } from "@/components/video/video-player";
 
 export default function EditVideoPage({
   uid,
   video_url,
   video_id,
-  download_transcript,
+  srt,
   upload_transcript,
   secondaryVideos,
 }: {
   uid: string;
   video_url: string;
   video_id: string;
-  download_transcript: string;
+  srt: string;
   upload_transcript: string;
   secondaryVideos: { title: string; video_id: string; url: string }[];
 }) {
@@ -55,6 +54,19 @@ export default function EditVideoPage({
                         hideControls
                       />
                     )}
+
+                    <div className="flex h-full flex-col items-center justify-start gap-2">
+                      <h3>Subtitles</h3>
+                      <SubtitleInput
+                        srt={srt}
+                        uploadUrl={upload_transcript}
+                        uid={uid}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex h-full flex-col items-center justify-start gap-2">
+                    <h3>Bottom Video</h3>
+
                     <div className="flex items-center gap-2">
                       <Dropdown
                         options={secondaryVideos.map((video) => ({
@@ -95,15 +107,6 @@ export default function EditVideoPage({
                       />
                     </div>
                   </div>
-
-                  <div className="flex h-full flex-col items-center justify-start gap-2">
-                    <h3>Subtitles</h3>
-                    <SubtitleInput
-                      downloadUrl={download_transcript}
-                      uploadUrl={upload_transcript}
-                      uid={uid}
-                    />
-                  </div>
                 </div>
 
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
@@ -140,11 +143,11 @@ import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import { parseCookies } from "nookies";
-import SubtitleInput from "@/components/TextInput";
+import SubtitleInput from "@/components/subtitle/subtitle-editor";
 import UploadButton from "@/components/upload-button";
 import { handleUpload } from "@/helpers/upload";
-import Sidebar from "@/components/side-bar";
-import BottomNavigation from "@/components/bottom-navigation";
+import Sidebar from "@/components/navigation/side-bar";
+import BottomNavigation from "@/components/navigation/bottom-bar";
 import Dropdown from "@/components/dropdown-menu";
 import videos from "./videos";
 import { premiumStorage } from "@/config/firebase";
@@ -163,8 +166,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         },
       };
     }
-
-
 
     // Get the video_id and transcribeData from the query
     const { video_id, download_transcript, upload_transcript } = context.query;
@@ -197,6 +198,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
+    // Download the transcript
+    const transcript_response = await fetch(download_transcript as string);
+
+    const transcript = await transcript_response.text();
+
+    console.log("Transcript response: ", transcript);
     // Get videos
     const secondaryVideos = await getVideos({
       uid: token.uid,
@@ -208,7 +215,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         uid: token.uid,
         video_url,
         video_id,
-        download_transcript,
+        srt: transcript,
         upload_transcript,
         secondaryVideos: secondaryVideos.videoData,
       },

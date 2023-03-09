@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import Spinner from "@/components/spinner";
 import Seo from "@/components/seo";
 import { handleVideoProcessing } from "@/helpers/processing";
-import Sidebar from "@/components/side-bar";
-import BottomNavigation from "@/components/bottom-navigation";
+import Sidebar from "@/components/navigation/side-bar";
+import BottomNavigation from "@/components/navigation/bottom-bar";
 
 export default function AddToVideoPage({
   video_id,
@@ -97,7 +97,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         },
       };
     }
-
 
     const { video_id, side_video_id } = context.query;
 

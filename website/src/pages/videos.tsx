@@ -53,9 +53,9 @@ export default function Videos({
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import VideoList from "@/components/video-list";
-import Sidebar from "@/components/side-bar";
-import BottomNavigation from "@/components/bottom-navigation";
+import VideoList from "@/components/video/video-list";
+import Sidebar from "@/components/navigation/side-bar";
+import BottomNavigation from "@/components/navigation/bottom-bar";
 import { getVideos } from "@/helpers/firebase";
 import Link from "next/link";
 import {

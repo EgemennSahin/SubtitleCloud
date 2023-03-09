@@ -1,13 +1,13 @@
-import Hero from "@/components/hero";
+import Hero from "@/components/content/hero";
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import Navbar from "@/components/nav-bar";
+import Navbar from "@/components/navigation/nav-bar";
 import Seo from "@/components/seo";
 import ContentRows from "@/components/content/content-rows";
 import ContentGrids from "../components/content/content-grids";
 import ContentLarge from "@/components/content/content-large";
-import Footer from "@/components/footer";
+import Footer from "@/components/navigation/footer";
 import {
   ChatBubbleBottomCenterTextIcon,
   FaceSmileIcon,

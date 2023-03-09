@@ -2,10 +2,10 @@ import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
-import Sidebar from "@/components/side-bar";
+import Sidebar from "@/components/navigation/side-bar";
 import React from "react";
 import Link from "next/link";
-import BottomNavigation from "@/components/bottom-navigation";
+import BottomNavigation from "@/components/navigation/bottom-bar";
 import {
   ArrowLeftOnRectangleIcon,
   ArrowUpTrayIcon,

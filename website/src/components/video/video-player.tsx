@@ -10,7 +10,7 @@ import {
   ArrowDownTrayIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
-import { Modal } from "./modal";
+import { Modal } from "../modal";
 import { useRouter } from "next/router";
 
 export const VideoPlayer = ({

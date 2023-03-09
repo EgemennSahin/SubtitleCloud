@@ -138,7 +138,7 @@ import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
 import Link from "next/link";
-import Navbar from "@/components/nav-bar";
+import Navbar from "@/components/navigation/nav-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
