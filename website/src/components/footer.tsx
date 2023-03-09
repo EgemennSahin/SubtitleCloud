@@ -17,7 +17,8 @@ export default function Footer() {
             >
               Shortzoo
             </Link>
-            All rights reserved.
+            All rights reserved.{" "}
+            <Link href="mailto:contact@shortzoo.com">contact@shortzoo.com</Link>
           </span>
         </div>
       </div>
