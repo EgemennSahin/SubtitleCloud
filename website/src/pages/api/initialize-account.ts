@@ -58,7 +58,6 @@ export default async function handler(
     if (weekOfMonth > 4) {
       weekOfMonth = 4;
     }
-    
 
     await firebaseAdmin.firestore().collection("users").doc(uid).set({
       uid,

@@ -1,6 +1,5 @@
 import { sendEmailVerification, User } from "firebase/auth";
 import React from "react";
-import TextButton from "@/components/text-button";
 import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";

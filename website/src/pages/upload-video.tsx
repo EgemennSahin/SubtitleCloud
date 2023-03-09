@@ -1,9 +1,14 @@
 import UploadButton from "@/components/upload-button";
 import React, { useState } from "react";
-import TextButton from "@/components/text-button";
 import { useRouter } from "next/router";
 import { handleUpload } from "@/helpers/upload";
 import Seo from "@/components/seo";
+import { GetServerSidePropsContext } from "next";
+import { getToken } from "@/helpers/user";
+import { handleError } from "@/helpers/error";
+import Sidebar from "@/components/navigation/side-bar";
+import BottomNavigation from "@/components/navigation/bottom-bar";
+import { VideoPlayer } from "@/components/video/video-player";
 
 export default function UploadVideo() {
   const router = useRouter();
@@ -93,13 +98,6 @@ export default function UploadVideo() {
     </>
   );
 }
-
-import { GetServerSidePropsContext } from "next";
-import { getToken } from "@/helpers/user";
-import { handleError } from "@/helpers/error";
-import { VideoPlayer } from "@/components/video-player";
-import Sidebar from "@/components/navigation/side-bar";
-import BottomNavigation from "@/components/navigation/bottom-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

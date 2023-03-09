@@ -8,9 +8,7 @@ import BottomNavigation from "@/components/navigation/bottom-bar";
 import { getVideos } from "@/helpers/firebase";
 import Seo from "@/components/seo";
 import UploadButton from "@/components/upload-button";
-import { premiumStorage } from "@/config/firebase";
 import { handleUpload } from "@/helpers/upload";
-import { getDownloadURL, ref } from "firebase/storage";
 
 export default function DashboardPage({
   videos,

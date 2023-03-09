@@ -1,6 +1,5 @@
 import { CloudArrowUpIcon } from "@heroicons/react/24/solid";
 import uploadFunctions from "@/helpers/upload";
-import TextButton from "./text-button";
 
 export default function UploadButton({
   setFile,

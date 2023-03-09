@@ -1,6 +1,11 @@
-import React, { useState } from "react";
-import TextButton from "@/components/text-button";
-import { VideoPlayer } from "@/components/video-player";
+import React from "react";
+import { GetServerSidePropsContext } from "next";
+import { getToken } from "@/helpers/user";
+import { handleError } from "@/helpers/error";
+import Seo from "@/components/seo";
+import Sidebar from "@/components/navigation/side-bar";
+import BottomNavigation from "@/components/navigation/bottom-bar";
+import { VideoPlayer } from "@/components/video/video-player";
 
 export default function GeneratedVideoPage({
   video_url,
@@ -34,13 +39,6 @@ export default function GeneratedVideoPage({
     </>
   );
 }
-
-import { GetServerSidePropsContext } from "next";
-import { getToken } from "@/helpers/user";
-import { handleError } from "@/helpers/error";
-import Seo from "@/components/seo";
-import Sidebar from "@/components/navigation/side-bar";
-import BottomNavigation from "@/components/navigation/bottom-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

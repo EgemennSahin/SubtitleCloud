@@ -5,7 +5,6 @@ import Seo from "@/components/seo";
 import Sidebar from "@/components/navigation/side-bar";
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import BottomNavigation from "@/components/navigation/bottom-bar";
 import {
   ArrowUpTrayIcon,

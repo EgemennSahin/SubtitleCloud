@@ -45,16 +45,6 @@ export default function EditVideoPage({
                     <VideoPlayer src={video_url} size="medium" hideControls />
                   </div>
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <h3>Secondary Video</h3>
-
-                    {secondaryVideo && (
-                      <VideoPlayer
-                        src={secondaryVideo.url}
-                        size="small"
-                        hideControls
-                      />
-                    )}
-
                     <div className="flex h-full flex-col items-center justify-start gap-2">
                       <h3>Subtitles</h3>
                       <SubtitleInput
@@ -66,6 +56,14 @@ export default function EditVideoPage({
                   </div>
                   <div className="flex h-full flex-col items-center justify-start gap-2">
                     <h3>Bottom Video</h3>
+
+                    {secondaryVideo && (
+                      <VideoPlayer
+                        src={secondaryVideo.url}
+                        size="small"
+                        hideControls
+                      />
+                    )}
 
                     <div className="flex items-center gap-2">
                       <Dropdown
