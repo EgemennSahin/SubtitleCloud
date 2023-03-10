@@ -169,7 +169,10 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
                           Send phone verification code
                         </button>
 
-                        <div id="recaptcha-container" />
+                        <div
+                          className="flex items-center justify-center"
+                          id="recaptcha-container"
+                        />
                       </form>
                     )}
                   </div>
