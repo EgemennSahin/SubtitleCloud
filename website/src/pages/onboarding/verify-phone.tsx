@@ -61,20 +61,17 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
 
     const authCredential = PhoneAuthProvider.credential(result, code);
 
-    if (!user.phoneNumber) {
-      try {
-        await updatePhoneNumber(user, authCredential);
-      } catch (error: any) {
-        console.log(error);
-        if (error.code === "auth/account-exists-with-different-credential") {
-          alert("This phone number is already in use. Try a different one.");
-          setMessageSent(false);
-        } else alert("Invalid code. Please try again.");
-      }
+    try {
+      await updatePhoneNumber(user, authCredential);
+    } catch (error: any) {
+      console.log(error);
+      if (error.code === "auth/account-exists-with-different-credential") {
+        alert("This phone number is already in use. Try a different one.");
+        setMessageSent(false);
+      } else alert("Invalid code. Please try again.");
     }
 
     // Update the token
-
     await fetch("/api/initialize-account", {
       method: "POST",
     });
@@ -106,9 +103,9 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
                 <div className="mt-8 w-full max-w-xl">
                   {messageSent ? (
                     <form
-                      onSubmit={(e) => {
+                      onSubmit={async (e) => {
                         e.preventDefault();
-                        handleVerifyCode();
+                        await handleVerifyCode();
                       }}
                       className="space-y-6"
                     >
@@ -145,9 +142,9 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
                     </form>
                   ) : (
                     <form
-                      onSubmit={(e) => {
+                      onSubmit={async (e) => {
                         e.preventDefault();
-                        handleSendCode();
+                        await handleSendCode();
                       }}
                       className="space-y-6"
                     >
