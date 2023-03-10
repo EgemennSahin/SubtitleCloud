@@ -167,16 +167,11 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
                             Send phone verification code
                           </button>
                         </div>
-
-                        <div
-                          id="recaptcha-container"
-                          data-sitekey="6LcsaxsdAAAAAEBn0sPDCEncnU9564MisyRuDzD_"
-                          data-callback="sendForm"
-                          data-size="invisible"
-                        ></div>
                       </form>
                     )}
                   </div>
+
+                  <div id="recaptcha-container"></div>
                 </div>
               </div>
             </div>
