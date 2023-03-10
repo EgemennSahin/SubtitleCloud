@@ -32,6 +32,7 @@ def edit_video(request):
         "subtitle_id": None,
         "secondary_id": None
     }
+    title = ""
 
     for key in data:
         # Get the data from the request
@@ -60,7 +61,13 @@ def edit_video(request):
         if not blob.exists():
             print(key, id, " doesn't exist in the bucket")
             return ('File does not exist', 403)
-        
+
+        if (key == "video_id"):
+            metadata_blob = bucket.get_blob(path)
+            title = metadata_blob.metadata["title"]
+            print("title: ", title)
+            print('Metadata: ', blob.metadata)
+                
         # Download the file into a temporary location
         blob.download_to_filename(temp_path)
         
@@ -71,7 +78,7 @@ def edit_video(request):
     # Run the main function
     print("Starting the editing process")
 
-    output_name = "/tmp/" + uid + "_" + vid + ".mp4"
+    output_name = "/tmp/" + uid + "_" + vid
     output_file = process_video(
         data["video_id"],
         data["secondary_id"],
@@ -83,6 +90,10 @@ def edit_video(request):
     # Upload the created video
     new_blob = bucket.blob(output_file_name)
     new_blob.upload_from_filename(output_file, content_type='video/mp4')
+
+    metadata = { "title": title }
+    new_blob.metadata = metadata
+    new_blob.patch()
 
     # Generate a signed URL
     url = new_blob.generate_signed_url(
