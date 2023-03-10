@@ -1,3 +1,4 @@
+import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
 type SubtitleBoxProps = {
@@ -50,9 +51,18 @@ export default function SubtitleBox({
     const ms = timeToMs(updatedStart);
     const newMs = increment ? ms + 100 : ms - 100;
     if (newMs < 0) return;
-    console.log("New time: ", msToTime(newMs));
     setUpdatedStart(msToTime(newMs));
     onSubtitleChange(index, msToTime(newMs), endTime, text);
+  };
+
+  const setStartTime = (time: string) => {
+    setUpdatedStart(time);
+    onSubtitleChange(index, time, endTime, text);
+  };
+
+  const setEndTime = (time: string) => {
+    setUpdatedEnd(time);
+    onSubtitleChange(index, startTime, time, text);
   };
 
   // Increase or decrease the end time by 0.1 seconds
@@ -70,20 +80,63 @@ export default function SubtitleBox({
     onSubtitleChange(index, updatedStart, updatedEnd, newText);
   };
 
+  // Only show the seconds and milliseconds
+  const start = startTime.split(":").slice(2);
+  const end = endTime.split(":").slice(2);
+
   return (
-    <div className="flex items-center">
-      <button onClick={() => adjustStartTime(false)}>-</button>
-      <span>{updatedStart}</span>
-      <button onClick={() => adjustStartTime(true)}>+</button>
+    <div className="grid grid-cols-12 gap-2">
+      <span className="place-self-center text-sm text-slate-500">
+        {index + 1}
+      </span>
+      <button className="place-self-end" onClick={() => adjustStartTime(false)}>
+        <MinusCircleIcon className="h-6 w-6 text-blue-600" />
+      </button>
       <input
-        className="text-center"
+        className="col-span-2 text-center"
+        type="text"
+        pattern="\d{2},\d{3}"
+        value={start}
+        onChange={(e) => {
+          // Format it to HH:MM:SS,MMM
+          const [seconds, milliseconds] = e.target.value.split(",");
+          const newTime = `00:00:${seconds},${milliseconds}`;
+
+          setStartTime(newTime);
+        }}
+      />
+      <button
+        className="place-self-start"
+        onClick={() => adjustStartTime(true)}
+      >
+        <PlusCircleIcon className="h-6 w-6 text-blue-600" />
+      </button>
+      <input
+        className="col-span-2 text-center"
         type="text"
         value={updatedText}
         onChange={handleTextChange}
       />
-      <button onClick={() => adjustEndTime(false)}>-</button>
-      <span>{updatedEnd}</span>
-      <button onClick={() => adjustEndTime(true)}>+</button>
+
+      <button className="place-self-end" onClick={() => adjustEndTime(false)}>
+        <MinusCircleIcon className="h-6 w-6 text-blue-600" />
+      </button>
+      <input
+        className="col-span-2 text-center"
+        type="text"
+        pattern="\d{2},\d{3}"
+        value={end}
+        onChange={(e) => {
+          // Format it to HH:MM:SS,MMM
+          const [seconds, milliseconds] = e.target.value.split(",");
+          const newTime = `00:00:${seconds},${milliseconds}`;
+
+          setEndTime(newTime);
+        }}
+      />
+      <button className="place-self-start" onClick={() => adjustEndTime(true)}>
+        <PlusCircleIcon className="h-6 w-6 text-blue-600" />
+      </button>
     </div>
   );
 }

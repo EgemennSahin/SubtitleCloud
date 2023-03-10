@@ -1,7 +1,9 @@
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import SubtitleBox from "./subtitle-box";
 
 interface Subtitle {
+  index: number;
   startTime: string;
   endTime: string;
   text: string;
@@ -9,55 +11,30 @@ interface Subtitle {
 
 export default function SubtitleInput({
   srt,
-  uploadUrl,
-  uid,
+  setState,
 }: {
   srt: string;
-  uploadUrl: string;
-  uid: string;
+  setState: any;
 }) {
-  const [srtContent, setSrtContent] = useState(srt);
-  const [uploaded, setUploaded] = useState(false);
-  const [subtitles, setSubtitles] = useState<Subtitle[]>();
-
-  // upload the edited srtContent to the uploadUrl
-  async function handleUpload() {
-    // Create a new Blob object from the srtContent string
-    const file = new File([srtContent], uid, { type: "text/plain" });
-
-    // Create a new FormData object and append the Blob to it
-    const formData = new FormData();
-    formData.append("subtitle", file, uid);
-    try {
-      await fetch(uploadUrl, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "text/plain",
-        },
-        body: file,
-      });
-
-      setUploaded(true);
-    } catch (error) {
-      console.error(error);
-      setUploaded(false);
-    }
-  }
+  const [subtitles, setSubtitles] = useState<Subtitle[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const subtitlesPerPage = 15;
 
   // Get each Subtitle object from the subtitles
   useEffect(() => {
-    const lines = srtContent.trim().split("\n");
+    const lines = srt.trim().split("\n");
 
     const parsedSubtitles = [];
 
     for (let i = 0; i < lines.length; i += 4) {
+      const index = parseInt(lines[i]);
       const [startTime, endTime] = lines[i + 1].split(" --> ");
       const text = lines[i + 2];
-      parsedSubtitles.push({ startTime, endTime, text });
+      parsedSubtitles.push({ index, startTime, endTime, text });
     }
 
     setSubtitles(parsedSubtitles);
-  }, [srtContent]);
+  }, [srt]);
 
   // Edit the srtContent when a subtitle is changed
   function editSrtContent(
@@ -66,25 +43,29 @@ export default function SubtitleInput({
     updatedEnd: string,
     newText: string
   ) {
-    const lines = srtContent.trim().split("\n");
+    const lines = srt.trim().split("\n");
 
     lines[index * 4 + 1] = `${updatedStart} --> ${updatedEnd}`;
     lines[index * 4 + 2] = newText;
 
     const newSrtContent = lines.join("\n");
 
-    setSrtContent(newSrtContent);
+    setState(newSrtContent);
   }
+
+  // Get the start and end index of the current page
+  const startIndex = Math.max((currentPage - 1) * subtitlesPerPage, 0);
+  const endIndex = Math.min(currentPage * subtitlesPerPage, subtitles?.length!);
 
   return (
     <>
-      {srtContent && (
-        <div className="flex flex-col items-center">
-          {subtitles?.map((subtitle, index) => {
+      {srt && (
+        <div className="flex flex-col items-center space-y-2">
+          {subtitles.slice(startIndex, endIndex).map((subtitle) => {
             return (
               <SubtitleBox
-                key={index}
-                index={index}
+                key={subtitle.index - 1}
+                index={subtitle.index - 1}
                 startTime={subtitle.startTime}
                 endTime={subtitle.endTime}
                 text={subtitle.text}
@@ -98,15 +79,37 @@ export default function SubtitleInput({
                   // const subtitleRegex = /(\d+)\n([\d:,]+) --> ([\d:,]+)\n(.+)/gs;
 
                   editSrtContent(index, updatedStart, updatedEnd, newText);
-                  console.log("SRT: ", srtContent);
                 }}
               />
             );
           })}
-
-          <button className="btn-secondary" onClick={handleUpload}>
-            Confirm changes
-          </button>
+          <span className="text-2xl text-slate-600">
+            {currentPage} / {Math.ceil(subtitles?.length! / subtitlesPerPage)}
+          </span>
+          <div className="mb-2 flex gap-3">
+            <button
+              className="btn-primary"
+              onClick={() => {
+                if (currentPage <= 1) {
+                  return;
+                }
+                setCurrentPage(currentPage - 1);
+              }}
+            >
+              <ArrowLeftIcon className="h-5 w-5" />
+            </button>
+            <button
+              className="btn-primary"
+              onClick={() => {
+                if (currentPage > subtitles.length / subtitlesPerPage) {
+                  return;
+                }
+                setCurrentPage(currentPage + 1);
+              }}
+            >
+              <ArrowRightIcon className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       )}
     </>

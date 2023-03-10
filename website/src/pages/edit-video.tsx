@@ -20,6 +20,30 @@ export default function EditVideoPage({
 }) {
   const router = useRouter();
   const [secondaryVideo, setSecondaryVideo] = useState<any>(null);
+  const [subtitle, setSubtitle] = useState(srt);
+
+  console.log("Subs: ", subtitle);
+
+  // upload the edited srtContent to the uploadUrl
+  async function handleUploadSubtitle() {
+    // Create a new Blob object from the srtContent string
+    const file = new File([srt], uid, { type: "text/plain" });
+
+    // Create a new FormData object and append the Blob to it
+    const formData = new FormData();
+    formData.append("subtitle", file, uid);
+    try {
+      await fetch(upload_transcript, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "text/plain",
+        },
+        body: file,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <>
@@ -40,22 +64,18 @@ export default function EditVideoPage({
                   Edit video
                 </h1>
 
-                <div className="grid grid-cols-2 items-center">
-                  <div className="flex flex-col items-center justify-center">
+                <div className="grid grid-cols-1 items-start lg:grid-cols-2">
+                  <div className="flex flex-col items-center justify-start">
+                    <h3 className="text-xl font-semibold">Main Video</h3>
+
                     <VideoPlayer src={video_url} size="medium" hideControls />
                   </div>
-                  <div className="flex flex-col items-center justify-center gap-2">
-                    <div className="flex h-full flex-col items-center justify-start gap-2">
-                      <h3>Subtitles</h3>
-                      <SubtitleInput
-                        srt={srt}
-                        uploadUrl={upload_transcript}
-                        uid={uid}
-                      />
-                    </div>
+                  <div className="flex flex-col items-center">
+                    <h3 className="mb-3 text-xl font-semibold">Subtitles</h3>
+                    <SubtitleInput srt={subtitle} setState={setSubtitle} />
                   </div>
                   <div className="flex h-full flex-col items-center justify-start gap-2">
-                    <h3>Bottom Video</h3>
+                    <h3 className="text-xl font-semibold">Bottom Video</h3>
 
                     {secondaryVideo && (
                       <VideoPlayer
@@ -112,6 +132,9 @@ export default function EditVideoPage({
                     <div className="items-bottom mt-6 flex justify-center">
                       <button
                         onClick={async () => {
+                          // Upload the edited subtitle
+                          await handleUploadSubtitle();
+
                           // Redirect to the video page
                           router.push({
                             pathname: "/add-to-video",
