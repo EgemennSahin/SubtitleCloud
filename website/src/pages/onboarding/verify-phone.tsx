@@ -8,7 +8,7 @@ import {
   updatePhoneNumber,
   User,
 } from "firebase/auth";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
@@ -23,6 +23,21 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
   const [messageSent, setMessageSent] = useState(false);
   const [result, setResult] = useState("");
   const router = useRouter();
+  const [appVerifier, setAppVerifier] = useState<RecaptchaVerifier | null>(
+    null
+  );
+
+  useEffect(() => {
+    setAppVerifier(
+      new RecaptchaVerifier(
+        "recaptcha-container",
+        {
+          size: "invisible",
+        },
+        auth
+      )
+    );
+  }, []);
 
   async function handleSendCode() {
     if (!token) {
@@ -30,21 +45,14 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
     }
 
     const provider = new PhoneAuthProvider(auth);
-    const appVerifier = new RecaptchaVerifier(
-      "recaptcha-container",
-      {
-        size: "invisible",
-      },
-      auth
-    );
-
-    if (phone === "" || phone.length < 10) return;
-
     try {
+      if (phone === "" || phone.length < 10) return;
+
       const verificationId = await provider.verifyPhoneNumber(
-        phone,
+        phone.replace(" ", ""),
         appVerifier
       );
+
       setResult(verificationId);
       setMessageSent(true);
     } catch (error: any) {
@@ -162,7 +170,7 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
                             type="tel"
                             autoComplete="tel"
                             required
-                            placeholder="Your phone number"
+                            placeholder="+X XXX XXX XXXX"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             className="block w-full transform rounded-lg border border-transparent bg-gray-50 px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
