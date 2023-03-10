@@ -29,8 +29,14 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
       return;
     }
 
-    let appVerifier = new RecaptchaVerifier("recaptcha-container", {}, auth);
     const provider = new PhoneAuthProvider(auth);
+    const appVerifier = new RecaptchaVerifier(
+      "recaptcha-container",
+      {
+        size: "invisible",
+      },
+      auth
+    );
 
     if (phone === "" || phone.length < 10) return;
 
@@ -91,91 +97,92 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
                   Verify phone number
                 </h1>
 
+                <h2 className="max-w-xl text-justify text-xl text-neutral-600">
+                  We need to verify your phone number to ensure that you are a
+                  real person. <br /> Format your phone number as: +1 555 555
+                  5555
+                </h2>
+
                 <div className="mt-8 w-full max-w-xl">
-                  <div className="mt-6">
-                    {messageSent ? (
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          handleVerifyCode();
-                        }}
-                        className="space-y-6"
-                      >
-                        <div>
-                          <label
-                            htmlFor="tel"
-                            className="block text-sm font-medium text-neutral-600"
-                          >
-                            Verification code
-                          </label>
-                          <div className="mt-1">
-                            <input
-                              id="tel"
-                              name="tel"
-                              type="tel"
-                              autoComplete="tel"
-                              required
-                              placeholder="Your verification code"
-                              value={code}
-                              onChange={(e) => setCode(e.target.value)}
-                              className="block w-full transform rounded-lg border border-transparent bg-gray-50 px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
-                            />
-                          </div>
+                  {messageSent ? (
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        handleVerifyCode();
+                      }}
+                      className="space-y-6"
+                    >
+                      <div>
+                        <label
+                          htmlFor="tel"
+                          className="block text-sm font-medium text-neutral-600"
+                        >
+                          Verification code
+                        </label>
+                        <div className="mt-1">
+                          <input
+                            id="tel"
+                            name="tel"
+                            type="tel"
+                            autoComplete="tel"
+                            required
+                            placeholder="Your verification code"
+                            value={code}
+                            onChange={(e) => setCode(e.target.value)}
+                            className="block w-full transform rounded-lg border border-transparent bg-gray-50 px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+                          />
                         </div>
+                      </div>
 
-                        <div>
-                          <button
-                            type="submit"
-                            className="flex w-full transform items-center justify-center rounded-xl bg-blue-600 px-10 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                          >
-                            Verify phone number
-                          </button>
-                        </div>
-                      </form>
-                    ) : (
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          handleSendCode();
-                        }}
-                        className="space-y-6"
-                      >
-                        <div>
-                          <label
-                            htmlFor="tel"
-                            className="block text-sm font-medium text-neutral-600"
-                          >
-                            Phone number
-                          </label>
-                          <div className="mt-1">
-                            <input
-                              id="tel"
-                              name="tel"
-                              type="tel"
-                              autoComplete="tel"
-                              required
-                              placeholder="Your phone number"
-                              value={phone}
-                              onChange={(e) => setPhone(e.target.value)}
-                              className="block w-full transform rounded-lg border border-transparent bg-gray-50 px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
-                            />
-                          </div>
-                        </div>
-
+                      <div>
                         <button
                           type="submit"
                           className="flex w-full transform items-center justify-center rounded-xl bg-blue-600 px-10 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         >
-                          Send phone verification code
+                          Verify phone number
                         </button>
+                      </div>
+                    </form>
+                  ) : (
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSendCode();
+                      }}
+                      className="space-y-6"
+                    >
+                      <div>
+                        <label
+                          htmlFor="tel"
+                          className="block text-sm font-medium text-neutral-600"
+                        >
+                          Phone number
+                        </label>
+                        <div className="mt-1">
+                          <input
+                            id="tel"
+                            name="tel"
+                            type="tel"
+                            autoComplete="tel"
+                            required
+                            placeholder="Your phone number"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            className="block w-full transform rounded-lg border border-transparent bg-gray-50 px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+                          />
+                        </div>
+                      </div>
 
-                        <div
-                          className="flex items-center justify-center"
-                          id="recaptcha-container"
-                        />
-                      </form>
-                    )}
-                  </div>
+                      <button
+                        type="submit"
+                        className="flex w-full transform items-center justify-center rounded-xl bg-blue-600 px-10 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                      >
+                        Send phone verification code
+                      </button>
+
+                      <div id="recaptcha-container"> </div>
+                    </form>
+                  )}
                 </div>
               </div>
             </div>
