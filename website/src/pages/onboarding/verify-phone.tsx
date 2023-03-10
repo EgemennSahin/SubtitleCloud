@@ -13,10 +13,8 @@ import { GetServerSidePropsContext } from "next";
 import { getToken, getUser } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
-import BottomNavigation from "@/components/navigation/bottom-bar";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import { auth } from "@/config/firebase";
-import Sidebar from "@/components/navigation/side-bar";
 import { useRouter } from "next/router";
 
 export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
@@ -31,17 +29,22 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
       return;
     }
 
+    let appVerifier = new RecaptchaVerifier("recaptcha-container", {}, auth);
     const provider = new PhoneAuthProvider(auth);
-    const appVerifier = new RecaptchaVerifier(
-      "recaptcha-container",
-      {
-        size: "invisible",
-      },
-      auth
-    );
-    const verificationId = await provider.verifyPhoneNumber(phone, appVerifier);
-    setResult(verificationId);
-    setMessageSent(true);
+
+    if (phone === "" || phone.length < 10) return;
+
+    try {
+      const verificationId = await provider.verifyPhoneNumber(
+        phone,
+        appVerifier
+      );
+      setResult(verificationId);
+      setMessageSent(true);
+    } catch (error: any) {
+      console.log(error);
+      alert("Invalid phone number. Please try again.");
+    }
   }
 
   async function handleVerifyCode() {
@@ -159,19 +162,17 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
                           </div>
                         </div>
 
-                        <div>
-                          <button
-                            type="submit"
-                            className="flex w-full transform items-center justify-center rounded-xl bg-blue-600 px-10 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                          >
-                            Send phone verification code
-                          </button>
-                        </div>
+                        <button
+                          type="submit"
+                          className="flex w-full transform items-center justify-center rounded-xl bg-blue-600 px-10 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        >
+                          Send phone verification code
+                        </button>
+
+                        <div id="recaptcha-container" />
                       </form>
                     )}
                   </div>
-
-                  <div id="recaptcha-container"></div>
                 </div>
               </div>
             </div>
