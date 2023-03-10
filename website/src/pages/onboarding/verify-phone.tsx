@@ -50,7 +50,7 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
 
       const verificationId = await provider.verifyPhoneNumber(
         phone.replace(" ", ""),
-        appVerifier
+        appVerifier!
       );
 
       setResult(verificationId);
