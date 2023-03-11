@@ -74,12 +74,13 @@ export default function EditVideoPage({
                     </li>
                     <li>
                       <span className="text-slate-600">2.</span> Choose your
-                      bottom video (optional) by clicking on the "Choose an
-                      option" button and selecting the video you want to add.
+                      bottom video (optional) by clicking on the &quot;Choose an
+                      option&quot; button and selecting the video you want to
+                      add.
                     </li>
                     <li>
                       <span className="text-slate-600">3.</span> Process your
-                      video by clicking on the "Continue" button.
+                      video by clicking on the &quot;Continue&quot; button.
                     </li>
                   </ol>
                 </div>
