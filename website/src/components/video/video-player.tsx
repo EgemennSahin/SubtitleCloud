@@ -48,7 +48,6 @@ export const VideoPlayer = ({
     "Video copied to clipboard!"
   );
   const [currentSubtitle, setCurrentSubtitle] = useState("");
-  const [parsedSubtitles, setParsedSubtitles] = useState<any[]>();
 
   const router = useRouter();
 
@@ -203,14 +202,7 @@ export const VideoPlayer = ({
     }
   };
 
-  // Use the subtitle package to parse the srt file
-  useEffect(() => {
-    if (!subtitles) {
-      return;
-    }
-
-    setParsedSubtitles(parseSync(subtitles));
-  }, [subtitles]);
+  var parsedSubtitles = parseSync(subtitles || "") || [];
 
   const handleTimeUpdate = () => {
     if (!subtitles) {
@@ -224,7 +216,7 @@ export const VideoPlayer = ({
     }
 
     // Find the subtitle that should be displayed at the current time
-    const subtitle = parsedSubtitles!.find((subtitle) => {
+    const subtitle = parsedSubtitles.find((subtitle) => {
       if (subtitle.type != "cue") {
         return;
       }
