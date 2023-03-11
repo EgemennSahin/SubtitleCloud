@@ -48,11 +48,9 @@ export const VideoPlayer = ({
     "Video copied to clipboard!"
   );
   const [currentSubtitle, setCurrentSubtitle] = useState("");
+  const [parsedSubtitles, setParsedSubtitles] = useState<any[]>();
 
   const router = useRouter();
-
-  // Use the subtitle package to parse the srt file
-  const parsedSubtitles = parseSync(subtitles!);
 
   const handlePlayPause = () => {
     if (!videoRef.current) {
@@ -205,6 +203,15 @@ export const VideoPlayer = ({
     }
   };
 
+  // Use the subtitle package to parse the srt file
+  useEffect(() => {
+    if (!subtitles) {
+      return;
+    }
+
+    setParsedSubtitles(parseSync(subtitles));
+  }, [subtitles]);
+
   const handleTimeUpdate = () => {
     if (!subtitles) {
       return;
@@ -217,7 +224,7 @@ export const VideoPlayer = ({
     }
 
     // Find the subtitle that should be displayed at the current time
-    const subtitle = parsedSubtitles.find((subtitle) => {
+    const subtitle = parsedSubtitles!.find((subtitle) => {
       if (subtitle.type != "cue") {
         return;
       }
@@ -298,15 +305,16 @@ export const VideoPlayer = ({
           onEnded={() => setIsPlaying(false)}
           onClick={handlePlayPause}
         />
-
-        <div className="absolute inset-x-0 top-1 h-fit">
-          <div className="flex items-center justify-center">
-            <div
-              className="w-fit rounded-lg bg-blue-500 bg-opacity-70 px-4 py-2 text-center text-white"
-              ref={subtitleRef}
-            />
+        {subtitles && (
+          <div className="absolute inset-x-0 top-1 h-fit">
+            <div className="flex items-center justify-center">
+              <div
+                className="w-fit rounded-lg bg-blue-500 bg-opacity-70 px-4 py-2 text-center text-white"
+                ref={subtitleRef}
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         {showControls && (
           <>
