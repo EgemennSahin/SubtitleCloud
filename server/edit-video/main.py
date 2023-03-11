@@ -59,8 +59,15 @@ def edit_video(request):
         # Check if the file exists
         blob = bucket.blob(path)
         if not blob.exists():
-            print(key, id, " doesn't exist in the bucket")
-            return ('File does not exist', 403)
+            if (key == "secondary_id"):
+                path = "secondary/default/" + id
+                blob = bucket.blob(path)
+                if not blob.exists():
+                    print(key, id, " doesn't exist in the bucket")
+                    return ('File does not exist', 403)
+            else:
+                print(key, id, " doesn't exist in the bucket")
+                return ('File does not exist', 403)
 
         if (key == "video_id"):
             metadata_blob = bucket.get_blob(path)

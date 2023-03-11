@@ -11,13 +11,12 @@ def find_square_length(main_mp4_filename, game_mp4_filename):
     return min(probe_main['width'], probe_main['height'], probe_game['width'], probe_game['height'])
 
 def create_mp3(mp4_filename, output_name):
-    output = "".join(output_name.split(".")[:-1]) + ".mp3"
-    (
-        ffmpeg.input(mp4_filename)
-        .output(output, preset="ultrafast")
-        .overwrite_output()
-        .run()
-    )
+    print("Creating mp3")
+    
+    output = output_name + ".mp3"
+
+    cmd = ['ffmpeg', '-i', mp4_filename, '-vn', '-preset', 'ultrafast', output]
+    subprocess.call(cmd)
 
     return output
 
@@ -28,9 +27,8 @@ def trim_crop_videos(main_mp4_filename, game_mp4_filename, output_name):
 
     # Get the main video's length
     duration_main = ffmpeg.probe(main_mp4_filename)["format"]["duration"]
-    duration_game = ffmpeg.probe(game_mp4_filename)["format"]["duration"]
 
-    m = 200
+    m = find_square_length(main_mp4_filename, game_mp4_filename)
 
     input_main_vid = ffmpeg.input(main_mp4_filename)
     (
@@ -40,32 +38,16 @@ def trim_crop_videos(main_mp4_filename, game_mp4_filename, output_name):
         .overwrite_output()
         .run()
     )
-
-    # If the game's duration is shorter than the main video's, loop the game video
-    if (float(duration_game) < float(duration_main)):
-        input_game_vid = ffmpeg.input(game_mp4_filename)
-        (
-            input_game_vid
-            .filter('crop', m, m)
-            .output("crop_no_loop.mp4", preset="ultrafast")
-            .overwrite_output()
-            .run()
-        )
-
-        num_loops = int(float(duration_main) // float(duration_game))
-        subprocess.call(['ffmpeg', '-stream_loop', str(num_loops), '-i', 'crop_no_loop.mp4', '-c', 'copy', '-y', outputs[1]])
-        os.remove("crop_no_loop.mp4")
-        
-    else:
-        input_game_vid = ffmpeg.input(game_mp4_filename)
-        (
-            input_game_vid
-            .trim(duration=duration_main)
-            .filter('crop', m, m)
-            .output(outputs[1], preset="ultrafast")
-            .overwrite_output()
-            .run()
-        )
+    
+    input_game_vid = ffmpeg.input(game_mp4_filename)
+    (
+        input_game_vid
+        .trim(duration=duration_main)
+        .filter('crop', m, m)
+        .output(outputs[1], preset="ultrafast")
+        .overwrite_output()
+        .run()
+    )
 
     return outputs
 
