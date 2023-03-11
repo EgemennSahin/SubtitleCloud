@@ -63,76 +63,100 @@ export default function EditVideoPage({
                   Edit video
                 </h1>
 
-                <div className="grid grid-cols-1 items-start lg:grid-cols-2">
-                  <div className="flex flex-col items-center justify-start">
-                    <h3 className="text-xl font-semibold">Main Video</h3>
+                <div className="mx-auto mb-8 w-1/2 text-slate-700">
+                  <p>Follow these steps to enhance your video:</p>
+                  <ol>
+                    <li>
+                      <span className="text-slate-600">1.</span> Edit the text
+                      and timing of your subtitles by clicking on the subtitle
+                      you want to edit and making the changes you need. You can
+                      edit up to 15 subtitles at a time.
+                    </li>
+                    <li>
+                      <span className="text-slate-600">2.</span> Choose your
+                      bottom video (optional) by clicking on the "Choose an
+                      option" button and selecting the video you want to add.
+                    </li>
+                    <li>
+                      <span className="text-slate-600">3.</span> Process your
+                      video by clicking on the "Continue" button.
+                    </li>
+                  </ol>
+                </div>
 
+                <div className="mb-8 flex flex-col items-center justify-start">
+                  <h3 className="mb-2 text-xl font-semibold">Main Video</h3>
+                  <p className="w-1/2 text-center text-sm text-slate-500">
+                    The subtitle overlay may not be accurate due to your
+                    browser. This is only a preview.
+                  </p>
+
+                  <VideoPlayer
+                    src={video_url}
+                    size="medium"
+                    hideControls
+                    subtitles={subtitle}
+                    setTime={setCurrentTime}
+                  />
+                </div>
+                <div className="mb-8 flex flex-col items-center">
+                  <h3 className="mb-3 text-xl font-semibold">Subtitles</h3>
+                  <SubtitleEditor
+                    srt={subtitle}
+                    setSrt={setSubtitle}
+                    time={currentTime}
+                  />
+                </div>
+
+                <div className="flex h-full flex-col items-center justify-start gap-2">
+                  <h3 className="text-xl font-semibold">Bottom Video</h3>
+
+                  {secondaryVideo && (
                     <VideoPlayer
-                      src={video_url}
-                      size="medium"
+                      src={secondaryVideo.url}
+                      size="small"
                       hideControls
-                      subtitles={subtitle}
-                      setTime={setCurrentTime}
                     />
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <h3 className="mb-3 text-xl font-semibold">Subtitles</h3>
-                    <SubtitleEditor
-                      srt={subtitle}
-                      setSrt={setSubtitle}
-                      time={currentTime}
+                  )}
+
+                  <div className="flex items-center gap-2">
+                    <Dropdown
+                      options={secondaryVideos.map((video) => ({
+                        id: video.video_id!,
+                        label: video.title!,
+                        other: video.url,
+                      }))}
+                      onChange={(option) => {
+                        setSecondaryVideo({
+                          video_id: option.id,
+                          url: option.other,
+                        });
+                      }}
                     />
-                  </div>
-                  <div className="flex h-full flex-col items-center justify-start gap-2">
-                    <h3 className="text-xl font-semibold">Bottom Video</h3>
+                    <UploadButton
+                      size="small"
+                      setFile={async (file: Blob) => {
+                        const side_video_id = await handleUpload(
+                          file,
+                          "secondary"
+                        );
 
-                    {secondaryVideo && (
-                      <VideoPlayer
-                        src={secondaryVideo.url}
-                        size="small"
-                        hideControls
-                      />
-                    )}
+                        // Get the download URL
+                        const side_video_url = await getDownloadURL(
+                          ref(
+                            premiumStorage,
 
-                    <div className="flex items-center gap-2">
-                      <Dropdown
-                        options={secondaryVideos.map((video) => ({
-                          id: video.video_id!,
-                          label: video.title!,
-                          other: video.url,
-                        }))}
-                        onChange={(option) => {
-                          setSecondaryVideo({
-                            video_id: option.id,
-                            url: option.other,
-                          });
-                        }}
-                      />
-                      <UploadButton
-                        size="small"
-                        setFile={async (file: Blob) => {
-                          const side_video_id = await handleUpload(
-                            file,
-                            "secondary"
-                          );
+                            `secondary/${uid}/${side_video_id}`
+                          )
+                        );
 
-                          // Get the download URL
-                          const side_video_url = await getDownloadURL(
-                            ref(
-                              premiumStorage,
-
-                              `secondary/${uid}/${side_video_id}`
-                            )
-                          );
-
-                          setSecondaryVideo({
-                            video_id: side_video_id,
-                            url: side_video_url,
-                          });
-                        }}
-                        disabled={false}
-                      />
-                    </div>
+                        setSecondaryVideo({
+                          video_id: side_video_id,
+                          url: side_video_url,
+                        });
+                      }}
+                      disabled={false}
+                    />
                   </div>
                 </div>
 
@@ -239,6 +263,17 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       uid: token.uid,
       folder: "secondary",
     });
+
+    const defaultSecondaryVideos = await getVideos({
+      uid: "default",
+      folder: "secondary",
+    });
+
+    // Combine secondaryVideos and defaultSecondaryVideos
+    secondaryVideos.videoData = [
+      ...secondaryVideos.videoData,
+      ...defaultSecondaryVideos.videoData,
+    ];
 
     return {
       props: {

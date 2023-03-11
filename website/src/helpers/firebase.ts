@@ -34,6 +34,7 @@ export async function getVideos({
     const video_id = item.name; // Get the uid from the path
     return { title, url: downloadURL, video_id: video_id }; // Return an object with the uid and url
   });
+
   const videoData = await Promise.all(promises); // Wait for all promises to resolve
 
   console.log("Next page token: ", res.nextPageToken);
