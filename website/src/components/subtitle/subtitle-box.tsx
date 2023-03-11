@@ -1,4 +1,9 @@
-import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
+import { timeToMs, msToTime } from "@/helpers/subtitle";
+import {
+  MinusCircleIcon,
+  PlayIcon,
+  PlusCircleIcon,
+} from "@heroicons/react/24/solid";
 import { useState } from "react";
 
 type SubtitleBoxProps = {
@@ -6,6 +11,12 @@ type SubtitleBoxProps = {
   startTime: string;
   endTime: string;
   text: string;
+  checkStartTime: (
+    startTime: string,
+    endTime: string,
+    index: number
+  ) => boolean;
+  checkEndTime: (startTime: string, endTime: string, index: number) => boolean;
   onSubtitleChange: (
     index: number,
     startTime: string,
@@ -19,59 +30,42 @@ export default function SubtitleBox({
   startTime,
   endTime,
   text,
+  checkStartTime,
+  checkEndTime,
   onSubtitleChange,
 }: SubtitleBoxProps) {
   const [updatedStart, setUpdatedStart] = useState(startTime);
   const [updatedEnd, setUpdatedEnd] = useState(endTime);
   const [updatedText, setUpdatedText] = useState(text);
 
-  // Helper function to convert time string to milliseconds
-  const timeToMs = (time: string) => {
-    const [hours, minutes, seconds] = time.split(":");
-    const [secondsStr, millisecondsStr] = seconds.split(",");
-    const ms = Number(secondsStr) * 1000 + Number(millisecondsStr);
-    return Number(hours) * 3600000 + Number(minutes) * 60000 + ms;
-  };
-
-  // Helper function to convert milliseconds to time string
-  const msToTime = (ms: number) => {
-    const hours = Math.floor(ms / 3600000);
-    const minutes = Math.floor((ms % 3600000) / 60000);
-    const seconds = Math.floor((ms % 60000) / 1000);
-    const milliseconds = Math.floor(ms % 1000);
-    return `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")},${milliseconds
-      .toString()
-      .padStart(3, "0")}`;
+  const handleUpdateTime = (type: "start" | "end", time: string) => {
+    if (type === "start") {
+      if (checkStartTime(time, updatedEnd, index)) {
+        setUpdatedStart(time);
+        onSubtitleChange(index, time, updatedEnd, text);
+      }
+    } else {
+      if (checkEndTime(updatedStart, time, index)) {
+        setUpdatedEnd(time);
+        onSubtitleChange(index, updatedStart, time, text);
+      }
+    }
   };
 
   // Increase or decrease the start time by 0.1 seconds
-  const adjustStartTime = (increment: boolean) => {
+  const adjustStartTime = (direction: boolean, increment: number) => {
     const ms = timeToMs(updatedStart);
-    const newMs = increment ? ms + 100 : ms - 100;
+    const newMs = direction ? ms + increment : ms - increment;
     if (newMs < 0) return;
-    setUpdatedStart(msToTime(newMs));
-    onSubtitleChange(index, msToTime(newMs), endTime, text);
-  };
-
-  const setStartTime = (time: string) => {
-    setUpdatedStart(time);
-    onSubtitleChange(index, time, endTime, text);
-  };
-
-  const setEndTime = (time: string) => {
-    setUpdatedEnd(time);
-    onSubtitleChange(index, startTime, time, text);
+    handleUpdateTime("start", msToTime(newMs));
   };
 
   // Increase or decrease the end time by 0.1 seconds
-  const adjustEndTime = (increment: boolean) => {
+  const adjustEndTime = (direction: boolean, increment: number) => {
     const ms = timeToMs(updatedEnd);
-    const newMs = increment ? ms + 100 : ms - 100;
+    const newMs = direction ? ms + increment : ms - increment;
     if (newMs < 0) return;
-    setUpdatedEnd(msToTime(newMs));
-    onSubtitleChange(index, updatedStart, msToTime(newMs), text);
+    handleUpdateTime("end", msToTime(newMs));
   };
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,15 +75,18 @@ export default function SubtitleBox({
   };
 
   // Only show the seconds and milliseconds
-  const start = startTime.split(":").slice(2);
-  const end = endTime.split(":").slice(2);
+  const start = updatedStart.split(":").slice(2);
+  const end = updatedEnd.split(":").slice(2);
 
   return (
     <div className="grid grid-cols-12 gap-2">
       <span className="place-self-center text-sm text-slate-500">
         {index + 1}
       </span>
-      <button className="place-self-end" onClick={() => adjustStartTime(false)}>
+      <button
+        className="place-self-end"
+        onClick={() => adjustStartTime(false, 50)}
+      >
         <MinusCircleIcon className="h-6 w-6 text-blue-600" />
       </button>
       <input
@@ -102,12 +99,12 @@ export default function SubtitleBox({
           const [seconds, milliseconds] = e.target.value.split(",");
           const newTime = `00:00:${seconds},${milliseconds}`;
 
-          setStartTime(newTime);
+          handleUpdateTime("start", newTime);
         }}
       />
       <button
         className="place-self-start"
-        onClick={() => adjustStartTime(true)}
+        onClick={() => adjustStartTime(true, 50)}
       >
         <PlusCircleIcon className="h-6 w-6 text-blue-600" />
       </button>
@@ -118,7 +115,10 @@ export default function SubtitleBox({
         onChange={handleTextChange}
       />
 
-      <button className="place-self-end" onClick={() => adjustEndTime(false)}>
+      <button
+        className="place-self-end"
+        onClick={() => adjustEndTime(false, 50)}
+      >
         <MinusCircleIcon className="h-6 w-6 text-blue-600" />
       </button>
       <input
@@ -131,10 +131,13 @@ export default function SubtitleBox({
           const [seconds, milliseconds] = e.target.value.split(",");
           const newTime = `00:00:${seconds},${milliseconds}`;
 
-          setEndTime(newTime);
+          handleUpdateTime("end", newTime);
         }}
       />
-      <button className="place-self-start" onClick={() => adjustEndTime(true)}>
+      <button
+        className="place-self-start"
+        onClick={() => adjustEndTime(true, 50)}
+      >
         <PlusCircleIcon className="h-6 w-6 text-blue-600" />
       </button>
     </div>

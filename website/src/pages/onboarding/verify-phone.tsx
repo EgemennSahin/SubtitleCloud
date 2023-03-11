@@ -48,6 +48,8 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
     try {
       if (phone === "" || phone.length < 10) return;
 
+      
+
       const verificationId = await provider.verifyPhoneNumber(
         phone.replace(" ", ""),
         appVerifier!

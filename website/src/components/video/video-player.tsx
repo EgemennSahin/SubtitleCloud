@@ -12,6 +12,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { Modal } from "../modal";
 import { useRouter } from "next/router";
+import { parseSync } from "subtitle";
 
 export const VideoPlayer = ({
   src,
@@ -21,6 +22,8 @@ export const VideoPlayer = ({
   other,
   folder,
   video_id,
+  subtitles,
+  setTime,
 }: {
   src: string;
   size?: "small" | "medium" | "large";
@@ -29,8 +32,12 @@ export const VideoPlayer = ({
   other?: string;
   folder?: string;
   video_id?: string;
+  subtitles?: string;
+  setTime?: (time: number) => void;
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const subtitleRef = useRef<HTMLDivElement>(null);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
@@ -40,7 +47,12 @@ export const VideoPlayer = ({
   const { ModalElement, closeModal, openModal } = Modal(
     "Video copied to clipboard!"
   );
+  const [currentSubtitle, setCurrentSubtitle] = useState("");
+
   const router = useRouter();
+
+  // Use the subtitle package to parse the srt file
+  const parsedSubtitles = parseSync(subtitles!);
 
   const handlePlayPause = () => {
     if (!videoRef.current) {
@@ -193,6 +205,71 @@ export const VideoPlayer = ({
     }
   };
 
+  const handleTimeUpdate = () => {
+    if (!subtitles) {
+      return;
+    }
+
+    const videoElement = videoRef.current;
+
+    if (!videoElement) {
+      return;
+    }
+
+    // Find the subtitle that should be displayed at the current time
+    const subtitle = parsedSubtitles.find((subtitle) => {
+      if (subtitle.type != "cue") {
+        return;
+      }
+      const currentTime = videoElement.currentTime * 1000;
+      if (setTime) {
+        setTime(currentTime);
+      }
+
+      return (
+        currentTime >= subtitle.data.start && currentTime <= subtitle.data.end
+      );
+    });
+
+    // Update the current subtitle state
+    if (subtitle) {
+      if (subtitle.type != "cue") {
+        return;
+      }
+      setCurrentSubtitle(subtitle.data.text);
+    } else {
+      setCurrentSubtitle("");
+    }
+  };
+
+  const renderSubtitles = () => {
+    const subtitleElement = subtitleRef.current;
+
+    if (!subtitleElement) {
+      return;
+    }
+
+    subtitleElement.innerText = currentSubtitle;
+
+    requestAnimationFrame(renderSubtitles);
+  };
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+
+    if (!videoElement) {
+      return;
+    }
+
+    videoElement.addEventListener("timeupdate", handleTimeUpdate);
+
+    requestAnimationFrame(renderSubtitles);
+
+    return () => {
+      videoElement.removeEventListener("timeupdate", handleTimeUpdate);
+    };
+  }, [videoRef, currentSubtitle]);
+
   return (
     <div
       className="flex h-full flex-col items-center"
@@ -221,6 +298,15 @@ export const VideoPlayer = ({
           onEnded={() => setIsPlaying(false)}
           onClick={handlePlayPause}
         />
+
+        <div className="absolute inset-x-0 top-1 h-fit">
+          <div className="flex items-center justify-center">
+            <div
+              className="w-fit rounded-lg bg-blue-500 bg-opacity-70 px-4 py-2 text-center text-white"
+              ref={subtitleRef}
+            />
+          </div>
+        </div>
 
         {showControls && (
           <>

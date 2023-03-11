@@ -9,16 +9,41 @@ interface Subtitle {
   text: string;
 }
 
-export default function SubtitleInput({
+export default function SubtitleEditor({
   srt,
-  setState,
+  setSrt,
+  time,
 }: {
   srt: string;
-  setState: any;
+  setSrt: any;
+  time: number;
 }) {
   const [subtitles, setSubtitles] = useState<Subtitle[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const subtitlesPerPage = 15;
+
+  // Switch page if the time is greater than the end time of the last subtitle on the page
+  useEffect(() => {
+    const lastSubtitle = subtitles[subtitlesPerPage * currentPage - 1];
+
+    if (!lastSubtitle) {
+      return;
+    }
+
+    const [lastEndSeconds, lastEndMilliseconds] = lastSubtitle.endTime
+      .replaceAll(":", "")
+      .split(",");
+
+    console.log(lastEndSeconds, lastEndMilliseconds);
+    const lastEndSecondsInt = parseInt(lastEndSeconds);
+    const lastEndMillisecondsInt = parseInt(lastEndMilliseconds);
+
+    console.log(lastEndSecondsInt, lastEndMillisecondsInt);
+
+    if (time > lastEndSecondsInt * 1000 + lastEndMillisecondsInt) {
+      setCurrentPage(currentPage + 1);
+    }
+  }, [time]);
 
   // Get each Subtitle object from the subtitles
   useEffect(() => {
@@ -36,6 +61,97 @@ export default function SubtitleInput({
     setSubtitles(parsedSubtitles);
   }, [srt]);
 
+  function checkStartTime(startTime: string, endTime: string, index: number) {
+    const [startSeconds, startMilliseconds] = startTime
+      .replaceAll(":", "")
+      .split(",");
+    const [endSeconds, endMilliseconds] = endTime
+      .replaceAll(":", "")
+      .split(",");
+
+    const startSecondsInt = parseInt(startSeconds);
+    const startMillisecondsInt = parseInt(startMilliseconds);
+    const endSecondsInt = parseInt(endSeconds);
+    const endMillisecondsInt = parseInt(endMilliseconds);
+
+    // if the start time is greater than the end time
+    if (
+      startSecondsInt > endSecondsInt ||
+      (startSecondsInt === endSecondsInt &&
+        startMillisecondsInt > endMillisecondsInt)
+    ) {
+      return false;
+    }
+
+    // if the start time is less than the previous subtitle's end time
+    const previousSubtitle = subtitles[index - 1];
+
+    if (!previousSubtitle) {
+      return true;
+    }
+
+    const [previousEndSeconds, previousEndMilliseconds] =
+      previousSubtitle.endTime.replaceAll(":", "").split(",");
+
+    const previousEndSecondsInt = parseInt(previousEndSeconds);
+    const previousEndMillisecondsInt = parseInt(previousEndMilliseconds);
+
+    if (
+      startSecondsInt < previousEndSecondsInt ||
+      (startSecondsInt === previousEndSecondsInt &&
+        startMillisecondsInt < previousEndMillisecondsInt)
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  function checkEndTime(startTime: string, endTime: string, index: number) {
+    const [endSeconds, endMilliseconds] = endTime
+      .replaceAll(":", "")
+      .split(",");
+    const endSecondsInt = parseInt(endSeconds);
+    const endMillisecondsInt = parseInt(endMilliseconds);
+
+    const [startSeconds, startMilliseconds] = startTime
+      .replaceAll(":", "")
+      .split(",");
+    const startSecondsInt = parseInt(startSeconds);
+    const startMillisecondsInt = parseInt(startMilliseconds);
+
+    // if the end time is less than the start time
+    if (
+      endSecondsInt < startSecondsInt ||
+      (endSecondsInt === startSecondsInt &&
+        endMillisecondsInt < startMillisecondsInt)
+    ) {
+      return false;
+    }
+
+    const nextSubtitle = subtitles[index + 1];
+
+    if (!nextSubtitle) {
+      return true;
+    }
+
+    const [nextStartSeconds, nextStartMilliseconds] = nextSubtitle.startTime
+      .replaceAll(":", "")
+      .split(",");
+    const nextStartSecondsInt = parseInt(nextStartSeconds);
+    const nextStartMillisecondsInt = parseInt(nextStartMilliseconds);
+
+    if (
+      endSecondsInt > nextStartSecondsInt ||
+      (endSecondsInt === nextStartSecondsInt &&
+        endMillisecondsInt > nextStartMillisecondsInt)
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
   // Edit the srtContent when a subtitle is changed
   function editSrtContent(
     index: number,
@@ -50,7 +166,7 @@ export default function SubtitleInput({
 
     const newSrtContent = lines.join("\n");
 
-    setState(newSrtContent);
+    setSrt(newSrtContent);
   }
 
   // Get the start and end index of the current page
@@ -69,15 +185,14 @@ export default function SubtitleInput({
                 startTime={subtitle.startTime}
                 endTime={subtitle.endTime}
                 text={subtitle.text}
+                checkStartTime={checkStartTime}
+                checkEndTime={checkEndTime}
                 onSubtitleChange={(
                   index,
                   updatedStart,
                   updatedEnd,
                   newText
                 ) => {
-                  // Update the srtContent when a subtitle is changed
-                  // const subtitleRegex = /(\d+)\n([\d:,]+) --> ([\d:,]+)\n(.+)/gs;
-
                   editSrtContent(index, updatedStart, updatedEnd, newText);
                 }}
               />

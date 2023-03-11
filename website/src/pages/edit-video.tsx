@@ -21,8 +21,7 @@ export default function EditVideoPage({
   const router = useRouter();
   const [secondaryVideo, setSecondaryVideo] = useState<any>(null);
   const [subtitle, setSubtitle] = useState(srt);
-
-  console.log("Subs: ", subtitle);
+  const [currentTime, setCurrentTime] = useState(0);
 
   // upload the edited srtContent to the uploadUrl
   async function handleUploadSubtitle() {
@@ -68,11 +67,21 @@ export default function EditVideoPage({
                   <div className="flex flex-col items-center justify-start">
                     <h3 className="text-xl font-semibold">Main Video</h3>
 
-                    <VideoPlayer src={video_url} size="medium" hideControls />
+                    <VideoPlayer
+                      src={video_url}
+                      size="medium"
+                      hideControls
+                      subtitles={subtitle}
+                      setTime={setCurrentTime}
+                    />
                   </div>
                   <div className="flex flex-col items-center">
                     <h3 className="mb-3 text-xl font-semibold">Subtitles</h3>
-                    <SubtitleInput srt={subtitle} setState={setSubtitle} />
+                    <SubtitleEditor
+                      srt={subtitle}
+                      setSrt={setSubtitle}
+                      time={currentTime}
+                    />
                   </div>
                   <div className="flex h-full flex-col items-center justify-start gap-2">
                     <h3 className="text-xl font-semibold">Bottom Video</h3>
@@ -174,6 +183,7 @@ import videos from "./videos";
 import { premiumStorage } from "@/config/firebase";
 import { getVideos } from "@/helpers/firebase";
 import { getDownloadURL, ref } from "firebase/storage";
+import SubtitleEditor from "@/components/subtitle/subtitle-editor";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -224,7 +234,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     const transcript = await transcript_response.text();
 
-    console.log("Transcript response: ", transcript);
     // Get videos
     const secondaryVideos = await getVideos({
       uid: token.uid,
