@@ -146,7 +146,6 @@ export default function EditVideoPage({
                         const side_video_url = await getDownloadURL(
                           ref(
                             premiumStorage,
-
                             `secondary/${uid}/${side_video_id}`
                           )
                         );

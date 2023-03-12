@@ -285,6 +285,16 @@ export const VideoPlayer = ({
           controls
           preload="metadata"
         />
+        {subtitles && (
+          <div className="h-fit">
+            <div className="flex items-center justify-center">
+              <div
+                className="w-fit rounded-lg bg-blue-500 bg-opacity-70 px-4 py-2 text-center text-white"
+                ref={subtitleRef}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="relative hidden h-full w-fit items-center justify-center rounded-xl bg-slate-300 bg-opacity-60 p-1 sm:flex">

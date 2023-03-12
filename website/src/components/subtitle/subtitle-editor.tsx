@@ -1,5 +1,6 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
+import EditSubtitle from "./edit-sub";
 import SubtitleBox from "./subtitle-box";
 
 interface Subtitle {
@@ -20,7 +21,7 @@ export default function SubtitleEditor({
 }) {
   const [subtitles, setSubtitles] = useState<Subtitle[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const subtitlesPerPage = 15;
+  const subtitlesPerPage = 10;
 
   // Switch page if the time is greater than the end time of the last subtitle on the page
   useEffect(() => {
@@ -173,37 +174,15 @@ export default function SubtitleEditor({
   const startIndex = Math.max((currentPage - 1) * subtitlesPerPage, 0);
   const endIndex = Math.min(currentPage * subtitlesPerPage, subtitles?.length!);
 
+  // Editing mode
+  const [editingSubtitle, setEditingSubtitle] = useState<number | null>(null);
+
   return (
     <>
       {srt && (
         <div className="flex flex-col items-center space-y-2">
-          {subtitles.slice(startIndex, endIndex).map((subtitle) => {
-            return (
-              <SubtitleBox
-                key={subtitle.index - 1}
-                index={subtitle.index - 1}
-                startTime={subtitle.startTime}
-                endTime={subtitle.endTime}
-                text={subtitle.text}
-                checkStartTime={checkStartTime}
-                checkEndTime={checkEndTime}
-                onSubtitleChange={(
-                  index,
-                  updatedStart,
-                  updatedEnd,
-                  newText
-                ) => {
-                  editSrtContent(index, updatedStart, updatedEnd, newText);
-                }}
-              />
-            );
-          })}
-          <span className="text-2xl text-slate-600">
-            {currentPage} / {Math.ceil(subtitles?.length! / subtitlesPerPage)}
-          </span>
-          <div className="mb-2 flex gap-3">
+          <div className="flex gap-3">
             <button
-              className="btn-primary"
               onClick={() => {
                 if (currentPage <= 1) {
                   return;
@@ -211,10 +190,9 @@ export default function SubtitleEditor({
                 setCurrentPage(currentPage - 1);
               }}
             >
-              <ArrowLeftIcon className="h-5 w-5" />
+              <ArrowLeftIcon className="h-8 w-8 hover:text-blue-600" />
             </button>
             <button
-              className="btn-primary"
               onClick={() => {
                 if (currentPage > subtitles.length / subtitlesPerPage) {
                   return;
@@ -222,9 +200,45 @@ export default function SubtitleEditor({
                 setCurrentPage(currentPage + 1);
               }}
             >
-              <ArrowRightIcon className="h-5 w-5" />
+              <ArrowRightIcon className="h-8 w-8 hover:text-blue-600" />
             </button>
           </div>
+          <span className="text-2xl text-slate-600">
+            {currentPage} / {Math.ceil(subtitles?.length! / subtitlesPerPage)}
+          </span>
+
+          <div className="w-64 overflow-x-auto pb-4 lg:w-full">
+            <div className="flex gap-2 ">
+              {subtitles.slice(startIndex, endIndex).map((subtitle) => {
+                return (
+                  <SubtitleBox
+                    key={subtitle.index - 1}
+                    index={subtitle.index - 1}
+                    startTime={subtitle.startTime}
+                    endTime={subtitle.endTime}
+                    text={subtitle.text}
+                    setEditingSubtitle={setEditingSubtitle}
+                    checkStartTime={checkStartTime}
+                    checkEndTime={checkEndTime}
+                    onSubtitleChange={editSrtContent}
+                  />
+                );
+              })}
+            </div>
+          </div>
+
+          {editingSubtitle !== null && (
+            <EditSubtitle
+              key={subtitles[editingSubtitle].index - 1}
+              index={subtitles[editingSubtitle].index - 1}
+              startTime={subtitles[editingSubtitle].startTime}
+              endTime={subtitles[editingSubtitle].endTime}
+              text={subtitles[editingSubtitle].text}
+              checkStartTime={checkStartTime}
+              checkEndTime={checkEndTime}
+              onSubtitleChange={editSrtContent}
+            />
+          )}
         </div>
       )}
     </>
