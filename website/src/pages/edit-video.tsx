@@ -2,6 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Seo from "@/components/seo";
 import { VideoPlayer } from "@/components/video/video-player";
+import { GetServerSidePropsContext } from "next";
+import { getToken } from "@/helpers/user";
+import { handleError } from "@/helpers/error";
+import { parseCookies } from "nookies";
+import UploadButton from "@/components/upload-button";
+import { handleUpload } from "@/helpers/upload";
+import Dropdown from "@/components/dropdown-menu";
+import { premiumStorage } from "@/config/firebase";
+import { getVideos } from "@/helpers/firebase";
+import { getDownloadURL, ref } from "firebase/storage";
+import SubtitleEditor from "@/components/subtitle/subtitle-editor";
+import Instructions from "@/components/instructions";
+import { DashboardPage } from "@/components/navigation/dashboard-page";
 
 export default function EditVideoPage({
   uid,
@@ -44,6 +57,28 @@ export default function EditVideoPage({
     }
   }
 
+  const instructions = [
+    "Choose your bottom video (optional)",
+    "Adjust the text and timing of your subtitles.",
+  ];
+
+  const [formattedSubtitles, setFormattedSubtitles] = useState(srt);
+
+  useEffect(() => {
+    let vttSubtitles =
+      "WEBVTT\n" + subtitle?.replaceAll(",", ".").replaceAll(/\n{2,}/g, "\n");
+
+    let lines = vttSubtitles.split("\n");
+
+    for (let i = 0; i < lines.length; i++) {
+      if (i % 3 == 2) {
+        lines[i] = lines[i] + " line:50% position:50% align:center size:100%";
+      }
+    }
+
+    setFormattedSubtitles(lines.join("\n"));
+  }, [subtitle]);
+
   return (
     <>
       <Seo
@@ -51,163 +86,92 @@ export default function EditVideoPage({
         description="Upload your video to be processed in our cloud servers. Be notified when your video is ready. Quickly and securely process your video files."
       />
 
-      <div className="flex overflow-hidden rounded-lg bg-white">
-        <Sidebar />
-        <BottomNavigation />
+      <DashboardPage
+        title="Edit video"
+        subtitle={
+          <Instructions title="Instructions" instructions={instructions} />
+        }
+      >
+        <section className="col-span-2 lg:col-span-1">
+          <h3 className="text-id">Main video</h3>
 
-        <div className="flex w-0 flex-1 flex-col overflow-hidden">
-          <main className="relative flex-1 overflow-y-auto focus:outline-none">
-            <div className="py-6 pb-24">
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                <h1 className="mb-8 text-center text-3xl text-neutral-600">
-                  Edit video
-                </h1>
+          <VideoPlayer
+            src={video_url}
+            size="medium"
+            hideControls
+            subtitles={formattedSubtitles}
+          />
+        </section>
 
-                <div className="mx-auto mb-8 w-1/2 text-slate-700">
-                  <p>Follow these steps to enhance your video:</p>
-                  <ol>
-                    <li>
-                      <span className="text-slate-600">1.</span> Edit the text
-                      and timing of your subtitles by clicking on the subtitle
-                      you want to edit and making the changes you need. You can
-                      edit up to 15 subtitles at a time.
-                    </li>
-                    <li>
-                      <span className="text-slate-600">2.</span> Choose your
-                      bottom video (optional) by clicking on the &quot;Choose an
-                      option&quot; button and selecting the video you want to
-                      add.
-                    </li>
-                    <li>
-                      <span className="text-slate-600">3.</span> Process your
-                      video by clicking on the &quot;Continue&quot; button.
-                    </li>
-                  </ol>
-                </div>
+        <section className="col-span-2 flex flex-col items-center gap-3 lg:col-span-1">
+          <h3 className="text-id">Extra video</h3>
 
-                <div className="mb-8 flex flex-col items-center justify-start">
-                  <h3 className="mb-2 text-xl font-semibold">Main Video</h3>
-                  <p className="w-1/2 text-center text-sm text-slate-500">
-                    The subtitle overlay may not be accurate due to your
-                    browser. This is only a preview.
-                  </p>
+          {secondaryVideo && (
+            <VideoPlayer src={secondaryVideo.url} size="medium" hideControls />
+          )}
+          <Dropdown
+            options={secondaryVideos.map((video) => ({
+              id: video.video_id!,
+              label: video.title!,
+              other: video.url,
+            }))}
+            onChange={(option) => {
+              setSecondaryVideo({
+                video_id: option.id,
+                url: option.other,
+              });
+            }}
+          />
 
-                  <VideoPlayer
-                    src={video_url}
-                    size="medium"
-                    hideControls
-                    subtitles={subtitle}
-                    setTime={setCurrentTime}
-                  />
-                </div>
-                <div className="mb-8 flex flex-col items-center">
-                  <h3 className="mb-3 text-xl font-semibold">Subtitles</h3>
-                  <SubtitleEditor
-                    srt={subtitle}
-                    setSrt={setSubtitle}
-                    time={currentTime}
-                  />
-                </div>
+          <UploadButton
+            size="medium"
+            setFile={async (file: Blob) => {
+              const side_video_id = await handleUpload(file, "secondary");
 
-                <div className="flex h-full flex-col items-center justify-start gap-2">
-                  <h3 className="text-xl font-semibold">Bottom Video</h3>
+              // Get the download URL
+              const side_video_url = await getDownloadURL(
+                ref(premiumStorage, `secondary/${uid}/${side_video_id}`)
+              );
 
-                  {secondaryVideo && (
-                    <VideoPlayer
-                      src={secondaryVideo.url}
-                      size="small"
-                      hideControls
-                    />
-                  )}
+              setSecondaryVideo({
+                video_id: side_video_id,
+                url: side_video_url,
+              });
+            }}
+          />
+        </section>
 
-                  <div className="flex items-center gap-2">
-                    <Dropdown
-                      options={secondaryVideos.map((video) => ({
-                        id: video.video_id!,
-                        label: video.title!,
-                        other: video.url,
-                      }))}
-                      onChange={(option) => {
-                        setSecondaryVideo({
-                          video_id: option.id,
-                          url: option.other,
-                        });
-                      }}
-                    />
-                    <UploadButton
-                      size="small"
-                      setFile={async (file: Blob) => {
-                        const side_video_id = await handleUpload(
-                          file,
-                          "secondary"
-                        );
-
-                        // Get the download URL
-                        const side_video_url = await getDownloadURL(
-                          ref(
-                            premiumStorage,
-                            `secondary/${uid}/${side_video_id}`
-                          )
-                        );
-
-                        setSecondaryVideo({
-                          video_id: side_video_id,
-                          url: side_video_url,
-                        });
-                      }}
-                      disabled={false}
-                    />
-                  </div>
-                </div>
-
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                  <div className="py-4">
-                    <div className="items-bottom mt-6 flex justify-center">
-                      <button
-                        onClick={async () => {
-                          // Upload the edited subtitle
-                          await handleUploadSubtitle();
-
-                          // Redirect to the video page
-                          router.push({
-                            pathname: "/add-to-video",
-                            query: {
-                              video_id: video_id,
-                              side_video_id: secondaryVideo?.video_id || null,
-                            },
-                          });
-                        }}
-                        className="btn-primary"
-                      >
-                        Continue
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </main>
+        <div className="col-span-2 flex w-screen flex-col items-center text-center text-xl">
+          <h3 className="text-id">Subtitle editor</h3>
+          <SubtitleEditor
+            srt={subtitle}
+            setSrt={setSubtitle}
+            time={currentTime}
+          />
         </div>
-      </div>
+
+        <button
+          onClick={async () => {
+            // Upload the edited subtitle
+            await handleUploadSubtitle();
+
+            // Redirect to the video page
+            router.push({
+              pathname: "/add-to-video",
+              query: {
+                video_id: video_id,
+                side_video_id: secondaryVideo?.video_id || null,
+              },
+            });
+          }}
+          className="btn-primary col-span-2 mt-8"
+        >
+          Continue
+        </button>
+      </DashboardPage>
     </>
   );
 }
-
-import { GetServerSidePropsContext } from "next";
-import { getToken } from "@/helpers/user";
-import { handleError } from "@/helpers/error";
-import { parseCookies } from "nookies";
-import SubtitleInput from "@/components/subtitle/subtitle-editor";
-import UploadButton from "@/components/upload-button";
-import { handleUpload } from "@/helpers/upload";
-import Sidebar from "@/components/navigation/side-bar";
-import BottomNavigation from "@/components/navigation/bottom-bar";
-import Dropdown from "@/components/dropdown-menu";
-import videos from "./videos";
-import { premiumStorage } from "@/config/firebase";
-import { getVideos } from "@/helpers/firebase";
-import { getDownloadURL, ref } from "firebase/storage";
-import SubtitleEditor from "@/components/subtitle/subtitle-editor";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -221,6 +185,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         },
       };
     }
+
+    const uid = token.uid;
 
     // Get the video_id and transcribeData from the query
     const { video_id, download_transcript, upload_transcript } = context.query;
@@ -254,35 +220,33 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
 
     // Download the transcript
-    const transcript_response = await fetch(download_transcript as string);
-
-    const transcript = await transcript_response.text();
+    const srt = await (await fetch(download_transcript as string)).text();
 
     // Get videos
-    const secondaryVideos = await getVideos({
-      uid: token.uid,
+    const userVideos = await getVideos({
+      uid: uid,
       folder: "secondary",
     });
 
-    const defaultSecondaryVideos = await getVideos({
+    const defaultVideos = await getVideos({
       uid: "default",
       folder: "secondary",
     });
 
     // Combine secondaryVideos and defaultSecondaryVideos
-    secondaryVideos.videoData = [
-      ...secondaryVideos.videoData,
-      ...defaultSecondaryVideos.videoData,
+    const secondaryVideos = [
+      ...userVideos.videoData,
+      ...defaultVideos.videoData,
     ];
 
     return {
       props: {
-        uid: token.uid,
+        uid: uid,
         video_url,
         video_id,
-        srt: transcript,
+        srt,
         upload_transcript,
-        secondaryVideos: secondaryVideos.videoData,
+        secondaryVideos,
       },
     };
   } catch (error) {

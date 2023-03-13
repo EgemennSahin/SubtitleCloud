@@ -181,6 +181,10 @@ export default function SubtitleEditor({
     <>
       {srt && (
         <div className="flex flex-col items-center space-y-2">
+          <span className="text-2xl text-slate-600">
+            {currentPage} / {Math.ceil(subtitles?.length! / subtitlesPerPage)}
+          </span>
+
           <div className="flex gap-3">
             <button
               onClick={() => {
@@ -203,11 +207,8 @@ export default function SubtitleEditor({
               <ArrowRightIcon className="h-8 w-8 hover:text-blue-600" />
             </button>
           </div>
-          <span className="text-2xl text-slate-600">
-            {currentPage} / {Math.ceil(subtitles?.length! / subtitlesPerPage)}
-          </span>
 
-          <div className="w-64 overflow-x-auto pb-4 lg:w-full">
+          <div className="w-screen overflow-x-auto pb-4 lg:w-full">
             <div className="flex gap-2 ">
               {subtitles.slice(startIndex, endIndex).map((subtitle) => {
                 return (

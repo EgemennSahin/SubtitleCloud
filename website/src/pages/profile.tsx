@@ -8,7 +8,7 @@ import BottomNavigation from "@/components/navigation/bottom-bar";
 import { UserIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 
-export default function DashboardPage({ user }: { user: any }) {
+export default function Profile({ user }: { user: any }) {
   return (
     <>
       <Seo

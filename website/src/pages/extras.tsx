@@ -10,7 +10,7 @@ import Seo from "@/components/seo";
 import UploadButton from "@/components/upload-button";
 import { handleUpload } from "@/helpers/upload";
 
-export default function DashboardPage({
+export default function Extras({
   videos,
 }: {
   videos: { title: string; video_id: string; url: string }[];

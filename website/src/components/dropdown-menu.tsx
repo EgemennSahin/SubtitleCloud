@@ -10,12 +10,10 @@ export default function Dropdown({
   options,
   onChange,
   text,
-  className = "",
 }: {
   options: DropdownOption[];
   onChange: (option: DropdownOption) => void;
   text?: string;
-  className?: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<DropdownOption | null>();
@@ -27,7 +25,7 @@ export default function Dropdown({
   };
 
   return (
-    <div className={`relative ${className}`}>
+    <div className="relative w-full">
       <button
         type="button"
         className="w-full rounded-md border px-3 py-2.5 text-left text-gray-500 shadow-sm focus:border-indigo-600 focus:outline-none"

@@ -1,4 +1,3 @@
-import { auth } from "@/config/firebase";
 import { setCookies } from "./auth";
 
 export async function handleError(error: any) {

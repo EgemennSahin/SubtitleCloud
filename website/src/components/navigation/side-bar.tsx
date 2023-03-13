@@ -1,4 +1,3 @@
-import { logOut } from "@/helpers/auth";
 import {
   ArrowUpTrayIcon,
   CircleStackIcon,
@@ -10,6 +9,40 @@ import Link from "next/link";
 import IconLink from "./icon-link";
 
 export default function Sidebar() {
+  const topButtons = [
+    {
+      link: "/dashboard",
+      Icon: HomeIcon,
+      text: "Dashboard",
+    },
+  ];
+
+  const middleButtons = [
+    {
+      link: "/upload-video",
+      Icon: ArrowUpTrayIcon,
+      text: "Upload",
+    },
+    {
+      link: "/videos",
+      Icon: FolderIcon,
+      text: "Videos",
+    },
+    {
+      link: "/extras",
+      Icon: CircleStackIcon,
+      text: "Extras",
+    },
+  ];
+
+  const bottomButtons = [
+    {
+      link: "/settings",
+      Icon: Cog6ToothIcon,
+      text: "Settings",
+    },
+  ];
+
   return (
     <>
       <div className="hidden md:flex md:flex-shrink-0">
@@ -21,53 +54,39 @@ export default function Sidebar() {
             Shortzoo
           </Link>
 
-          <div className="mt-5 flex flex-grow flex-col px-4">
-            <nav className="flex-1 space-y-1">
-              <ul>
-                <li>
+          <nav className="mx-8 mt-4">
+            <ul className="flex flex-col gap-1">
+              {topButtons.map((button, index) => (
+                <li key={index}>
                   <IconLink
-                    link="/dashboard"
-                    Icon={HomeIcon}
-                    text="Dashboard"
+                    link={button.link}
+                    Icon={button.Icon}
+                    text={button.text}
                   />
                 </li>
-                <li>
-                  <div className="flex items-center px-8">
-                    <div className="w-12 border-t border-blue-300"></div>
-                  </div>
-                </li>
-                <li>
+              ))}
+              <div className="w-full border-t border-blue-300"></div>
+              {middleButtons.map((button, index) => (
+                <li key={index}>
                   <IconLink
-                    link="/upload-video"
-                    Icon={ArrowUpTrayIcon}
-                    text="Upload"
+                    link={button.link}
+                    Icon={button.Icon}
+                    text={button.text}
                   />
                 </li>
-                <li>
-                  <IconLink link="/videos" Icon={FolderIcon} text="Videos" />
-                </li>
-                <li>
+              ))}
+              <div className="w-full border-t border-slate-300"></div>
+              {bottomButtons.map((button, index) => (
+                <li key={index}>
                   <IconLink
-                    link="/extras"
-                    Icon={CircleStackIcon}
-                    text="Extras"
+                    link={button.link}
+                    Icon={button.Icon}
+                    text={button.text}
                   />
                 </li>
-                <li>
-                  <div className="flex items-center px-8">
-                    <div className="w-full border-t border-slate-300"></div>
-                  </div>
-                </li>
-                <li>
-                  <IconLink
-                    link="/settings"
-                    Icon={Cog6ToothIcon}
-                    text="Settings"
-                  />
-                </li>
-              </ul>
-            </nav>
-          </div>
+              ))}
+            </ul>
+          </nav>
         </div>
       </div>
     </>

@@ -17,7 +17,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { logOut } from "@/helpers/auth";
 
-export default function DashboardPage({ ...props }) {
+export default function Settings({ ...props }) {
   return (
     <>
       <Seo

@@ -37,6 +37,5 @@ export async function getVideos({
 
   const videoData = await Promise.all(promises); // Wait for all promises to resolve
 
-  console.log("Next page token: ", res.nextPageToken);
   return { videoData, nextPageToken: res.nextPageToken };
 }

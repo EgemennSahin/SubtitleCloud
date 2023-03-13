@@ -23,7 +23,6 @@ export const VideoPlayer = ({
   folder,
   video_id,
   subtitles,
-  setTime,
 }: {
   src: string;
   size?: "small" | "medium" | "large";
@@ -33,22 +32,15 @@ export const VideoPlayer = ({
   folder?: string;
   video_id?: string;
   subtitles?: string;
-  setTime?: (time: number) => void;
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const subtitleRef = useRef<HTMLDivElement>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [sliderValue, setSliderValue] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [showControls, setShowControls] = useState(false);
-  const { ModalElement, closeModal, openModal } = Modal(
-    "Video copied to clipboard!"
-  );
-  const [currentSubtitle, setCurrentSubtitle] = useState("");
-
+  const { ModalElement, openModal } = Modal("Video copied to clipboard!");
   const router = useRouter();
 
   const handlePlayPause = () => {
@@ -95,7 +87,7 @@ export const VideoPlayer = ({
   // Update the slider value as the video plays
   useEffect(() => {
     const interval = setInterval(() => {
-      setSliderValue(getCurrentTime());
+      getCurrentTime();
     }, 100);
     return () => clearInterval(interval);
   }, []);
@@ -173,7 +165,6 @@ export const VideoPlayer = ({
       const duration = video.duration;
       const currentTime = (percentage / 100) * duration;
       video.currentTime = currentTime;
-      setSliderValue(percentage);
       setIsDragging(true);
       setIsFinished(false);
     }
@@ -196,78 +187,10 @@ export const VideoPlayer = ({
         const duration = video.duration;
         const currentTime = (percentage / 100) * duration;
         video.currentTime = currentTime;
-        setSliderValue(percentage);
         setIsFinished(false);
       }
     }
   };
-
-  var parsedSubtitles = parseSync(subtitles || "") || [];
-
-  const handleTimeUpdate = () => {
-    if (!subtitles) {
-      return;
-    }
-
-    const videoElement = videoRef.current;
-
-    if (!videoElement) {
-      return;
-    }
-
-    // Find the subtitle that should be displayed at the current time
-    const subtitle = parsedSubtitles.find((subtitle) => {
-      if (subtitle.type != "cue") {
-        return;
-      }
-      const currentTime = videoElement.currentTime * 1000;
-      if (setTime) {
-        setTime(currentTime);
-      }
-
-      return (
-        currentTime >= subtitle.data.start && currentTime <= subtitle.data.end
-      );
-    });
-
-    // Update the current subtitle state
-    if (subtitle) {
-      if (subtitle.type != "cue") {
-        return;
-      }
-      setCurrentSubtitle(subtitle.data.text);
-    } else {
-      setCurrentSubtitle("");
-    }
-  };
-
-  const renderSubtitles = () => {
-    const subtitleElement = subtitleRef.current;
-
-    if (!subtitleElement) {
-      return;
-    }
-
-    subtitleElement.innerText = currentSubtitle;
-
-    requestAnimationFrame(renderSubtitles);
-  };
-
-  useEffect(() => {
-    const videoElement = videoRef.current;
-
-    if (!videoElement) {
-      return;
-    }
-
-    videoElement.addEventListener("timeupdate", handleTimeUpdate);
-
-    requestAnimationFrame(renderSubtitles);
-
-    return () => {
-      videoElement.removeEventListener("timeupdate", handleTimeUpdate);
-    };
-  }, [videoRef, currentSubtitle]);
 
   return (
     <div
@@ -281,44 +204,54 @@ export const VideoPlayer = ({
         <video
           className="rounded-lg"
           ref={videoRef}
-          src={
-            other == "upload" ? src : `${src}${other != "upload" && "#t=0.1"}`
-          }
           controls
           preload="metadata"
-        />
-        {subtitles && (
-          <div className="h-fit">
-            <div className="flex items-center justify-center">
-              <div
-                className="w-fit rounded-lg bg-blue-500 bg-opacity-70 px-4 py-2 text-center text-white"
-                ref={subtitleRef}
-              />
-            </div>
-          </div>
-        )}
+        >
+          <source
+            src={
+              other == "upload" ? src : `${src}${other != "upload" && "#t=0.1"}`
+            }
+          />
+
+          {subtitles && (
+            <track
+              label="English"
+              kind="subtitles"
+              src={URL.createObjectURL(
+                new Blob([subtitles as BlobPart], {
+                  type: "text/html",
+                })
+              )}
+              default
+            />
+          )}
+        </video>
       </div>
 
-      <div className="relative hidden h-full w-fit items-center justify-center rounded-xl bg-slate-300 bg-opacity-60 p-1 sm:flex">
+      <div className="relative hidden rounded-xl bg-slate-300 bg-opacity-60 p-1 sm:flex">
         <video
           ref={videoRef}
-          src={src}
           className={`${width} rounded-lg`}
           onPlay={() => setIsPlaying(true)}
           onPause={() => setIsPlaying(false)}
           onEnded={() => setIsPlaying(false)}
           onClick={handlePlayPause}
-        />
-        {subtitles && (
-          <div className="absolute inset-x-0 top-1 h-fit">
-            <div className="flex items-center justify-center">
-              <div
-                className="w-fit rounded-lg bg-blue-500 bg-opacity-70 px-4 py-2 text-center text-white"
-                ref={subtitleRef}
-              />
-            </div>
-          </div>
-        )}
+        >
+          <source src={src} />
+
+          {subtitles && (
+            <track
+              label="English"
+              kind="subtitles"
+              src={URL.createObjectURL(
+                new Blob([subtitles as BlobPart], {
+                  type: "text/html",
+                })
+              )}
+              default
+            />
+          )}
+        </video>
 
         {showControls && (
           <>
