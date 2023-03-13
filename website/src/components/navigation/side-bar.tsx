@@ -12,7 +12,7 @@ export default function Sidebar() {
   return (
     <>
       <div className="hidden md:flex md:flex-shrink-0">
-        <div className="flex h-screen w-56 flex-col">
+        <div className="fixed flex h-screen w-56 flex-col">
           <div className="flex flex-grow flex-col overflow-y-auto border-r border-slate-50 bg-slate-50 pt-5">
             <div className="flex flex-shrink-0 flex-col items-center px-4">
               <Link href="/" className="px-8 text-left focus:outline-none">

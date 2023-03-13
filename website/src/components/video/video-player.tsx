@@ -281,7 +281,9 @@ export const VideoPlayer = ({
         <video
           className="rounded-lg"
           ref={videoRef}
-          src={`${src}${other != "upload" && "#t=0.1"}`}
+          src={
+            other == "upload" ? src : `${src}${other != "upload" && "#t=0.1"}`
+          }
           controls
           preload="metadata"
         />

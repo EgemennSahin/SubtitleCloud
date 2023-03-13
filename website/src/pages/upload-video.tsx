@@ -23,76 +23,62 @@ export default function UploadVideo() {
         description="Upload your video to be processed in our cloud servers. Be notified when your video is ready. Quickly and securely process your video files."
       />
 
-      <div className="flex overflow-hidden rounded-lg bg-white">
+      <div className="flex overflow-hidden bg-white">
         <Sidebar />
         <BottomNavigation />
 
-        <div className="flex w-0 flex-1 flex-col overflow-hidden">
-          <main className="relative flex-1 overflow-y-auto focus:outline-none">
-            <div className="py-6 pb-24">
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                <h1 className="mb-8 text-center text-3xl text-neutral-600">
-                  Upload your video
-                </h1>
+        <div className="relative flex flex-1 flex-col gap-6 px-4 pt-6 pb-24 sm:px-6 md:px-8">
+          <h1 className="text-center text-3xl text-neutral-600">
+            Upload your video
+          </h1>
 
-                {!file ? (
-                  <div className="flex flex-col items-center justify-center gap-1">
-                    <UploadButton
-                      size="large"
-                      setFile={setFile}
-                      disabled={false}
-                    />
+          <div className="flex flex-col items-center justify-center gap-2">
+            {!file ? (
+              <>
+                <UploadButton size="large" setFile={setFile} disabled={false} />
 
-                    <h3 className="text-md mt-7 w-64 text-xl font-normal tracking-wide text-slate-800">
-                      Video duration must be less than 3 minutes.
-                    </h3>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center gap-4">
-                    <VideoPlayer
-                      size="small"
-                      src={URL.createObjectURL(file)}
-                      hideControls
-                      other="upload"
-                    />
-                    <UploadButton
-                      size="medium"
-                      setFile={setFile}
-                      text="Change upload"
-                      disabled={false}
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                <div className="py-4">
-                  <div className="items-bottom mt-6 flex justify-center">
-                    <button
-                      onClick={async () => {
-                        setPressed(true);
-                        const video_id = await handleUpload(file, "main");
+                <h3 className="text-md w-64 text-xl font-normal tracking-wide text-slate-800">
+                  Video duration must be less than 3 minutes.
+                </h3>
+              </>
+            ) : (
+              <>
+                <VideoPlayer
+                  size="small"
+                  src={URL.createObjectURL(file)}
+                  hideControls
+                  other="upload"
+                />
+                <UploadButton
+                  size="medium"
+                  setFile={setFile}
+                  text="Change upload"
+                  disabled={false}
+                />
+              </>
+            )}
+          </div>
+          <button
+            onClick={async () => {
+              setPressed(true);
+              const video_id = await handleUpload(file, "main");
 
-                        if (!video_id) {
-                          setFile(null);
-                          setPressed(false);
-                          return;
-                        }
+              if (!video_id) {
+                setFile(null);
+                setPressed(false);
+                return;
+              }
 
-                        // Push to processing page with file id
-                        router.push({
-                          pathname: "/process-video",
-                          query: { video_id: video_id },
-                        });
-                      }}
-                      className="btn-primary"
-                    >
-                      Process video
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </main>
+              // Push to processing page with file id
+              router.push({
+                pathname: "/process-video",
+                query: { video_id: video_id },
+              });
+            }}
+            className="btn-primary w-32 self-center"
+          >
+            Process video
+          </button>
         </div>
       </div>
     </>
