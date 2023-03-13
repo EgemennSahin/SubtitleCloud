@@ -10,7 +10,7 @@ function Navbar({ uid }: { uid: string }) {
     <nav className="sticky top-0 z-50 flex flex-wrap items-center justify-between bg-white py-3 px-8 shadow md:px-16">
       <span className="flex flex-row items-center justify-between lg:justify-start">
         <Link
-          className="tracking-relaxed transform text-lg font-bold tracking-tighter text-blue-600 transition duration-500 ease-in-out hover:text-teal-400 lg:pr-8"
+          className="transform text-lg font-bold tracking-tighter text-blue-600 transition duration-500 ease-in-out hover:text-teal-400 lg:pr-8"
           href="/"
         >
           Shortzoo
