@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Seo from "@/components/seo";
-import { VideoPlayer } from "@/components/video/video-player";
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
@@ -15,6 +14,7 @@ import { getDownloadURL, ref } from "firebase/storage";
 import SubtitleEditor from "@/components/subtitle/subtitle-editor";
 import Instructions from "@/components/instructions";
 import { DashboardPage } from "@/components/navigation/dashboard-page";
+import VideoPlayer from "@/components/video/video-player";
 
 export default function EditVideoPage({
   uid,
@@ -32,7 +32,10 @@ export default function EditVideoPage({
   secondaryVideos: { title: string; video_id: string; url: string }[];
 }) {
   const router = useRouter();
-  const [secondaryVideo, setSecondaryVideo] = useState<any>(null);
+  const [secondaryVideo, setSecondaryVideo] = useState<{
+    video_id: string;
+    url: string;
+  }>();
   const [subtitle, setSubtitle] = useState(srt);
   const [currentTime, setCurrentTime] = useState(0);
 
@@ -58,12 +61,12 @@ export default function EditVideoPage({
   }
 
   const instructions = [
-    "Choose your bottom video (optional)",
+    "Choose your bottom video from your extras (optional)",
     "Adjust the text and timing of your subtitles.",
   ];
 
+  // Formatting the subtitles to VTT format to be displayed on the video player
   const [formattedSubtitles, setFormattedSubtitles] = useState(srt);
-
   useEffect(() => {
     let vttSubtitles =
       "WEBVTT\n" + subtitle?.replaceAll(",", ".").replaceAll(/\n{2,}/g, "\n");
@@ -97,51 +100,57 @@ export default function EditVideoPage({
 
           <VideoPlayer
             src={video_url}
-            size="medium"
-            hideControls
             subtitles={formattedSubtitles}
+            setTime={setCurrentTime}
           />
         </section>
 
         <section className="col-span-2 flex flex-col items-center gap-3 lg:col-span-1">
-          <h3 className="text-id">Extra video</h3>
+          <h3 className="text-id">Bottom video</h3>
 
-          {secondaryVideo && (
-            <VideoPlayer src={secondaryVideo.url} size="medium" hideControls />
+          <div className="flex gap-2">
+            <Dropdown
+              options={secondaryVideos.map((video) => ({
+                id: video.video_id!,
+                label: video.title!,
+                other: video.url,
+              }))}
+              onChange={(option) => {
+                console.log("New option: ", option);
+                setSecondaryVideo({
+                  video_id: option.id,
+                  url: option.other,
+                });
+              }}
+            />
+
+            <UploadButton
+              size="medium"
+              setFile={async (file: Blob) => {
+                const side_video_id = await handleUpload(file, "secondary");
+
+                // Get the download URL
+                const side_video_url = await getDownloadURL(
+                  ref(premiumStorage, `secondary/${uid}/${side_video_id}`)
+                );
+
+                setSecondaryVideo({
+                  video_id: side_video_id,
+                  url: side_video_url,
+                });
+              }}
+            />
+          </div>
+
+          {secondaryVideo?.url && (
+            <VideoPlayer
+              key={secondaryVideo.video_id}
+              src={secondaryVideo.url}
+            />
           )}
-          <Dropdown
-            options={secondaryVideos.map((video) => ({
-              id: video.video_id!,
-              label: video.title!,
-              other: video.url,
-            }))}
-            onChange={(option) => {
-              setSecondaryVideo({
-                video_id: option.id,
-                url: option.other,
-              });
-            }}
-          />
-
-          <UploadButton
-            size="medium"
-            setFile={async (file: Blob) => {
-              const side_video_id = await handleUpload(file, "secondary");
-
-              // Get the download URL
-              const side_video_url = await getDownloadURL(
-                ref(premiumStorage, `secondary/${uid}/${side_video_id}`)
-              );
-
-              setSecondaryVideo({
-                video_id: side_video_id,
-                url: side_video_url,
-              });
-            }}
-          />
         </section>
 
-        <div className="col-span-2 flex w-screen flex-col items-center text-center text-xl">
+        <div className="col-span-2 flex flex-col items-center">
           <h3 className="text-id">Subtitle editor</h3>
           <SubtitleEditor
             srt={subtitle}

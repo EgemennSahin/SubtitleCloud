@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const Modal = (text: string) => {
+export const Modal = (text: string, color: "blue" | "red") => {
   const [showModal, setShowModal] = useState(false);
 
   const handleModalClick = () => {
@@ -8,6 +8,15 @@ export const Modal = (text: string) => {
   };
 
   const ModalElement = () => {
+    let colorClass = "text-blue-600";
+    switch (color) {
+      case "red":
+        colorClass = "text-red-600";
+        break;
+      default:
+        colorClass = "text-blue-600";
+    }
+
     return (
       <>
         {showModal && (
@@ -15,7 +24,9 @@ export const Modal = (text: string) => {
             onClick={handleModalClick}
             className="fixed top-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black bg-opacity-50"
           >
-            <div className="w-fit rounded-lg border bg-white text-blue-600 shadow-xl">
+            <div
+              className={`w-fit rounded-lg border bg-white ${colorClass} shadow-xl`}
+            >
               <div className="mx-auto flex items-center justify-between px-12 py-8">
                 <div className="flex">
                   <p className="text-sm font-semibold uppercase tracking-wide">

@@ -95,5 +95,5 @@
 }
 
 .text-id {
-  @apply text-center text-xl font-semibold;
+  @apply text-center text-2xl font-semibold;
 }

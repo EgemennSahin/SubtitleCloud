@@ -6,11 +6,9 @@ import Seo from "@/components/seo";
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import Sidebar from "@/components/navigation/side-bar";
-import BottomNavigation from "@/components/navigation/bottom-bar";
-import { VideoPlayer } from "@/components/video/video-player";
 import { DashboardPage } from "@/components/navigation/dashboard-page";
 import Instructions from "@/components/instructions";
+import VideoPlayer from "@/components/video/video-player";
 
 export default function UploadVideo() {
   const router = useRouter();
@@ -30,7 +28,7 @@ export default function UploadVideo() {
         description="Upload your video to be processed in our cloud servers. Be notified when your video is ready. Quickly and securely process your video files."
       />
       <DashboardPage
-        title="Edit video"
+        title="Upload video"
         subtitle={
           <Instructions title="Video Format" instructions={instructions} />
         }
@@ -41,7 +39,6 @@ export default function UploadVideo() {
           ) : (
             <>
               <VideoPlayer
-                size="small"
                 src={URL.createObjectURL(file)}
                 hideControls
                 other="upload"

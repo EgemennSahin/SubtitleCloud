@@ -23,6 +23,11 @@ export default function SubtitleEditor({
   const [currentPage, setCurrentPage] = useState(1);
   const subtitlesPerPage = 10;
 
+  const getTimeFromLine = (subtitleTime: string) => {
+    const [seconds, milliseconds] = subtitleTime.replaceAll(":", "").split(",");
+    return parseInt(seconds) * 1000 + parseInt(milliseconds);
+  };
+
   // Switch page if the time is greater than the end time of the last subtitle on the page
   useEffect(() => {
     const lastSubtitle = subtitles[subtitlesPerPage * currentPage - 1];
@@ -31,17 +36,7 @@ export default function SubtitleEditor({
       return;
     }
 
-    const [lastEndSeconds, lastEndMilliseconds] = lastSubtitle.endTime
-      .replaceAll(":", "")
-      .split(",");
-
-    console.log(lastEndSeconds, lastEndMilliseconds);
-    const lastEndSecondsInt = parseInt(lastEndSeconds);
-    const lastEndMillisecondsInt = parseInt(lastEndMilliseconds);
-
-    console.log(lastEndSecondsInt, lastEndMillisecondsInt);
-
-    if (time > lastEndSecondsInt * 1000 + lastEndMillisecondsInt) {
+    if (time > getTimeFromLine(lastSubtitle.endTime)) {
       setCurrentPage(currentPage + 1);
     }
   }, [time]);
@@ -179,69 +174,67 @@ export default function SubtitleEditor({
 
   return (
     <>
-      {srt && (
-        <div className="flex flex-col items-center space-y-2">
-          <span className="text-2xl text-slate-600">
-            {currentPage} / {Math.ceil(subtitles?.length! / subtitlesPerPage)}
-          </span>
+      <div className="flex flex-col items-center space-y-2">
+        <span className="text-2xl text-slate-600">
+          {currentPage} / {Math.ceil(subtitles?.length! / subtitlesPerPage)}
+        </span>
 
-          <div className="flex gap-3">
-            <button
-              onClick={() => {
-                if (currentPage <= 1) {
-                  return;
-                }
-                setCurrentPage(currentPage - 1);
-              }}
-            >
-              <ArrowLeftIcon className="h-8 w-8 hover:text-blue-600" />
-            </button>
-            <button
-              onClick={() => {
-                if (currentPage > subtitles.length / subtitlesPerPage) {
-                  return;
-                }
-                setCurrentPage(currentPage + 1);
-              }}
-            >
-              <ArrowRightIcon className="h-8 w-8 hover:text-blue-600" />
-            </button>
-          </div>
-
-          <div className="w-screen overflow-x-auto pb-4 lg:w-full">
-            <div className="flex gap-2 ">
-              {subtitles.slice(startIndex, endIndex).map((subtitle) => {
-                return (
-                  <SubtitleBox
-                    key={subtitle.index - 1}
-                    index={subtitle.index - 1}
-                    startTime={subtitle.startTime}
-                    endTime={subtitle.endTime}
-                    text={subtitle.text}
-                    setEditingSubtitle={setEditingSubtitle}
-                    checkStartTime={checkStartTime}
-                    checkEndTime={checkEndTime}
-                    onSubtitleChange={editSrtContent}
-                  />
-                );
-              })}
-            </div>
-          </div>
-
-          {editingSubtitle !== null && (
-            <EditSubtitle
-              key={subtitles[editingSubtitle].index - 1}
-              index={subtitles[editingSubtitle].index - 1}
-              startTime={subtitles[editingSubtitle].startTime}
-              endTime={subtitles[editingSubtitle].endTime}
-              text={subtitles[editingSubtitle].text}
-              checkStartTime={checkStartTime}
-              checkEndTime={checkEndTime}
-              onSubtitleChange={editSrtContent}
-            />
-          )}
+        <div className="flex gap-3">
+          <button
+            onClick={() => {
+              if (currentPage <= 1) {
+                return;
+              }
+              setCurrentPage(currentPage - 1);
+            }}
+          >
+            <ArrowLeftIcon className="h-8 w-8 hover:text-blue-600" />
+          </button>
+          <button
+            onClick={() => {
+              if (currentPage > subtitles.length / subtitlesPerPage) {
+                return;
+              }
+              setCurrentPage(currentPage + 1);
+            }}
+          >
+            <ArrowRightIcon className="h-8 w-8 hover:text-blue-600" />
+          </button>
         </div>
-      )}
+
+        <div className="w-screen overflow-x-auto pb-4 lg:w-full">
+          <div className="flex gap-2 ">
+            {subtitles.slice(startIndex, endIndex).map((subtitle) => {
+              return (
+                <SubtitleBox
+                  key={subtitle.index - 1}
+                  index={subtitle.index - 1}
+                  startTime={subtitle.startTime}
+                  endTime={subtitle.endTime}
+                  text={subtitle.text}
+                  setEditingSubtitle={setEditingSubtitle}
+                  checkStartTime={checkStartTime}
+                  checkEndTime={checkEndTime}
+                  onSubtitleChange={editSrtContent}
+                />
+              );
+            })}
+          </div>
+        </div>
+
+        {editingSubtitle !== null && (
+          <EditSubtitle
+            key={subtitles[editingSubtitle].index - 1}
+            index={subtitles[editingSubtitle].index - 1}
+            startTime={subtitles[editingSubtitle].startTime}
+            endTime={subtitles[editingSubtitle].endTime}
+            text={subtitles[editingSubtitle].text}
+            checkStartTime={checkStartTime}
+            checkEndTime={checkEndTime}
+            onSubtitleChange={editSrtContent}
+          />
+        )}
+      </div>
     </>
   );
 }

@@ -25,10 +25,10 @@ export default function Dropdown({
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative">
       <button
         type="button"
-        className="w-full rounded-md border px-3 py-2.5 text-left text-gray-500 shadow-sm focus:border-indigo-600 focus:outline-none"
+        className="w-48 rounded-md border px-3 py-2.5 text-left text-gray-500 shadow-sm focus:border-indigo-600 focus:outline-none"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="block truncate">

@@ -30,7 +30,7 @@ export default function GeneratedVideoPage({
                 </h1>
               </div>
               <div className="flex flex-col items-center">
-                <VideoPlayer size="medium" src={video_url} />
+                <VideoPlayer src={video_url} />
               </div>
             </div>
           </main>

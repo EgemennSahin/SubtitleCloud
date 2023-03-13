@@ -35,7 +35,7 @@ export default function ContentRows({
               }
 
               return (
-                <>
+                <div key={index}>
                   <h3 className="text-lg font-medium tracking-wide">
                     {item.title}
                   </h3>
@@ -45,7 +45,7 @@ export default function ContentRows({
                   <p className="mb-8 text-left text-base leading-relaxed text-slate-600">
                     {item.paragraph}
                   </p>
-                </>
+                </div>
               );
             })}
           </div>
