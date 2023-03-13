@@ -27,20 +27,16 @@ export default function UploadVideo() {
         <Sidebar />
         <BottomNavigation />
 
-        <div className="relative flex flex-1 flex-col gap-6 px-4 pt-6 pb-24 sm:px-6 md:px-8">
-          <h1 className="text-center text-3xl text-neutral-600">
-            Upload your video
-          </h1>
+        <div className="relative flex flex-1 flex-col items-center gap-6 px-4 pt-6 pb-24 sm:px-6 md:px-8">
+          <h1 className="text-3xl text-neutral-600">Upload your video</h1>
+
+          <h2 className="text-md w-96 text-xl font-normal tracking-wide text-slate-800">
+            Your video must contain audio and be less than 3 minutes long.
+          </h2>
 
           <div className="flex flex-col items-center justify-center gap-2">
             {!file ? (
-              <>
-                <UploadButton size="large" setFile={setFile} disabled={false} />
-
-                <h3 className="text-md w-64 text-xl font-normal tracking-wide text-slate-800">
-                  Video duration must be less than 3 minutes.
-                </h3>
-              </>
+              <UploadButton size="large" setFile={setFile} disabled={false} />
             ) : (
               <>
                 <VideoPlayer
