@@ -5,7 +5,7 @@ import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
 import Sidebar from "@/components/navigation/side-bar";
 import BottomNavigation from "@/components/navigation/bottom-bar";
-import { VideoPlayer } from "@/components/video/video-player";
+import VideoPlayer from "@/components/video/video-player";
 
 export default function GeneratedVideoPage({
   video_url,

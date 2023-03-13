@@ -38,11 +38,7 @@ export default function UploadVideo() {
             <UploadButton size="large" setFile={setFile} disabled={false} />
           ) : (
             <>
-              <VideoPlayer
-                src={URL.createObjectURL(file)}
-                hideControls
-                other="upload"
-              />
+              <VideoPlayer src={URL.createObjectURL(file)} other="upload" />
               <UploadButton
                 size="medium"
                 setFile={setFile}
