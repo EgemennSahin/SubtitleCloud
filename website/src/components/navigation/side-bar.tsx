@@ -13,7 +13,7 @@ export default function Sidebar() {
   return (
     <>
       <div className="hidden md:flex md:flex-shrink-0">
-        <div className="sticky flex flex h-screen w-56 flex-grow flex-col overflow-y-auto border-r border-slate-50 bg-slate-50 pt-5">
+        <div className="sticky flex flex max-h-fit min-h-screen w-56 flex-grow flex-col overflow-y-auto border-r border-slate-50 bg-slate-50 pt-5">
           <Link
             href="/"
             className="mx-auto pl-2 text-lg font-bold tracking-tighter text-blue-600 transition duration-500 ease-in-out hover:text-teal-400"
