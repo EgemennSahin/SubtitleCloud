@@ -44,9 +44,11 @@ export default function Videos({
                       <ArrowRightIcon className="h-5 w-5" />
                     </Link>
                   ) : (
-                    <Link className="btn-secondary" href={`/videos?`}>
-                      <FolderIcon className="h-5 w-5" />
-                    </Link>
+                    videos.length > 3 && (
+                      <Link className="btn-secondary" href={`/videos?`}>
+                        <FolderIcon className="h-5 w-5" />
+                      </Link>
+                    )
                   )}
                 </div>
               </div>
