@@ -8,19 +8,14 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import IconLink from "./icon-link";
 
 export default function BottomBar() {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-slate-50 md:hidden">
       <ul className="flex justify-around py-2">
         <li className="flex-1">
-          <Link
-            href="/dashboard"
-            className="block text-center text-gray-500 hover:text-gray-900"
-          >
-            <HomeIcon className="mx-auto h-6 w-6" />
-            <span className="mt-1 text-xs">Dashboard</span>
-          </Link>
+          <IconLink link="/dashboard" Icon={HomeIcon} text="Dashboard" />
         </li>
         <li className="flex-1">
           <Link
