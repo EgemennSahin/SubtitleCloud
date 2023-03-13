@@ -61,6 +61,7 @@ export default async function handler(
 
     await firebaseAdmin.firestore().collection("users").doc(uid).set({
       uid,
+      email: user.email,
       video_credit: 15,
       signup_week: weekOfMonth,
     });

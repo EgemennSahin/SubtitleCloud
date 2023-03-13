@@ -1,4 +1,4 @@
-import { db, auth } from "@/config/firebase";
+import { auth } from "@/config/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -8,46 +8,34 @@ import {
   onIdTokenChanged,
   User,
 } from "firebase/auth";
-import {
-  setDoc,
-  doc,
-  getDoc,
-  deleteField,
-  updateDoc,
-} from "firebase/firestore";
 import { destroyCookie, setCookie } from "nookies";
 import { useEffect } from "react";
 
-export function isValidEmail(email: string) {
-  // Regular expression to validate email addresses
-  const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-  return regex.test(email);
-}
+export function isValidInput(input: string, type: "email" | "password") {
+  let regex = new RegExp("");
 
-export function isValidPassword(password: string) {
-  // Regular expression to validate email password
-  const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
-  return regex.test(password);
+  switch (type) {
+    case "email":
+      regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+      break;
+    case "password":
+      regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
+      break;
+  }
+  return regex.test(input);
 }
 
 export const signUp = async (email: string, password: string) => {
-  // If the email is not valid, throw an error
-  if (!isValidEmail(email)) {
+  if (!isValidInput(email, "email")) {
     throw new Error("Invalid email");
-  } else if (!isValidPassword(password)) {
+  }
+
+  if (!isValidInput(password, "password")) {
     throw new Error("Invalid password");
   }
 
   try {
-    const userCredentials = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-
-    await setDoc(doc(db, "users", userCredentials.user.uid), {
-      email: userCredentials.user.email,
-    });
+    await createUserWithEmailAndPassword(auth, email, password);
   } catch (error) {
     console.log(error);
     throw new Error("Error signing up");
@@ -55,30 +43,20 @@ export const signUp = async (email: string, password: string) => {
 };
 
 export const logIn = async (email: string, password: string) => {
-  await signInWithEmailAndPassword(auth, email, password);
-  if (auth.currentUser) {
+  const userRecord = await signInWithEmailAndPassword(auth, email, password);
+  if (userRecord) {
     await fetch("/api/save-account", {
       method: "POST",
     });
   }
 };
 
-export const authGoogle = async () => {
+export const authGoogle = async (type: "logIn" | "signUp") => {
   try {
     const provider = new GoogleAuthProvider();
-    const userCredentials = await signInWithPopup(auth, provider);
+    await signInWithPopup(auth, provider);
 
-    const userExists = (
-      await getDoc(doc(db, "users", userCredentials.user.uid))
-    ).exists();
-
-    if (!userExists) {
-      await setDoc(doc(db, "users", userCredentials.user.uid), {
-        email: userCredentials.user.email,
-      });
-    }
-
-    if (userExists) {
+    if (type === "logIn") {
       await fetch("/api/save-account", {
         method: "POST",
       });

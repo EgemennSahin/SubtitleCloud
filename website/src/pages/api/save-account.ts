@@ -21,8 +21,6 @@ export default async function handler(
 
     const decodedToken = await getToken({ context });
 
-    console.log("Token:", decodedToken);
-
     // Check if the user is authenticated
     if (!decodedToken) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -37,18 +35,22 @@ export default async function handler(
       .doc(uid)
       .get();
 
-    if (userDoc.exists) {
-      const userDocData = userDoc.data();
-
-      if (userDocData?.status === "delete") {
-        await firebaseAdmin.firestore().collection("users").doc(uid).set(
-          {
-            status: firebaseAdmin.firestore.FieldValue.delete(),
-          },
-          { merge: true }
-        );
-      }
+    if (!userDoc.exists) {
+      res.status(200).json({ message: "User document doesn't exist" });
     }
+
+    const userDocData = userDoc.data();
+
+    if (userDocData?.status != "delete") {
+      res.status(200).json({ message: "User doesn't need to be deleted" });
+    }
+
+    await firebaseAdmin.firestore().collection("users").doc(uid).set(
+      {
+        status: firebaseAdmin.firestore.FieldValue.delete(),
+      },
+      { merge: true }
+    );
 
     res.status(200).json({ message: "User document saved" });
   } catch (error: any) {
