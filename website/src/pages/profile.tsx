@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext } from "next";
-import { getToken, getUser } from "@/helpers/user";
+import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
 import Sidebar from "@/components/navigation/side-bar";
@@ -9,56 +9,53 @@ import { UserIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/config/firebase";
+import { logOut } from "@/helpers/auth";
+import { useRouter } from "next/router";
+import { DashboardPage } from "@/components/navigation/dashboard-page";
 
 export default function Profile({ user }: { user: any }) {
+  const router = useRouter();
   return (
     <>
       <Seo
-        title="Dashboard"
-        description="Access your generated videos on our short video subtitling solution. Generate subtitles for your videos in a few minutes."
+        title="Profile"
+        description="Change your profile settings and account preferences."
       />
 
-      <div className="flex overflow-hidden rounded-lg bg-white">
-        <Sidebar />
-        <BottomNavigation />
-        <div className="flex w-0 flex-1 flex-col  overflow-hidden pb-16">
-          <main className="relative flex-1 overflow-y-auto focus:outline-none">
-            <div className="py-6 pb-24">
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                <h1 className="mb-8 text-center text-3xl text-neutral-600">
-                  Profile & Preferences
-                </h1>
-                <div className="flex flex-col items-center justify-center gap-6 lg:flex-row">
-                  <div className="flex w-1/3 flex-col items-center p-6">
-                    <div className="flex flex-col gap-2 py-4">
-                      <UserIcon
-                        className="h-12 w-12 self-center opacity-60"
-                        aria-hidden="true"
-                      />
-                      <div className="mt-4 text-xl">Email: {user.email}</div>
-                      <button
-                        onClick={async () => {
-                          await sendPasswordResetEmail(auth, user.email);
-                        }}
-                        className="btn-primary"
-                      >
-                        Change Password
-                      </button>
+      <DashboardPage title="Profile & Preferences">
+        <section className="col-span-2 flex flex-col gap-2">
+          <UserIcon
+            className="h-12 w-12 self-center opacity-60"
+            aria-hidden="true"
+          />
+          <div className="mt-4 text-xl">Email: {user.email}</div>
+          <button
+            onClick={async () => {
+              await sendPasswordResetEmail(auth, user.email);
+            }}
+            className="btn-primary"
+          >
+            Change Password
+          </button>
 
-                      <Link
-                        href="/delete-account"
-                        className="flex w-full transform items-center justify-center rounded-xl border-2 border-red-600 px-10  py-3 text-center text-base font-medium text-red-600 transition duration-500 ease-in-out hover:border-red-700 hover:bg-red-700 hover:text-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                      >
-                        Delete Account
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </main>
-        </div>
-      </div>
+          <button
+            onClick={async () => {
+              await logOut();
+              router.push("/");
+            }}
+            className="btn-secondary"
+          >
+            Log out
+          </button>
+
+          <Link
+            href="/delete-account"
+            className="flex w-full transform items-center justify-center rounded-xl border-2 border-red-600 px-10  py-3 text-center text-base font-medium text-red-600 transition duration-500 ease-in-out hover:border-red-700 hover:bg-red-700 hover:text-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+          >
+            Delete Account
+          </Link>
+        </section>
+      </DashboardPage>
     </>
   );
 }

@@ -7,7 +7,7 @@ export function DashboardPage({
   children,
 }: {
   title: string;
-  subtitle: string | React.ReactNode;
+  subtitle?: string | React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
