@@ -7,6 +7,7 @@ import Seo from "@/components/seo";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import { auth } from "@/config/firebase";
 import { dashboardRoute } from "@/helpers/routing";
+import { firebaseAdmin } from "@/config/firebase-admin";
 
 export default function VerifyEmail({ token }: { token: DecodedIdToken }) {
   async function handleVerifyEmail() {
@@ -66,15 +67,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    const authorized = dashboardRoute(token);
-    if (!(authorized == true)) {
+    // Refresh token
+    const user = await firebaseAdmin.auth().getUser(token.uid);
+
+    if (user.emailVerified) {
       return {
         redirect: {
-          destination: authorized,
+          destination: "/onboarding/verify-phone",
           permanent: false,
         },
       };
     }
+
     return {
       props: {
         token: token,

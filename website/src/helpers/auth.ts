@@ -43,24 +43,18 @@ export const signUp = async (email: string, password: string) => {
 };
 
 export const logIn = async (email: string, password: string) => {
-  const userRecord = await signInWithEmailAndPassword(auth, email, password);
-  if (userRecord) {
-    await fetch("/api/save-account", {
-      method: "POST",
-    });
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    console.log(error);
+    throw new Error("Email or password is incorrect");
   }
 };
 
-export const authGoogle = async (type: "logIn" | "signUp") => {
+export const authGoogle = async () => {
   try {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
-
-    if (type === "logIn") {
-      await fetch("/api/save-account", {
-        method: "POST",
-      });
-    }
 
     return;
   } catch (error) {
@@ -87,6 +81,11 @@ export const setCookies = async (user: User | null, force?: boolean) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ token }),
+  });
+
+  // Save the account from being deleted
+  await fetch("/api/save-account", {
+    method: "POST",
   });
 
   // Set the cookie

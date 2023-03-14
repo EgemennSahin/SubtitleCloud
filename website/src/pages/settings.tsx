@@ -16,8 +16,11 @@ import {
   UserIcon,
 } from "@heroicons/react/24/solid";
 import { logOut } from "@/helpers/auth";
+import { useRouter } from "next/router";
 
 export default function Settings({ ...props }) {
+  const router = useRouter();
+
   return (
     <>
       <Seo
@@ -54,11 +57,11 @@ export default function Settings({ ...props }) {
                     </Link>
                   </div>
                   <div className="flex w-1/3 flex-col items-center p-6">
-                    <Link
+                    <button
                       onClick={async () => {
                         await logOut();
+                        router.push("/");
                       }}
-                      href="/"
                       className="focus:ring-offset-2; block w-72 transform items-center rounded-xl border-2 border-white px-10 py-2.5 text-center text-base font-medium text-slate-600 shadow-xl shadow-md transition duration-500 ease-in-out hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
                     >
                       <div className="flex flex-col items-center py-4">
@@ -69,7 +72,7 @@ export default function Settings({ ...props }) {
 
                         <div className="mt-4 text-xl">Log out</div>
                       </div>
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>

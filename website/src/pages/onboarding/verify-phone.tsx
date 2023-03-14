@@ -16,6 +16,7 @@ import Seo from "@/components/seo";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import { auth } from "@/config/firebase";
 import { useRouter } from "next/router";
+import { firebaseAdmin } from "@/config/firebase-admin";
 
 export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
   const [phone, setPhone] = useState("");
@@ -47,8 +48,6 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
     const provider = new PhoneAuthProvider(auth);
     try {
       if (phone === "" || phone.length < 10) return;
-
-      
 
       const verificationId = await provider.verifyPhoneNumber(
         phone.replace(" ", ""),
@@ -213,16 +212,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    if (!token.email_verified) {
-      return {
-        redirect: {
-          destination: "/onboarding/verify-email",
-          permanent: false,
-        },
-      };
-    }
+    // Refresh token
+    const user = await firebaseAdmin.auth().getUser(token.uid);
 
-    if (token.phone_number) {
+    if (user.phoneNumber) {
       return {
         redirect: {
           destination: "/dashboard",

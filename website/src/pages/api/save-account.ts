@@ -36,13 +36,15 @@ export default async function handler(
       .get();
 
     if (!userDoc.exists) {
-      res.status(200).json({ message: "User document doesn't exist" });
+      return res.status(200).json({ message: "User document doesn't exist" });
     }
 
     const userDocData = userDoc.data();
 
     if (userDocData?.status != "delete") {
-      res.status(200).json({ message: "User doesn't need to be deleted" });
+      return res
+        .status(200)
+        .json({ message: "User doesn't need to be deleted" });
     }
 
     await firebaseAdmin.firestore().collection("users").doc(uid).set(

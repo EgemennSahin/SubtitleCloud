@@ -1,4 +1,4 @@
-import { db, premiumStorage } from "@/config/firebase";
+import { db } from "@/config/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { firebaseAdmin } from "@/config/firebase-admin";
 import { GetServerSidePropsContext } from "next";

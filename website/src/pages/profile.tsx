@@ -7,6 +7,8 @@ import React from "react";
 import BottomNavigation from "@/components/navigation/bottom-bar";
 import { UserIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "@/config/firebase";
 
 export default function Profile({ user }: { user: any }) {
   return (
@@ -34,9 +36,14 @@ export default function Profile({ user }: { user: any }) {
                         aria-hidden="true"
                       />
                       <div className="mt-4 text-xl">Email: {user.email}</div>
-                      <Link href="/password-reset" className="btn-primary">
+                      <button
+                        onClick={async () => {
+                          await sendPasswordResetEmail(auth, user.email);
+                        }}
+                        className="btn-primary"
+                      >
                         Change Password
-                      </Link>
+                      </button>
 
                       <Link
                         href="/delete-account"
@@ -67,8 +74,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         },
       };
     }
-
-    const user = await getUser({ uid: token.uid });
 
     return {
       props: {

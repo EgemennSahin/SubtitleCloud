@@ -76,16 +76,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    const authorized = dashboardRoute(token);
-
-    if (!(authorized == true)) {
-      return {
-        redirect: {
-          destination: authorized,
-          permanent: false,
-        },
-      };
-    }
+    dashboardRoute(token);
 
     const user = await getUser({ uid: token.uid });
 
