@@ -9,6 +9,7 @@ import BottomNavigation from "@/components/navigation/bottom-bar";
 import { getVideos } from "@/helpers/firebase";
 import Link from "next/link";
 import { ArrowRightIcon, FolderIcon } from "@heroicons/react/24/solid";
+import { DashboardPage } from "@/components/navigation/dashboard-page";
 
 export default function Videos({
   videos,
@@ -24,39 +25,27 @@ export default function Videos({
         description="Access your generated videos on our short video subtitling solution."
       />
 
-      <div className="flex overflow-hidden rounded-lg bg-white">
-        <Sidebar />
-        <BottomNavigation />
-
-        <div className="flex w-0 flex-1 flex-col overflow-hidden">
-          <main className="relative flex-1 overflow-y-auto focus:outline-none">
-            <div className="py-6 pb-24">
-              <div className="mx-auto  max-w-7xl px-4 sm:px-6 md:px-8">
-                <h1 className="mb-8 text-center text-3xl text-neutral-600">
-                  Your videos
-                </h1>
-                <div className="flex items-center justify-center gap-4 px-4">
-                  {nextPageToken ? (
-                    <Link
-                      className="btn-secondary"
-                      href={`/videos?page=${nextPageToken}`}
-                    >
-                      <ArrowRightIcon className="h-5 w-5" />
-                    </Link>
-                  ) : (
-                    videos.length > 3 && (
-                      <Link className="btn-secondary" href={`/videos?`}>
-                        <FolderIcon className="h-5 w-5" />
-                      </Link>
-                    )
-                  )}
-                </div>
-              </div>
-              <VideoList videos={videos} folder="output" />
-            </div>
-          </main>
+      <DashboardPage title="Your videos" subtitle="See your generated videos.">
+        <div className="col-span-2 mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+          <div className="flex items-center justify-center gap-4 px-4">
+            {nextPageToken ? (
+              <Link
+                className="btn-secondary"
+                href={`/videos?page=${nextPageToken}`}
+              >
+                <ArrowRightIcon className="h-5 w-5" />
+              </Link>
+            ) : (
+              videos.length > 3 && (
+                <Link className="btn-secondary" href={`/videos?`}>
+                  <FolderIcon className="h-5 w-5" />
+                </Link>
+              )
+            )}
+          </div>
+          <VideoList videos={videos} folder="output" />
         </div>
-      </div>
+      </DashboardPage>
     </>
   );
 }

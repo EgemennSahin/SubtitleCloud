@@ -9,6 +9,9 @@ import { getVideos } from "@/helpers/firebase";
 import Seo from "@/components/seo";
 import UploadButton from "@/components/upload-button";
 import { handleUpload } from "@/helpers/upload";
+import { DashboardPage } from "@/components/navigation/dashboard-page";
+import { ArrowRightIcon, FolderIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
 
 export default function Extras({
   videos,
@@ -18,40 +21,26 @@ export default function Extras({
   return (
     <>
       <Seo
-        title="Videos"
-        description="Access your generated videos on our short video subtitling solution."
+        title="Extras"
+        description="Access your extra videos on our short video subtitling solution."
       />
 
-      <div className="flex overflow-hidden rounded-lg bg-white">
-        <Sidebar />
-        <BottomNavigation />
-
-        <div className="flex w-0 flex-1 flex-col overflow-hidden">
-          <main className="relative flex-1 overflow-y-auto focus:outline-none">
-            <div className="py-6 pb-24">
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                <h1 className="mb-8 text-center text-3xl text-neutral-600">
-                  Your extras
-                </h1>
-                <div className="mb-8 flex justify-center">
-                  <UploadButton
-                    size="medium"
-                    setFile={async (file: Blob) => {
-                      const side_video_id = await handleUpload(
-                        file,
-                        "secondary"
-                      );
-                    }}
-                    text="Upload an extra"
-                  />
-                </div>
-              </div>
-
-              <VideoList videos={videos} folder="secondary" />
-            </div>
-          </main>
+      <DashboardPage
+        title="Your videos"
+        subtitle={
+          <UploadButton
+            size="medium"
+            setFile={async (file: Blob) => {
+              await handleUpload(file, "secondary");
+            }}
+            text="Upload an extra"
+          />
+        }
+      >
+        <div className="col-span-2 mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+          <VideoList videos={videos} folder="output" />
         </div>
-      </div>
+      </DashboardPage>
     </>
   );
 }
