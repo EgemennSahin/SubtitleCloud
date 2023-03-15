@@ -18,6 +18,7 @@ export default function UploadVideo() {
     "Contains audio",
     "Less than 1 minute",
     "Less than 100MB",
+    "For best results, use a square video",
   ];
 
   return (
