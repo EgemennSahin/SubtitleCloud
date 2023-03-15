@@ -61,8 +61,17 @@ export function VideoControls({
       },
       {
         text: "Delete",
-        onClick: () => {
-          console.log("delete");
+        onClick: async () => {
+          await fetch("/api/delete-video", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              video_id,
+              folder,
+            }),
+          });
         },
       },
     ],
