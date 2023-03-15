@@ -6,8 +6,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== "GET") {
-    res.status(405).json({ message: "Method Not Allowed" });
-    return;
+    return res.status(405).json({ message: "Method Not Allowed" });
   }
 
   setCookie({ res }, "session", "", {
@@ -15,5 +14,5 @@ export default async function handler(
     path: "/",
   });
 
-  res.status(200).json({ message: "Logout successful" });
+  return res.status(200).json({ message: "Logout successful" });
 }

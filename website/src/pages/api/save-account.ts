@@ -1,32 +1,17 @@
 import { firebaseAdmin } from "@/config/firebase-admin";
-import { getToken } from "@/helpers/user";
-import moment from "moment";
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from "next";
+import { getUidFromReqRes } from "@/helpers/api";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    const context: GetServerSidePropsContext = {
-      req: req,
-      res: res,
-      query: {},
-      resolvedUrl: "",
-    };
+    const uid = await getUidFromReqRes(req, res);
 
-    const decodedToken = await getToken({ context });
-
-    // Check if the user is authenticated
-    if (!decodedToken) {
+    if (!uid) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-
-    const uid = decodedToken.uid;
 
     // Check if the user's status is delete, and if so, delete that field
     const userDoc = await firebaseAdmin
@@ -54,8 +39,8 @@ export default async function handler(
       { merge: true }
     );
 
-    res.status(200).json({ message: "User document saved" });
+    return res.status(200).json({ message: "User document saved" });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 }

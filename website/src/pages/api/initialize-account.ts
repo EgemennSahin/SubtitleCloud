@@ -1,34 +1,20 @@
 import { firebaseAdmin } from "@/config/firebase-admin";
-import { getToken } from "@/helpers/user";
+import { getUidFromReqRes } from "@/helpers/api";
 import moment from "moment";
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    const context: GetServerSidePropsContext = {
-      req: req,
-      res: res,
-      query: {},
-      resolvedUrl: "",
-    };
+    const uid = await getUidFromReqRes(req, res);
 
-    const decodedToken = await getToken({ context });
-
-    console.log("Token:", decodedToken);
-
-    // Check if the user is authenticated
-    if (!decodedToken) {
+    if (!uid) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const user = await firebaseAdmin.auth().getUser(decodedToken.uid);
+    const user = await firebaseAdmin.auth().getUser(uid);
 
     // Check if the phone number is provided
     if (!user.phoneNumber) {
@@ -36,8 +22,6 @@ export default async function handler(
     }
 
     // Add the phone number to the user document
-
-    const uid = decodedToken.uid;
 
     const userDoc = await firebaseAdmin
       .firestore()

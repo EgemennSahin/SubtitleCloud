@@ -1,12 +1,5 @@
 import { premiumStorage } from "@/config/firebase";
-import {
-  listAll,
-  getDownloadURL,
-  StorageReference,
-  getMetadata,
-  ref,
-  list,
-} from "firebase/storage";
+import { getDownloadURL, getMetadata, ref, list } from "firebase/storage";
 
 export async function getVideos({
   uid,
@@ -38,4 +31,26 @@ export async function getVideos({
   const videoData = await Promise.all(promises); // Wait for all promises to resolve
 
   return { videoData, nextPageToken: res.nextPageToken };
+}
+
+export function createPath(folder: string, uid: string, video_id: string) {
+  return `${folder}/${uid}/${video_id}`;
+}
+
+export async function renameVideo(
+  video_id: string,
+  folder: string,
+  name: string
+) {
+  if (!video_id || !name) return;
+
+  const response = await fetch("/api/rename-video", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ video_id, folder, name }),
+  });
+
+  return await response.json();
 }

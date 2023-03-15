@@ -1,14 +1,12 @@
 import { firebaseAdmin } from "@/config/firebase-admin";
 import { NextApiRequest, NextApiResponse } from "next";
-import { setCookie } from "nookies";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method !== "POST") {
-    res.status(405).json({ message: "Method Not Allowed" });
-    return;
+    return res.status(405).json({ message: "Method Not Allowed" });
   }
 
   const { token } = req.body;
@@ -18,11 +16,11 @@ export default async function handler(
       .auth()
       .createSessionCookie(token, { expiresIn: 60 * 60 * 24 * 14 * 1000 }); // Expires in 2 weeks
 
-    res
+    return res
       .status(200)
       .json({ sessionCookie: sessionCookie, message: "Login successful" });
   } catch (error) {
     console.error(error);
-    res.status(401).json({ message: "Invalid email or password" });
+    return res.status(401).json({ message: "Invalid email or password" });
   }
 }

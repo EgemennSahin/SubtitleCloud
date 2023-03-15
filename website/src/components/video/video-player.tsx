@@ -25,35 +25,33 @@ export default function VideoPlayer({
   }
 
   return (
-    <div className="flex h-full flex-col items-center">
-      <div className="relative w-1/2 rounded-xl bg-slate-300 bg-opacity-60 p-1">
-        <video
-          className="rounded-lg"
-          ref={videoRef}
-          controls
-          preload="metadata"
-          onTimeUpdate={handleTimeUpdate}
-        >
-          <source
-            src={
-              other == "upload" ? src : `${src}${other != "upload" && "#t=0.1"}`
-            }
-          />
+    <div className="relative w-1/2 rounded-xl bg-slate-300 bg-opacity-60 p-1">
+      <video
+        className="rounded-lg"
+        ref={videoRef}
+        controls
+        preload="metadata"
+        onTimeUpdate={handleTimeUpdate}
+      >
+        <source
+          src={
+            other == "upload" ? src : `${src}${other != "upload" && "#t=0.1"}`
+          }
+        />
 
-          {subtitles && (
-            <track
-              label="English"
-              kind="subtitles"
-              src={URL.createObjectURL(
-                new Blob([subtitles as BlobPart], {
-                  type: "text/html",
-                })
-              )}
-              default
-            />
-          )}
-        </video>
-      </div>
+        {subtitles && (
+          <track
+            label="English"
+            kind="subtitles"
+            src={URL.createObjectURL(
+              new Blob([subtitles as BlobPart], {
+                type: "text/html",
+              })
+            )}
+            default
+          />
+        )}
+      </video>
     </div>
   );
 }

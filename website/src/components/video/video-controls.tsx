@@ -1,9 +1,8 @@
 import {
   ShareIcon,
   ArrowDownTrayIcon,
-  TrashIcon,
+  EllipsisVerticalIcon,
 } from "@heroicons/react/24/solid";
-import { useRouter } from "next/router";
 import React from "react";
 import { Modal } from "../modal";
 
@@ -11,21 +10,63 @@ export function VideoControls({
   src,
   folder,
   video_id,
+  title,
 }: {
   src: string;
   folder: string;
   video_id: string;
+  title: string;
 }) {
-  const { ModalElement: CopyModal, openModal: openCopyModal } = Modal(
-    "Video copied to clipboard!",
-    "blue"
-  );
-  const { ModalElement: DeleteModal, openModal: openDeleteModal } = Modal(
-    "Video deleted.",
-    "red"
-  );
+  const { ModalElement: CopyModal, openModal: openCopyModal } = Modal({
+    text: "Video copied to clipboard!",
+    color: "blue",
+  });
 
-  const router = useRouter();
+  let name = title;
+  const { ModalElement: RenameModal, openModal: openRenameModal } = Modal({
+    body: {
+      element: (
+        <input
+          type="text"
+          key="rename"
+          className="w-full rounded-lg border border-gray-300 p-2"
+          placeholder={title}
+          onChange={(e) => {
+            e.preventDefault();
+            name = e.target.value;
+          }}
+        />
+      ),
+      onSubmit: async () => {
+        await fetch("/api/rename-video", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            video_id,
+            folder,
+            name,
+          }),
+        });
+      },
+    },
+  });
+
+  const { ModalElement: MoreModal, openModal: openMoreModal } = Modal({
+    options: [
+      {
+        text: "Rename",
+        onClick: openRenameModal,
+      },
+      {
+        text: "Delete",
+        onClick: () => {
+          console.log("delete");
+        },
+      },
+    ],
+  });
 
   async function downloadVideo() {
     const response = await fetch(src as string);
@@ -37,53 +78,34 @@ export function VideoControls({
     URL.revokeObjectURL(link.href);
   }
 
-  const copyLinkToClipboard = () => {
-    navigator.clipboard.writeText(src);
-  };
-
   return (
-    <>
-      <div className="mt-4 flex gap-4">
-        <CopyModal />
-        <button
-          onClick={() => {
-            copyLinkToClipboard();
-            openCopyModal();
-          }}
-          className="btn-secondary"
-        >
-          <ShareIcon className="h-6 w-6" />
-        </button>
-        <button
-          onClick={downloadVideo}
-          className="focus:ring-offset-2; block transform items-center rounded-xl bg-blue-600 px-10 py-3 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <ArrowDownTrayIcon className="h-6 w-6" />
-        </button>
-      </div>
-
-      <div className="mt-4 flex gap-4">
-        <DeleteModal />
-        <button
-          onClick={async () => {
-            openDeleteModal();
-            await fetch("/api/delete-video", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                folder,
-                video_id,
-              }),
-            });
-            router.reload();
-          }}
-          className="focus:ring-offset-2; block transform items-center rounded-xl bg-red-600 px-10 py-3 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-        >
-          <TrashIcon className="h-6 w-6" />
-        </button>
-      </div>
-    </>
+    <div className="flex w-1/2 justify-between gap-4">
+      <CopyModal />
+      <MoreModal />
+      <RenameModal />
+      <button
+        onClick={() => {
+          navigator.clipboard.writeText(src);
+          openCopyModal();
+        }}
+        className="rounded-xl bg-white p-3 text-blue-600 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      >
+        <ShareIcon className="h-6 w-6" />
+      </button>{" "}
+      <button
+        onClick={downloadVideo}
+        className="rounded-xl bg-blue-600 p-3 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      >
+        <ArrowDownTrayIcon className="h-6 w-6" />
+      </button>
+      <button
+        onClick={() => {
+          openMoreModal();
+        }}
+        className="rounded-xl bg-white p-3 text-slate-600 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
+      >
+        <EllipsisVerticalIcon className="h-6 w-6" />
+      </button>
+    </div>
   );
 }

@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useRouter } from "next/router";
-import Spinner from "@/components/spinner";
 import Seo from "@/components/seo";
+import { GetServerSidePropsContext } from "next";
+import { getToken } from "@/helpers/user";
+import { handleError } from "@/helpers/error";
+import { handleTranscribe } from "@/helpers/processing";
+import { DashboardPage } from "@/components/navigation/dashboard-page";
 
 export default function ProcessVideoPage({
   video_id,
@@ -14,34 +18,34 @@ export default function ProcessVideoPage({
   const router = useRouter();
   const [token, setToken] = useState<string | null>();
 
-  // Process video if it is uploaded and token is received
-  useEffect(() => {
-    async function handler(uid: string, video_id: string, token: string) {
-      try {
-        const transcribeData = await handleTranscribe(uid, video_id, token);
-
-        console.log("Finished");
-
-        // Redirect to edit-subtitles with the transcribe data
-        router.push({
-          pathname: "/edit-video",
-          query: {
-            video_id: video_id,
-            download_transcript: transcribeData?.download_url,
-            upload_transcript: transcribeData?.upload_url,
-          },
-        });
-      } catch (error) {
-        console.error(error);
-        router.push("/");
-      }
-    }
-
+  async function handler() {
     if (!token) {
       return;
     }
 
-    handler(uid, video_id, token);
+    try {
+      const transcribeData = await handleTranscribe(uid, video_id, token);
+
+      console.log("Finished");
+
+      // Redirect to edit-subtitles with the transcribe data
+      router.push({
+        pathname: "/edit-video",
+        query: {
+          video_id: video_id,
+          download_transcript: transcribeData?.download_url,
+          upload_transcript: transcribeData?.upload_url,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      router.push("/");
+    }
+  }
+
+  // Process video if it is uploaded and token is received
+  useEffect(() => {
+    handler();
   }, [token]);
 
   return (
@@ -50,61 +54,36 @@ export default function ProcessVideoPage({
         title="Process Video"
         description="Upload your video to be processed in our cloud servers. Be notified when your video is ready. Quickly and securely process your video files."
       />
-      <div className="flex overflow-hidden rounded-lg bg-white">
-        <Sidebar />
-        <BottomNavigation />
-        <div className="flex w-0 flex-1 flex-col overflow-hidden">
-          <main className="relative flex-1 overflow-y-auto focus:outline-none">
-            <div className="py-6 pb-24">
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                <h1 className="mb-8 text-center text-3xl text-neutral-600">
-                  Transcribing...
-                </h1>
-                <div className="my-5 flex flex-col items-center justify-center">
-                  <Spinner size="large" />
-
-                  <h3 className="text-md linear-wipe my-12 px-4 text-center">
-                    <span className="sm:hidden">
-                      This may take a few minutes. Please do not close the
-                      window or navigate away from this page.
-                    </span>
-                    <span className="hidden sm:block">
-                      This may take a few minutes.
-                    </span>
-                  </h3>
-                </div>
-              </div>
-            </div>
-          </main>
-        </div>
-      </div>
-
-      {!token && (
-        <div style={{ position: "fixed", bottom: 0, right: 0 }}>
-          <Turnstile
-            className="mt-7"
-            siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
-            scriptOptions={{ async: true, defer: true, appendTo: "head" }}
-            onSuccess={(token: string) => {
-              setToken(token);
-            }}
-            options={{
-              size: "compact",
-              theme: "light",
-            }}
-          />
-        </div>
-      )}
+      <DashboardPage
+        title="Processing video"
+        subtitle={
+          <span className="linear-wipe">
+            This may take a few minutes. Please do not close the window or
+            navigate away from this page.
+          </span>
+        }
+      >
+        <div className="loader col-span-2 h-56 w-56" />
+        {!token && (
+          <div style={{ position: "fixed", bottom: 0, right: 0 }}>
+            <Turnstile
+              className="mt-7"
+              siteKey="0x4AAAAAAACiGkz1x1wcw2J9"
+              scriptOptions={{ async: true, defer: true, appendTo: "head" }}
+              onSuccess={(token: string) => {
+                setToken(token);
+              }}
+              options={{
+                size: "compact",
+                theme: "light",
+              }}
+            />
+          </div>
+        )}
+      </DashboardPage>
     </>
   );
 }
-
-import { GetServerSidePropsContext } from "next";
-import { getToken } from "@/helpers/user";
-import { handleError } from "@/helpers/error";
-import { handleTranscribe } from "@/helpers/processing";
-import Sidebar from "@/components/navigation/side-bar";
-import BottomNavigation from "@/components/navigation/bottom-bar";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

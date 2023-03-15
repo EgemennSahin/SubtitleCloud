@@ -211,7 +211,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         },
         body: JSON.stringify({
           folder: "main",
-          id_token: parsedCookies["session"],
           video_id: video_id,
         }),
       }

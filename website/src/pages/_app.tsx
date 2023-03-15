@@ -1,4 +1,3 @@
-import Navbar from "@/components/navigation/nav-bar";
 import { useIdTokenListener } from "@/helpers/auth";
 import "@/styles/globals.css";
 

@@ -38,7 +38,7 @@ export default function Extras({
         }
       >
         <div className="col-span-2 mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-          <VideoList videos={videos} folder="output" />
+          <VideoList videos={videos} folder="secondary" />
         </div>
       </DashboardPage>
     </>

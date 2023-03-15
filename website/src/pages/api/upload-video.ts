@@ -1,11 +1,8 @@
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { firebaseAdmin } from "@/config/firebase-admin";
 import { uuidv4 } from "@firebase/util";
-import { getToken } from "@/helpers/user";
+import { createPath } from "@/helpers/firebase";
+import { getUidFromReqRes } from "@/helpers/api";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,23 +10,13 @@ export default async function handler(
 ) {
   const { type, title, folder } = req.body;
 
-  const context: GetServerSidePropsContext = {
-    req: req,
-    res: res,
-    query: {},
-    resolvedUrl: "",
-  };
+  const uid = await getUidFromReqRes(req, res);
 
-  const decodedToken = await getToken({ context });
-
-  // Check if the user is authenticated
-  if (!decodedToken) {
+  if (!uid) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  const uid = decodedToken.uid;
-
-  let maxContentLength = 0;
+  let maxContentLength = 10 * 1024 * 1024;
   switch (folder) {
     case "main":
     case "secondary":
@@ -43,7 +30,6 @@ export default async function handler(
       if (!type.startsWith("audio")) {
         return res.status(400).json({ message: "Invalid file type" });
       }
-      maxContentLength = 10 * 1024 * 1024; // 10 MB
       break;
     default:
       return res.status(400).json({ message: "Invalid file type" });
@@ -51,8 +37,7 @@ export default async function handler(
 
   // Create a unique id for the file and get the first 1000 characters
   const file_id = uuidv4();
-
-  const filename = `${folder}/${uid}/${file_id}`;
+  const path = createPath(folder, uid, file_id);
   const options = {
     version: "v4" as const,
     action: "write" as const,
@@ -64,19 +49,16 @@ export default async function handler(
     },
   };
 
-  console.log("Title: ", title);
-
   try {
     const [url] = await firebaseAdmin
       .storage()
       .bucket("shortzoo-premium")
-      .file(filename)
+      .file(path)
       .getSignedUrl(options);
 
-    res.status(200).json({ url, file_id });
+    return res.status(200).json({ url, file_id });
   } catch (err) {
     console.error("Error: ", err);
-
-    res.status(500).send("Internal server error");
+    return res.status(500).send("Internal server error");
   }
 }
