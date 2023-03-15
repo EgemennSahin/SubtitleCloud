@@ -18,33 +18,33 @@ export default function ProcessVideoPage({
   const router = useRouter();
   const [token, setToken] = useState<string | null>();
 
-  async function handler() {
-    if (!token) {
-      return;
-    }
-
-    try {
-      const transcribeData = await handleTranscribe(uid, video_id, token);
-
-      console.log("Finished");
-
-      // Redirect to edit-subtitles with the transcribe data
-      router.push({
-        pathname: "/edit-video",
-        query: {
-          video_id: video_id,
-          download_transcript: transcribeData?.download_url,
-          upload_transcript: transcribeData?.upload_url,
-        },
-      });
-    } catch (error) {
-      console.error(error);
-      router.push("/");
-    }
-  }
-
   // Process video if it is uploaded and token is received
   useEffect(() => {
+    async function handler() {
+      if (!token) {
+        return;
+      }
+
+      try {
+        const transcribeData = await handleTranscribe(uid, video_id, token);
+
+        console.log("Finished");
+
+        // Redirect to edit-subtitles with the transcribe data
+        router.push({
+          pathname: "/edit-video",
+          query: {
+            video_id: video_id,
+            download_transcript: transcribeData?.download_url,
+            upload_transcript: transcribeData?.upload_url,
+          },
+        });
+      } catch (error) {
+        console.error(error);
+        router.push("/");
+      }
+    }
+
     handler();
   }, [token]);
 
