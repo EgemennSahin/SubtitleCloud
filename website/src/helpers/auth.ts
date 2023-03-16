@@ -86,6 +86,10 @@ export const setCookies = async (user: User | null, force?: boolean) => {
   // Save the account from being deleted
   await fetch("/api/save-account", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ uid: user.uid }),
   });
 
   // Set the cookie
