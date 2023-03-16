@@ -8,8 +8,10 @@ import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import { auth } from "@/config/firebase";
 import { dashboardRoute } from "@/helpers/routing";
 import { firebaseAdmin } from "@/config/firebase-admin";
+import Link from "next/link";
 
 export default function VerifyEmail({ token }: { token: DecodedIdToken }) {
+  const [emailSent, setEmailSent] = React.useState(false);
   async function handleVerifyEmail() {
     const user = auth.currentUser;
 
@@ -18,6 +20,7 @@ export default function VerifyEmail({ token }: { token: DecodedIdToken }) {
     }
 
     await sendEmailVerification(user);
+    setEmailSent(true);
   }
 
   return (
@@ -44,9 +47,21 @@ export default function VerifyEmail({ token }: { token: DecodedIdToken }) {
                     <br />
                     Be sure to check your spam folder.
                   </h3>
-                  <button className="btn-primary" onClick={handleVerifyEmail}>
+                  <button
+                    disabled={emailSent}
+                    className="btn-primary disabled:bg-slate-300"
+                    onClick={handleVerifyEmail}
+                  >
                     Send verification email
                   </button>
+                  {emailSent && (
+                    <Link
+                      href="/onboarding/verify-phone"
+                      className="text-md mt-4 text-teal-600 hover:text-teal-500"
+                    >
+                      Click here after verifying your email
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
@@ -68,7 +83,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         },
       };
     }
-
     // Refresh token
     const user = await firebaseAdmin.auth().getUser(token.uid);
 
