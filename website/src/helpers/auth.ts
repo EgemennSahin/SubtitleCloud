@@ -106,7 +106,7 @@ export const setCookies = async (user: User | null, force?: boolean) => {
 
 export const useIdTokenListener = () => {
   useEffect(() => {
-    return onAuthStateChanged(auth, async (user) => {
+    return onIdTokenChanged(auth, async (user) => {
       await setCookies(user);
     });
   }, []);
