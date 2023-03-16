@@ -6,11 +6,16 @@ import Seo from "@/components/seo";
 import Sidebar from "@/components/navigation/side-bar";
 import BottomNavigation from "@/components/navigation/bottom-bar";
 import VideoPlayer from "@/components/video/video-player";
+import { DashboardPage } from "@/components/navigation/dashboard-page";
+import { redirect } from "next/dist/server/api-utils";
+import { VideoControls } from "@/components/video/video-controls";
 
 export default function GeneratedVideoPage({
   video_url,
+  video_id,
 }: {
   video_url: string;
+  video_id: string;
 }) {
   return (
     <>
@@ -18,24 +23,20 @@ export default function GeneratedVideoPage({
         title="Subtitled Video"
         description="Subtitled video upload with download and share options."
       />
-      <div className="flex overflow-hidden rounded-lg bg-white">
-        <Sidebar />
-        <BottomNavigation />
-        <div className="flex w-0 flex-1 flex-col overflow-hidden">
-          <main className="relative flex-1 overflow-y-auto focus:outline-none">
-            <div className="py-6 pb-24">
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                <h1 className="mb-8 text-center text-3xl text-neutral-600">
-                  Your video
-                </h1>
-              </div>
-              <div className="flex flex-col items-center">
-                <VideoPlayer src={video_url} />
-              </div>
-            </div>
-          </main>
+      <DashboardPage
+        title="Subtitled Video"
+        subtitle={<span className="linear-wipe">Your video is ready.</span>}
+      >
+        <div className="col-span-2 flex flex-col items-center  space-y-3">
+          <VideoPlayer src={video_url} />
+          <VideoControls
+            src={video_url}
+            folder="output"
+            video_id={video_id}
+            title={""}
+          />
         </div>
-      </div>
+      </DashboardPage>
     </>
   );
 }

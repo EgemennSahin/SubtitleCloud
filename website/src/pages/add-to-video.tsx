@@ -33,6 +33,7 @@ export default function AddToVideo({
           pathname: "/video",
           query: {
             video_url: videoData.url,
+            video_id: video_id,
           },
         });
       } catch (error) {
