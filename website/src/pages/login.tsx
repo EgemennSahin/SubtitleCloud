@@ -7,19 +7,15 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  useEffect(() => {
-    if (auth.currentUser) {
-      router.push("/dashboard");
-    }
-  }, [auth.currentUser]);
-
   const handleSubmit = async (event: any) => {
     event.preventDefault();
 
     try {
       await logIn(email, password);
 
-      router.push("/dashboard");
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 1000);
     } catch (error) {
       console.log(error);
     }
@@ -130,7 +126,9 @@ export default function LoginPage() {
                   <button
                     onClick={async () => {
                       if (await authGoogle()) {
-                        console.log("logged in");
+                        setTimeout(() => {
+                          router.push("/dashboard");
+                        }, 1000);
                       }
                     }}
                     className="flex w-full transform items-center justify-center rounded-xl bg-red-600 px-10 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
@@ -153,7 +151,6 @@ import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
 import Link from "next/link";
 import Navbar from "@/components/navigation/nav-bar";
-import { auth } from "@/config/firebase";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {

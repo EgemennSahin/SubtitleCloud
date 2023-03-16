@@ -9,7 +9,7 @@ import {
   User,
   onAuthStateChanged,
 } from "firebase/auth";
-import { destroyCookie, setCookie } from "nookies";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
 import { useEffect } from "react";
 
 export function isValidInput(input: string, type: "email" | "password") {
@@ -74,6 +74,15 @@ export const setCookies = async (user: User | null, force?: boolean) => {
     return;
   }
 
+  // Get the session cookie using nookies
+  const cookies = parseCookies();
+  const sc = cookies.session;
+
+  // If the session cookie is set, then return
+  if (sc) return;
+
+  console.log("user", user);
+
   const token = await user.getIdToken(force);
   // Fetch API to set the cookie
   const cookie = await fetch("/api/login", {
@@ -106,8 +115,10 @@ export const setCookies = async (user: User | null, force?: boolean) => {
 
 export const useIdTokenListener = () => {
   useEffect(() => {
-    return onIdTokenChanged(auth, async (user) => {
+    const unsubscribe = onIdTokenChanged(auth, async (user) => {
       await setCookies(user);
     });
+
+    return () => unsubscribe();
   }, []);
 };
