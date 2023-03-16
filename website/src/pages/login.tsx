@@ -124,6 +124,7 @@ export default function LoginPage() {
                   <button
                     onClick={async () => {
                       if (await authGoogle()) {
+                        console.log("logged in");
                         router.push("/dashboard");
                       }
                     }}
