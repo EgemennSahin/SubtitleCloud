@@ -74,13 +74,6 @@ export const setCookies = async (user: User | null, force?: boolean) => {
     return;
   }
 
-  // Get the session cookie using nookies
-  const cookies = parseCookies();
-  const sc = cookies.session;
-
-  // If the session cookie is set, then return
-  if (sc) return;
-
   const token = await user.getIdToken(force);
   // Fetch API to set the cookie
   const cookie = await fetch("/api/login", {
