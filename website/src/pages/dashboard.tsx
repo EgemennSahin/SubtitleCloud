@@ -76,7 +76,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
 
-    dashboardRoute(token);
+    const reroute = dashboardRoute(token);
+
+    if (reroute) {
+      return reroute;
+    }
 
     const user = await getUser({ uid: token.uid });
 
