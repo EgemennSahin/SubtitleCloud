@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { authGoogle, logIn } from "@/helpers/auth";
 
@@ -6,6 +6,12 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    if (auth.currentUser) {
+      router.push("/dashboard");
+    }
+  }, [auth.currentUser]);
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -147,6 +153,7 @@ import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
 import Link from "next/link";
 import Navbar from "@/components/navigation/nav-bar";
+import { auth } from "@/config/firebase";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
