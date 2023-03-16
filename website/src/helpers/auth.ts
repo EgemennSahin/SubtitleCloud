@@ -56,7 +56,7 @@ export const authGoogle = async () => {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
 
-    return;
+    return true;
   } catch (error) {
     console.log(error);
   }

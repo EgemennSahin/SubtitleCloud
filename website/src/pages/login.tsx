@@ -123,8 +123,9 @@ export default function LoginPage() {
                 <div>
                   <button
                     onClick={async () => {
-                      await authGoogle();
-                      window.location.reload();
+                      if (await authGoogle()) {
+                        router.push("/dashboard");
+                      }
                     }}
                     className="flex w-full transform items-center justify-center rounded-xl bg-red-600 px-10 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                   >
