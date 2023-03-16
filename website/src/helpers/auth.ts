@@ -7,6 +7,7 @@ import {
   signOut,
   onIdTokenChanged,
   User,
+  onAuthStateChanged,
 } from "firebase/auth";
 import { destroyCookie, setCookie } from "nookies";
 import { useEffect } from "react";
@@ -57,7 +58,7 @@ export const authGoogle = async () => {
     await signInWithPopup(auth, provider);
 
     return true;
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
   }
 };
@@ -105,9 +106,8 @@ export const setCookies = async (user: User | null, force?: boolean) => {
 
 export const useIdTokenListener = () => {
   useEffect(() => {
-    return onIdTokenChanged(auth, async (user) => {
+    return onAuthStateChanged(auth, async (user) => {
       await setCookies(user);
-      window.location.reload();
     });
   }, []);
 };
