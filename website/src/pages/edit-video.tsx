@@ -96,7 +96,7 @@ export default function EditVideoPage({
           <Instructions title="Instructions" instructions={instructions} />
         }
       >
-        <section className="col-span-2 lg:col-span-1">
+        <section className="col-span-2 flex flex-col items-center gap-3 lg:col-span-1">
           <h3 className="text-id">Main video</h3>
 
           <VideoPlayer
@@ -127,6 +127,7 @@ export default function EditVideoPage({
 
             <UploadButton
               size="medium"
+              text="Upload an extra"
               setFile={async (file: Blob) => {
                 const side_video_id = await handleUpload(file, "secondary");
 
@@ -217,14 +218,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       }
     );
 
-    console.log("Video url response: ", video_url_response);
-
     const video_url = await (await video_url_response.json()).url;
 
-    console.log("Video url: ", video_url);
-    console.log("Video id: ", video_id);
-    console.log("Download transcript: ", download_transcript);
-    console.log("Upload transcript: ", upload_transcript);
     if (!video_id || !video_url || !download_transcript || !upload_transcript) {
       return {
         redirect: {

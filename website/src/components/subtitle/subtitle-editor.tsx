@@ -165,6 +165,21 @@ export default function SubtitleEditor({
     setSrt(newSrtContent);
   }
 
+  function deleteIndex(index: number) {
+    const lines = srt.trim().split("\n");
+
+    lines.splice(index * 4, 4);
+
+    // Update the index of the remaining
+    for (let i = index * 4; i < lines.length; i += 4) {
+      lines[i] = (parseInt(lines[i]) - 1).toString();
+    }
+
+    const newSrtContent = lines.join("\n");
+
+    setSrt(newSrtContent);
+  }
+
   // Get the start and end index of the current page
   const startIndex = Math.max((currentPage - 1) * subtitlesPerPage, 0);
   const endIndex = Math.min(currentPage * subtitlesPerPage, subtitles?.length!);
@@ -204,10 +219,10 @@ export default function SubtitleEditor({
 
         <div className="w-screen overflow-x-auto pb-4 lg:w-full">
           <div className="flex gap-2 ">
-            {subtitles.slice(startIndex, endIndex).map((subtitle) => {
+            {subtitles.slice(startIndex, endIndex).map((subtitle, index) => {
               return (
                 <SubtitleBox
-                  key={subtitle.index - 1}
+                  key={index}
                   index={subtitle.index - 1}
                   startTime={subtitle.startTime}
                   endTime={subtitle.endTime}
@@ -232,6 +247,8 @@ export default function SubtitleEditor({
             checkStartTime={checkStartTime}
             checkEndTime={checkEndTime}
             onSubtitleChange={editSrtContent}
+            onDelete={deleteIndex}
+            onCreate={() => {}}
           />
         )}
       </div>

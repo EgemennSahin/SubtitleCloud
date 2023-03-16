@@ -1,9 +1,15 @@
 import { timeToMs, msToTime } from "@/helpers/subtitle";
 import {
+  ArrowDownCircleIcon,
+  ArrowUpCircleIcon,
+  ChatBubbleBottomCenterIcon,
+  ChatBubbleBottomCenterTextIcon,
   MinusCircleIcon,
   PlayCircleIcon,
   PlayIcon,
   PlusCircleIcon,
+  PlusIcon,
+  TrashIcon,
 } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
@@ -24,6 +30,8 @@ type EditSubtitleProps = {
     endTime: string,
     text: string
   ) => void;
+  onDelete: (index: number) => void;
+  onCreate: (index: number) => void;
 };
 
 export default function EditSubtitle({
@@ -34,6 +42,8 @@ export default function EditSubtitle({
   checkStartTime,
   checkEndTime,
   onSubtitleChange,
+  onDelete,
+  onCreate
 }: EditSubtitleProps) {
   const [updatedStart, setUpdatedStart] = useState(startTime);
   const [updatedEnd, setUpdatedEnd] = useState(endTime);
@@ -81,10 +91,19 @@ export default function EditSubtitle({
 
   return (
     <div className="flex flex-col items-center gap-2">
+      <div className="mb-2 flex gap-8">
+        <button onClick={() => onCreate(index)}>
+          <PlusCircleIcon className="h-16 w-16 text-green-600 hover:text-green-700 lg:h-8 lg:w-8" />
+        </button>
+        <button onClick={() => onDelete(index)}>
+          <TrashIcon className="h-16 w-16 text-red-600 hover:text-red-700 lg:h-8 lg:w-8" />
+        </button>
+      </div>
+
       <div className="flex">
-        <div className="flex flex-col flex-col-reverse items-center justify-center gap-2 lg:flex-row lg:gap-0">
+        <div className="flex flex-col-reverse items-center justify-center gap-2 lg:flex-row lg:gap-0">
           <button onClick={() => adjustStartTime(false, 50)}>
-            <MinusCircleIcon className="h-12 w-12 text-blue-600 lg:h-6 lg:w-6" />
+            <ArrowDownCircleIcon className="h-12 w-12 text-blue-600 lg:h-6 lg:w-6" />
           </button>
           <input
             className="w-16 text-center"
@@ -100,7 +119,7 @@ export default function EditSubtitle({
             }}
           />
           <button onClick={() => adjustStartTime(true, 50)}>
-            <PlusCircleIcon className="h-12 w-12 text-blue-600 lg:h-6 lg:w-6" />
+            <ArrowUpCircleIcon className="h-12 w-12 text-blue-600 lg:h-6 lg:w-6" />
           </button>
         </div>
 
@@ -111,9 +130,9 @@ export default function EditSubtitle({
           value={updatedText}
           onChange={handleTextChange}
         />
-        <div className="flex flex-col flex-col-reverse items-center justify-center gap-2 lg:flex-row lg:gap-0">
+        <div className="flex flex-col-reverse items-center justify-center gap-2 lg:flex-row lg:gap-0">
           <button onClick={() => adjustEndTime(false, 50)}>
-            <MinusCircleIcon className="h-12 w-12 text-blue-600 lg:h-6 lg:w-6" />
+            <ArrowDownCircleIcon className="h-12 w-12 text-blue-600 lg:h-6 lg:w-6" />
           </button>
           <input
             className="w-16 text-center"
@@ -129,7 +148,7 @@ export default function EditSubtitle({
             }}
           />
           <button onClick={() => adjustEndTime(true, 50)}>
-            <PlusCircleIcon className="h-12 w-12 text-blue-600 lg:h-6 lg:w-6" />
+            <ArrowUpCircleIcon className="h-12 w-12 text-blue-600 lg:h-6 lg:w-6" />
           </button>
         </div>
       </div>

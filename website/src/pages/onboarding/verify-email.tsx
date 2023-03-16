@@ -41,6 +41,8 @@ export default function VerifyEmail({ token }: { token: DecodedIdToken }) {
                       <span className="font-semibold">{token.email}</span>
                     )}
                     .
+                    <br />
+                    Be sure to check your spam folder.
                   </h3>
                   <button className="btn-primary" onClick={handleVerifyEmail}>
                     Send verification email
