@@ -201,7 +201,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const { video_id, download_transcript, upload_transcript } = context.query;
 
     // Get the video url
-    const parsedCookies = parseCookies(context);
     const video_url_response = await fetch(
       "https://www.shortzoo.com/api/get-video",
       {
@@ -218,6 +217,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     const video_url = await (await video_url_response.json()).url;
 
+    console.log("Video url: ", video_url);
+    console.log("Video id: ", video_id);
+    console.log("Download transcript: ", download_transcript);
+    console.log("Upload transcript: ", upload_transcript);
     if (!video_id || !video_url || !download_transcript || !upload_transcript) {
       return {
         redirect: {
