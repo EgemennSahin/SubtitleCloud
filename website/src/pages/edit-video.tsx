@@ -15,6 +15,7 @@ import SubtitleEditor from "@/components/subtitle/subtitle-editor";
 import Instructions from "@/components/instructions";
 import { DashboardPage } from "@/components/navigation/dashboard-page";
 import VideoPlayer from "@/components/video/video-player";
+import { stringify } from "subtitle";
 
 export default function EditVideoPage({
   uid,
@@ -211,9 +212,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         body: JSON.stringify({
           folder: "main",
           video_id: video_id,
+          uid: uid,
         }),
       }
     );
+
+    console.log("Video url response: ", video_url_response);
 
     const video_url = await (await video_url_response.json()).url;
 

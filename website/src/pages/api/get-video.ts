@@ -7,9 +7,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { folder, video_id } = req.body;
-
-  const uid = await getUidFromReqRes(req, res);
+  const { folder, uid, video_id } = req.body;
 
   if (!uid) {
     return res.status(401).json({ message: "Unauthorized" });

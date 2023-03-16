@@ -10,8 +10,6 @@ import Seo from "@/components/seo";
 import UploadButton from "@/components/upload-button";
 import { handleUpload } from "@/helpers/upload";
 import { DashboardPage } from "@/components/navigation/dashboard-page";
-import { ArrowRightIcon, FolderIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
 
 export default function Extras({
   videos,
@@ -32,6 +30,7 @@ export default function Extras({
             size="medium"
             setFile={async (file: Blob) => {
               await handleUpload(file, "secondary");
+              window.location.reload();
             }}
             text="Upload an extra"
           />
