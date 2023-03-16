@@ -107,6 +107,7 @@ export const useIdTokenListener = () => {
   useEffect(() => {
     return onIdTokenChanged(auth, async (user) => {
       await setCookies(user);
+      window.location.reload();
     });
   }, []);
 };
