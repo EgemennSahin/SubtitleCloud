@@ -12,16 +12,14 @@ export default function ContentRows({
       <h1 className="text-3xl font-bold leading-none tracking-tight text-slate-600 md:text-6xl lg:text-4xl">
         {title}
       </h1>
-      <h2 className="text-xs font-bold uppercase tracking-widest text-blue-600">
+      <h2 className="text-xs font-bold uppercase tracking-widest text-teal-500">
         {header}
       </h2>
       {main.map((item, index) => {
-        let w = Math.max(12, 32 - index * 8).toString();
-
         return (
-          <div key={"Row " + title + " " + index.toString}>
+          <div key={"Row " + title + " " + index.toString()}>
             <h3 className="text-lg font-medium tracking-wide">{item.title}</h3>
-            <div className={`my-1 w-${w} border-t border-teal-400`}></div>
+            <div className={`my-1 w-16 border-t border-teal-400`}></div>
             <p className="leading-relaxed text-slate-600">{item.paragraph}</p>
           </div>
         );

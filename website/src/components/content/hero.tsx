@@ -18,7 +18,7 @@ export default function Hero({
         <Image fill style={{ objectFit: "contain" }} alt="hero" src={image} />
       </div>
       <div className="mt-12 mb-16 flex flex-col items-start text-left md:mb-0 lg:w-1/2 lg:flex-grow lg:pl-6 xl:mt-0 xl:pl-24">
-        <span className="mb-4 text-xs font-bold uppercase tracking-widest text-blue-600">
+        <span className="mb-4 text-xs font-bold uppercase tracking-widest text-teal-500">
           {header}
         </span>
         <h1 className="mb-8 text-4xl font-bold leading-none tracking-tighter text-slate-600 md:text-7xl lg:text-5xl">

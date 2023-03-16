@@ -8,10 +8,10 @@ export default function ContentGrids({
       {grids.map((item, index) => {
         return (
           <div
-            key={"Grid " + index.toString}
+            key={"Grid " + index.toString()}
             className="h-full w-full rounded-xl bg-slate-100 p-8 shadow-inner"
           >
-            <div className="mx-auto mb-5 inline-flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+            <div className="mx-auto mb-5 inline-flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-teal-100 text-teal-500">
               {item.icon}
             </div>
 

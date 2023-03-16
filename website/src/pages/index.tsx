@@ -46,19 +46,17 @@ export default function NewPage({ uid }: { uid: string }) {
   const gridBody = [
     {
       title: "Free forever",
-      icon: <FaceSmileIcon className="h-8 w-8 text-blue-500" />,
+      icon: <FaceSmileIcon className="h-8 w-8" />,
       body: "With Shortzoo, you can create up to 15 videos for free every month. Plus, our platform will always be free!",
     },
     {
       title: "Secure storage",
-      icon: <ShieldCheckIcon className="h-8 w-8 text-blue-500" />,
+      icon: <ShieldCheckIcon className="h-8 w-8" />,
       body: "At Shortzoo, we take the security and privacy of your data very seriously. We use secure servers to ensure that your information is always protected.",
     },
     {
       title: "Word level captions",
-      icon: (
-        <ChatBubbleBottomCenterTextIcon className="h-8 w-8 text-blue-500" />
-      ),
+      icon: <ChatBubbleBottomCenterTextIcon className="h-8 w-8" />,
       body: "Shortzoo uses premium AI models to provide accurate and automated captions for your videos to provide captions of the highest quality.",
     },
   ];
