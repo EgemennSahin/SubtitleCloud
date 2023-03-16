@@ -29,8 +29,8 @@ export default async function handler(
       expires: Date.now() + 15 * 60 * 1000, // Link expires in 15 minutes
     });
 
-    res.status(200).json({ url: signedUrl });
+    return res.status(200).json({ url: signedUrl });
   } catch (error) {
-    res.status(500).send(`Error retrieving file ${video_id}: ${error}`);
+    return res.status(500).send(`Error retrieving file ${video_id}: ${error}`);
   }
 }
