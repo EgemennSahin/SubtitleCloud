@@ -4,7 +4,6 @@ import Seo from "@/components/seo";
 import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
-import { parseCookies } from "nookies";
 import UploadButton from "@/components/upload-button";
 import { handleUpload } from "@/helpers/upload";
 import Dropdown from "@/components/dropdown-menu";
@@ -15,7 +14,6 @@ import SubtitleEditor from "@/components/subtitle/subtitle-editor";
 import Instructions from "@/components/instructions";
 import { DashboardPage } from "@/components/navigation/dashboard-page";
 import VideoPlayer from "@/components/video/video-player";
-import { stringify } from "subtitle";
 
 export default function EditVideoPage({
   uid,
@@ -62,8 +60,9 @@ export default function EditVideoPage({
   }
 
   const instructions = [
-    "Choose your bottom video from your extras (optional)",
-    "Adjust the text and timing of your subtitles.",
+    "Choose bottom video (optional)",
+    "Adjust subtitle text and timing.",
+    "Add or delete subtitles.",
   ];
 
   // Formatting the subtitles to VTT format to be displayed on the video player
@@ -105,7 +104,6 @@ export default function EditVideoPage({
             setTime={setCurrentTime}
           />
         </section>
-
         <section className="col-span-2 flex flex-col items-center gap-3 lg:col-span-1">
           <h3 className="text-id">Bottom video</h3>
 
@@ -126,7 +124,7 @@ export default function EditVideoPage({
             />
 
             <UploadButton
-              size="medium"
+              size="small"
               text="Upload an extra"
               setFile={async (file: Blob) => {
                 const side_video_id = await handleUpload(file, "secondary");
@@ -152,14 +150,14 @@ export default function EditVideoPage({
           )}
         </section>
 
-        <div className="col-span-2 flex flex-col items-center">
+        <section className="col-span-2 flex flex-col items-center">
           <h3 className="text-id">Subtitle editor</h3>
           <SubtitleEditor
             srt={subtitle}
             setSrt={setSubtitle}
             time={currentTime}
           />
-        </div>
+        </section>
 
         <button
           onClick={async () => {

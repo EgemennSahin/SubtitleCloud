@@ -1,101 +1,106 @@
-import { timeToMs, msToTime } from "@/helpers/subtitle";
+import {
+  timeToMs,
+  msToTime,
+  checkStartTime,
+  checkEndTime,
+  deleteSubtitle,
+  createSubtitle,
+} from "@/helpers/subtitle";
 import {
   ArrowDownCircleIcon,
   ArrowUpCircleIcon,
-  ChatBubbleBottomCenterIcon,
-  ChatBubbleBottomCenterTextIcon,
-  MinusCircleIcon,
-  PlayCircleIcon,
-  PlayIcon,
   PlusCircleIcon,
-  PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Subtitle } from "./subtitle-editor";
 
 type EditSubtitleProps = {
-  index: number;
-  startTime: string;
-  endTime: string;
-  text: string;
-  checkStartTime: (
-    startTime: string,
-    endTime: string,
-    index: number
-  ) => boolean;
-  checkEndTime: (startTime: string, endTime: string, index: number) => boolean;
-  onSubtitleChange: (
-    index: number,
-    startTime: string,
-    endTime: string,
-    text: string
-  ) => void;
-  onDelete: (index: number) => void;
-  onCreate: (index: number) => void;
+  subtitle: Subtitle;
+  subtitles: Subtitle[];
+  setSubtitles: (subtitles: Subtitle[]) => void;
 };
 
 export default function EditSubtitle({
-  index,
-  startTime,
-  endTime,
-  text,
-  checkStartTime,
-  checkEndTime,
-  onSubtitleChange,
-  onDelete,
-  onCreate
+  subtitle,
+  subtitles,
+  setSubtitles,
 }: EditSubtitleProps) {
-  const [updatedStart, setUpdatedStart] = useState(startTime);
-  const [updatedEnd, setUpdatedEnd] = useState(endTime);
-  const [updatedText, setUpdatedText] = useState(text);
+  const [updatedStart, setUpdatedStart] = useState(subtitle.startMs);
+  const [updatedEnd, setUpdatedEnd] = useState(subtitle.endMs);
+  const [updatedText, setUpdatedText] = useState(subtitle.text);
 
-  const handleUpdateTime = (type: "start" | "end", time: string) => {
-    if (type === "start") {
-      if (checkStartTime(time, updatedEnd, index)) {
-        setUpdatedStart(time);
-        onSubtitleChange(index, time, updatedEnd, text);
+  function handleUpdateSubtitle() {
+    const newSubtitle: Subtitle = {
+      index: subtitle.index,
+      startMs: updatedStart,
+      endMs: updatedEnd,
+      text: updatedText,
+    };
+    // Change subtitles[subtitle.index - 1] to newSubtitle
+    const newSubtitles = subtitles.map((sub, index) => {
+      if (sub.index === newSubtitle.index) {
+        return newSubtitle;
       }
-    } else {
-      if (checkEndTime(updatedStart, time, index)) {
-        setUpdatedEnd(time);
-        onSubtitleChange(index, updatedStart, time, text);
-      }
+      return sub;
+    });
+    setSubtitles(newSubtitles);
+  }
+
+  useEffect(() => {
+    handleUpdateSubtitle();
+  }, [updatedStart, updatedEnd, updatedText]);
+
+  function handleUpdateStartTime(newMs: number) {
+    if (!checkStartTime(newMs, subtitle, subtitles)) {
+      return;
     }
-  };
+    setUpdatedStart(newMs);
+  }
 
-  // Increase or decrease the start time by 0.1 seconds
-  const adjustStartTime = (direction: boolean, increment: number) => {
-    const ms = timeToMs(updatedStart);
-    const newMs = direction ? ms + increment : ms - increment;
-    if (newMs < 0) return;
-    handleUpdateTime("start", msToTime(newMs));
-  };
-
-  // Increase or decrease the end time by 0.1 seconds
-  const adjustEndTime = (direction: boolean, increment: number) => {
-    const ms = timeToMs(updatedEnd);
-    const newMs = direction ? ms + increment : ms - increment;
-    if (newMs < 0) return;
-    handleUpdateTime("end", msToTime(newMs));
-  };
+  function handleUpdateEndTime(newMs: number) {
+    if (!checkEndTime(newMs, subtitle, subtitles)) {
+      return;
+    }
+    setUpdatedEnd(newMs);
+  }
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newText = event.target.value;
     setUpdatedText(newText);
-    onSubtitleChange(index, updatedStart, updatedEnd, newText);
+  };
+
+  // Increase or decrease the start time by 0.1 seconds
+  const adjustStartTime = (direction: boolean, increment: number) => {
+    const newMs = direction
+      ? updatedStart + increment
+      : updatedStart - increment;
+    if (newMs < 0) return;
+    handleUpdateStartTime(newMs);
+  };
+
+  // Increase or decrease the end time by 0.1 seconds
+  const adjustEndTime = (direction: boolean, increment: number) => {
+    const newMs = direction ? updatedEnd + increment : updatedEnd - increment;
+    if (newMs < 0) return;
+    handleUpdateEndTime(newMs);
   };
 
   // Only show the seconds and milliseconds
-  const start = updatedStart.split(":").slice(2);
-  const end = updatedEnd.split(":").slice(2);
+  const start = msToTime(updatedStart).split(":").slice(2);
+  const end = msToTime(updatedEnd).split(":").slice(2);
 
   return (
     <div className="flex flex-col items-center gap-2">
       <div className="mb-2 flex gap-8">
-        <button onClick={() => onCreate(index)}>
+        <button
+          onClick={() => createSubtitle(subtitle, subtitles, setSubtitles)}
+        >
           <PlusCircleIcon className="h-16 w-16 text-green-600 hover:text-green-700 lg:h-8 lg:w-8" />
         </button>
-        <button onClick={() => onDelete(index)}>
+        <button
+          onClick={() => deleteSubtitle(subtitle, subtitles, setSubtitles)}
+        >
           <TrashIcon className="h-16 w-16 text-red-600 hover:text-red-700 lg:h-8 lg:w-8" />
         </button>
       </div>
@@ -114,8 +119,7 @@ export default function EditSubtitle({
               // Format it to HH:MM:SS,MMM
               const [seconds, milliseconds] = e.target.value.split(",");
               const newTime = `00:00:${seconds},${milliseconds}`;
-
-              handleUpdateTime("start", newTime);
+              handleUpdateStartTime(timeToMs(newTime));
             }}
           />
           <button onClick={() => adjustStartTime(true, 50)}>
@@ -143,8 +147,7 @@ export default function EditSubtitle({
               // Format it to HH:MM:SS,MMM
               const [seconds, milliseconds] = e.target.value.split(",");
               const newTime = `00:00:${seconds},${milliseconds}`;
-
-              handleUpdateTime("end", newTime);
+              handleUpdateEndTime(timeToMs(newTime));
             }}
           />
           <button onClick={() => adjustEndTime(true, 50)}>

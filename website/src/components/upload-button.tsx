@@ -19,9 +19,7 @@ export default function UploadButton({
   switch (size) {
     case "small":
       button = (
-        <div>
-          <CloudArrowUpIcon className="h-16 w-16 text-teal-500" />
-        </div>
+        <CloudArrowUpIcon className="h-12 w-12 text-teal-500 hover:text-teal-600" />
       );
       break;
     case "medium":

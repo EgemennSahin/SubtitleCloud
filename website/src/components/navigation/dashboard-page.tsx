@@ -15,7 +15,7 @@ export function DashboardPage({
       <Sidebar />
       <BottomBar />
 
-      <div className="relative mx-auto grid auto-rows-min grid-cols-2 place-items-center items-start gap-2 gap-y-12 pt-8 pb-24 lg:gap-y-4 lg:pb-8">
+      <div className="relative mx-auto grid auto-rows-min grid-cols-2 place-items-center items-start gap-2 gap-y-4 pt-8 pb-24 lg:pb-8">
         <div className="col-span-2 mx-auto mb-8">
           <h1 className="text-center text-4xl text-slate-600">{title}</h1>
           <h2 className="mt-4 text-xl">{subtitle}</h2>
