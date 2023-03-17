@@ -82,6 +82,8 @@ export default function EditVideoPage({
     setFormattedSubtitles(lines.join("\n"));
   }, [subtitle]);
 
+  
+
   return (
     <>
       <Seo

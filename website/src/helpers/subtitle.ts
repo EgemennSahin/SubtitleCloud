@@ -51,46 +51,44 @@ export const listToSrt = (subtitles: Subtitle[]) => {
 };
 
 // Check if the subtitle's start time is valid
-export function checkStartTime(
+export function parseStartTime(
   newStartMs: number,
   subtitle: Subtitle,
   subtitles: Subtitle[]
 ) {
   // if the start time is greater than the end time
   if (newStartMs > subtitle.endMs) {
-    return false;
+    return subtitle.endMs;
   }
 
   // if the start time is less than the previous subtitle's end time
   const previousSubtitle = subtitles[subtitle.index - 2];
 
-  if (!previousSubtitle) {
-    return true;
+  if (!previousSubtitle || previousSubtitle.endMs <= newStartMs) {
+    return newStartMs;
   }
-  console.log(previousSubtitle.endMs);
-  console.log(newStartMs);
 
-  return previousSubtitle.endMs <= newStartMs;
+  return previousSubtitle.endMs;
 }
 
 // Check if the subtitle's end time is valid
-export function checkEndTime(
+export function parseEndTime(
   newEndMs: number,
   subtitle: Subtitle,
   subtitles: Subtitle[]
 ) {
   // if the end time is less than the start time
   if (newEndMs < subtitle.startMs) {
-    return false;
+    return subtitle.startMs;
   }
 
   const nextSubtitle = subtitles[subtitle.index];
 
-  if (!nextSubtitle) {
-    return true;
+  if (!nextSubtitle || nextSubtitle.startMs >= newEndMs) {
+    return newEndMs;
   }
 
-  return nextSubtitle.startMs >= newEndMs;
+  return nextSubtitle.startMs;
 }
 
 export function deleteSubtitle(

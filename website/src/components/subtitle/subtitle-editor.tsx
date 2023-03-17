@@ -1,6 +1,6 @@
 import {
-  checkEndTime,
-  checkStartTime,
+  parseEndTime,
+  parseStartTime,
   listToSrt,
   srtToList,
 } from "@/helpers/subtitle";

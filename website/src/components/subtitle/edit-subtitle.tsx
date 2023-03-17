@@ -1,8 +1,8 @@
 import {
   timeToMs,
   msToTime,
-  checkStartTime,
-  checkEndTime,
+  parseStartTime,
+  parseEndTime,
   deleteSubtitle,
   createSubtitle,
 } from "@/helpers/subtitle";
@@ -52,17 +52,11 @@ export default function EditSubtitle({
   }, [updatedStart, updatedEnd, updatedText]);
 
   function handleUpdateStartTime(newMs: number) {
-    if (!checkStartTime(newMs, subtitle, subtitles)) {
-      return;
-    }
-    setUpdatedStart(newMs);
+    setUpdatedStart(parseStartTime(newMs, subtitle, subtitles));
   }
 
   function handleUpdateEndTime(newMs: number) {
-    if (!checkEndTime(newMs, subtitle, subtitles)) {
-      return;
-    }
-    setUpdatedEnd(newMs);
+    setUpdatedEnd(parseEndTime(newMs, subtitle, subtitles));
   }
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
