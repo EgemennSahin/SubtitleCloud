@@ -61,46 +61,47 @@ export default function SubtitleEditor({
 
   return (
     <>
-      <div className="flex flex-col items-center space-y-2">
-        <span className="text-2xl text-slate-600">
-          {currentPage} / {Math.ceil(subtitles?.length! / subtitlesPerPage)}
-        </span>
+      <div className="mt-4 flex flex-col items-center">
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-md text-slate-600">
+            {currentPage}/{Math.ceil(subtitles?.length! / subtitlesPerPage)}
+          </span>
 
-        <div className="flex gap-3">
-          <button
-            onClick={() => {
-              if (currentPage <= 1) {
-                return;
-              }
-              setCurrentPage(currentPage - 1);
-            }}
-          >
-            <ArrowLeftIcon className="h-8 w-8 hover:text-blue-600" />
-          </button>
-          <button
-            onClick={() => {
-              if (currentPage > subtitles.length / subtitlesPerPage) {
-                return;
-              }
-              setCurrentPage(currentPage + 1);
-            }}
-          >
-            <ArrowRightIcon className="h-8 w-8 hover:text-blue-600" />
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => {
+                if (currentPage <= 1) {
+                  return;
+                }
+                setCurrentPage(currentPage - 1);
+              }}
+            >
+              <ArrowLeftIcon className="h-8 w-8 text-slate-800 hover:text-blue-600" />
+            </button>
+            <button
+              onClick={() => {
+                if (currentPage > subtitles.length / subtitlesPerPage) {
+                  return;
+                }
+                setCurrentPage(currentPage + 1);
+              }}
+            >
+              <ArrowRightIcon className="h-8 w-8 text-slate-800 hover:text-blue-600" />
+            </button>
+          </div>
         </div>
 
-        <div className="w-screen overflow-x-auto pb-4 lg:w-full">
-          <div className="flex gap-2 ">
-            {subtitles.slice(startIndex, endIndex).map((subtitle, index) => {
-              return (
-                <SubtitleBox
-                  key={`${subtitle.index}-${subtitle.text}`}
-                  subtitle={subtitle}
-                  setEditingSubtitle={setEditingSubtitle}
-                />
-              );
-            })}
-          </div>
+        <div className="mx-16 mb-4 flex h-48 flex-wrap gap-2">
+          {subtitles.slice(startIndex, endIndex).map((subtitle) => {
+            return (
+              <SubtitleBox
+                key={subtitle.index}
+                subtitle={subtitle}
+                editingSubtitle={editingSubtitle}
+                setEditingSubtitle={setEditingSubtitle}
+              />
+            );
+          })}
         </div>
 
         {editingSubtitle != null && (

@@ -45,7 +45,7 @@ export const listToSrt = (subtitles: Subtitle[]) => {
   subtitles.forEach((subtitle, index) => {
     srt += `${index + 1}\n`;
     srt += `${msToTime(subtitle.startMs)} --> ${msToTime(subtitle.endMs)}\n`;
-    srt += `${subtitle.text}\n\n`;
+    srt += `${subtitle.text || " "}\n\n`;
   });
   return srt;
 };
@@ -62,11 +62,13 @@ export function checkStartTime(
   }
 
   // if the start time is less than the previous subtitle's end time
-  const previousSubtitle = subtitles[subtitle.index - 1];
+  const previousSubtitle = subtitles[subtitle.index - 2];
 
   if (!previousSubtitle) {
     return true;
   }
+  console.log(previousSubtitle.endMs);
+  console.log(newStartMs);
 
   return previousSubtitle.endMs <= newStartMs;
 }
@@ -82,7 +84,7 @@ export function checkEndTime(
     return false;
   }
 
-  const nextSubtitle = subtitles[subtitle.index + 1];
+  const nextSubtitle = subtitles[subtitle.index];
 
   if (!nextSubtitle) {
     return true;
@@ -110,8 +112,8 @@ export function createSubtitle(
 ) {
   const newSubtitle = {
     index: subtitle.index - 1,
-    startMs: subtitles[subtitle.index - 1].endMs || subtitle.startMs - 1000,
-    endMs: subtitle.startMs,
+    startMs: subtitles[subtitle.index - 2].endMs || subtitle.startMs - 1000,
+    endMs: subtitles[subtitle.index - 1].startMs || subtitle.endMs + 1000,
     text: "",
   };
   subtitles.splice(subtitle.index - 1, 0, newSubtitle);

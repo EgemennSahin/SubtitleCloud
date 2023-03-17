@@ -38,7 +38,7 @@ export default function EditSubtitle({
       text: updatedText,
     };
     // Change subtitles[subtitle.index - 1] to newSubtitle
-    const newSubtitles = subtitles.map((sub, index) => {
+    const newSubtitles = subtitles.map((sub) => {
       if (sub.index === newSubtitle.index) {
         return newSubtitle;
       }
@@ -66,7 +66,7 @@ export default function EditSubtitle({
   }
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newText = event.target.value;
+    const newText = event.target.value.toUpperCase();
     setUpdatedText(newText);
   };
 
@@ -91,27 +91,32 @@ export default function EditSubtitle({
   const end = msToTime(updatedEnd).split(":").slice(2);
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-2 rounded-lg bg-slate-200 p-4">
       <div className="mb-2 flex gap-8">
         <button
+          className="flex flex-col items-center gap-2"
           onClick={() => createSubtitle(subtitle, subtitles, setSubtitles)}
         >
-          <PlusCircleIcon className="h-16 w-16 text-green-600 hover:text-green-700 lg:h-8 lg:w-8" />
+          <p className="font-bold text-slate-700">Add</p>
+
+          <PlusCircleIcon className="h-14 w-14 text-green-600 hover:text-green-700 lg:h-10 lg:w-10" />
         </button>
         <button
+          className="flex flex-col items-center gap-2"
           onClick={() => deleteSubtitle(subtitle, subtitles, setSubtitles)}
         >
-          <TrashIcon className="h-16 w-16 text-red-600 hover:text-red-700 lg:h-8 lg:w-8" />
+          <p className="font-bold text-slate-700">Delete</p>
+          <TrashIcon className="h-14 w-14 text-red-600 hover:text-red-700 lg:h-10 lg:w-10" />
         </button>
       </div>
 
-      <div className="flex">
-        <div className="flex flex-col-reverse items-center justify-center gap-2 lg:flex-row lg:gap-0">
+      <div className="flex gap-4">
+        <div className="flex flex-col-reverse items-center justify-center gap-2 lg:flex-row">
           <button onClick={() => adjustStartTime(false, 50)}>
             <ArrowDownCircleIcon className="h-12 w-12 text-blue-600 lg:h-6 lg:w-6" />
           </button>
           <input
-            className="w-16 text-center"
+            className="w-16 bg-transparent text-center"
             type="text"
             pattern="\d{2},\d{3}"
             value={start}
@@ -128,18 +133,19 @@ export default function EditSubtitle({
         </div>
 
         <input
-          className="whitespace-normal text-center text-xl lg:text-lg"
+          className="w-48 rounded-lg bg-transparent text-center text-xl lg:text-lg"
           type="text"
           placeholder="Subtitle text"
-          value={updatedText}
+          value={updatedText.toUpperCase()}
           onChange={handleTextChange}
         />
-        <div className="flex flex-col-reverse items-center justify-center gap-2 lg:flex-row lg:gap-0">
+
+        <div className="rounded-lgp-2 flex flex-col-reverse items-center justify-center gap-2 lg:flex-row">
           <button onClick={() => adjustEndTime(false, 50)}>
             <ArrowDownCircleIcon className="h-12 w-12 text-blue-600 lg:h-6 lg:w-6" />
           </button>
           <input
-            className="w-16 text-center"
+            className="w-16 bg-transparent text-center"
             type="text"
             pattern="\d{2},\d{3}"
             value={end}

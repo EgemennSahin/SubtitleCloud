@@ -60,9 +60,9 @@ export default function EditVideoPage({
   }
 
   const instructions = [
-    "Choose bottom video (optional)",
     "Adjust subtitle text and timing.",
     "Add or delete subtitles.",
+    "Choose bottom video (optional)",
   ];
 
   // Formatting the subtitles to VTT format to be displayed on the video player
@@ -104,7 +104,17 @@ export default function EditVideoPage({
             setTime={setCurrentTime}
           />
         </section>
-        <section className="col-span-2 flex flex-col items-center gap-3 lg:col-span-1">
+
+        <section className="col-span-2 flex flex-col items-center lg:col-span-1">
+          <h3 className="text-id">Subtitle editor</h3>
+          <SubtitleEditor
+            srt={subtitle}
+            setSrt={setSubtitle}
+            time={currentTime}
+          />
+        </section>
+
+        <section className="col-span-2 flex flex-col items-center gap-3">
           <h3 className="text-id">Bottom video</h3>
 
           <div className="flex gap-2">
@@ -148,15 +158,6 @@ export default function EditVideoPage({
               src={secondaryVideo.url}
             />
           )}
-        </section>
-
-        <section className="col-span-2 flex flex-col items-center">
-          <h3 className="text-id">Subtitle editor</h3>
-          <SubtitleEditor
-            srt={subtitle}
-            setSrt={setSubtitle}
-            time={currentTime}
-          />
         </section>
 
         <button
