@@ -82,7 +82,7 @@ export function VideoControls({
     const blob = await response.blob();
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "Shortzoo Captioned Video.mp4";
+    link.download = title || "Shortzoo Captioned Video.mp4";
     link.click();
     URL.revokeObjectURL(link.href);
   }
