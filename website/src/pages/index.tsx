@@ -63,7 +63,10 @@ export default function NewPage({ uid }: { uid: string }) {
 
   return (
     <>
-      <Seo title="Home" description="Home page" />
+      <Seo
+        title="Home"
+        description="Home page for Shortzoo, your hands off video-editing and subtitling solution."
+      />
 
       <Navbar uid={uid} />
 

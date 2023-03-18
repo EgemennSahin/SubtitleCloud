@@ -82,13 +82,11 @@ export default function EditVideoPage({
     setFormattedSubtitles(lines.join("\n"));
   }, [subtitle]);
 
-  
-
   return (
     <>
       <Seo
-        title="Edit Subtitles"
-        description="Upload your video to be processed in our cloud servers. Be notified when your video is ready. Quickly and securely process your video files."
+        title="Edit Video"
+        description="Edit subtitles for the video. Add or delete subtitles. Add a bottom video."
       />
 
       <DashboardPage

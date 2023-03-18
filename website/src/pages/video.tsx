@@ -3,11 +3,8 @@ import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
-import Sidebar from "@/components/navigation/side-bar";
-import BottomNavigation from "@/components/navigation/bottom-bar";
 import VideoPlayer from "@/components/video/video-player";
 import { DashboardPage } from "@/components/navigation/dashboard-page";
-import { redirect } from "next/dist/server/api-utils";
 import { VideoControls } from "@/components/video/video-controls";
 
 export default function GeneratedVideoPage({

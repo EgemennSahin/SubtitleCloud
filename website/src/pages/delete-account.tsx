@@ -3,10 +3,7 @@ import { GetServerSidePropsContext } from "next";
 import { getToken } from "@/helpers/user";
 import { handleError } from "@/helpers/error";
 import Seo from "@/components/seo";
-import BottomNavigation from "@/components/navigation/bottom-bar";
 import { useRouter } from "next/router";
-import Sidebar from "@/components/navigation/side-bar";
-
 import { logOut } from "@/helpers/auth";
 import { DashboardPage } from "@/components/navigation/dashboard-page";
 
@@ -22,10 +19,7 @@ export default function OnboardingPage() {
 
   return (
     <>
-      <Seo
-        title="Delete Account"
-        description="Verify your email to gain access to generate subtitles for your videos."
-      />
+      <Seo title="Delete Account" description="Delete your account" />
 
       <DashboardPage
         title="Delete account"

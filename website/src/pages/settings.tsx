@@ -19,8 +19,8 @@ export default function Settings() {
   return (
     <>
       <Seo
-        title="Dashboard"
-        description="Access your generated videos on our short video subtitling solution. Generate subtitles for your videos in a few minutes."
+        title="Settings"
+        description="Access your account settings and preferences"
       />
 
       <DashboardPage title="Your dashboard">

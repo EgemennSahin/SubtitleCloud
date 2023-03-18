@@ -48,8 +48,8 @@ export default function AddToVideo({
   return (
     <>
       <Seo
-        title="Process Video"
-        description="Upload your video to be processed in our cloud servers. Be notified when your video is ready. Quickly and securely process your video files."
+        title="Editing video"
+        description="Editing video with the selected subtitles and video."
       />
       <DashboardPage
         title="Editing video"

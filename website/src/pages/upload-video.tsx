@@ -25,7 +25,7 @@ export default function UploadVideo() {
     <>
       <Seo
         title="Upload Video"
-        description="Upload your video to be processed in our cloud servers. Be notified when your video is ready. Quickly and securely process your video files."
+        description="Upload your video to be processed in our cloud servers. Quickly and securely process your video files."
       />
       <DashboardPage
         title="Upload video"

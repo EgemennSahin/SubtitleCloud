@@ -24,8 +24,8 @@ export default function LoginPage() {
   return (
     <>
       <Seo
-        title="Log In"
-        description="Sign in to our short video subtitling solution and gain access to your account."
+        title="Sign Up"
+        description="Sign up to our short video subtitling solution and gain access to our products."
       />
 
       <Navbar uid="" />
