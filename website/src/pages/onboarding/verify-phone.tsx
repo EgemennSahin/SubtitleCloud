@@ -39,13 +39,13 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
       )
     );
   }, []);
+  const provider = new PhoneAuthProvider(auth);
 
   async function handleSendCode() {
     if (!token) {
       return;
     }
 
-    const provider = new PhoneAuthProvider(auth);
     try {
       if (phone === "" || phone.length < 10) return;
 
@@ -59,6 +59,8 @@ export default function VerifyPhone({ token }: { token: DecodedIdToken }) {
     } catch (error: any) {
       console.log(error);
       alert("Invalid phone number. Please try again.");
+      setResult("");
+      setMessageSent(false);
     }
   }
 
