@@ -8,6 +8,7 @@ export async function handleVideoProcessing(
   }
 
   try {
+    // Key only works for the shortzoo domain
     const endpoint =
       "https://public-process-api-gateway-6dipdkfs.uc.gateway.dev/process?key=AIzaSyA8gNrXERBjLwY8MlAGNYawoQgfzbhdRYY";
 
@@ -43,6 +44,7 @@ export async function handleTranscribe(
   console.log("Starting video processing...");
 
   try {
+    // Key only works for the shortzoo domain
     const endpoint =
       "https://public-process-api-gateway-6dipdkfs.uc.gateway.dev/subtitle?key=AIzaSyA8gNrXERBjLwY8MlAGNYawoQgfzbhdRYY";
 
